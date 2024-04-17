@@ -44,7 +44,7 @@ const createGetMusicInfosTask = (hashs) => {
   let list = hashs;
   const tasks = [];
   while (list.length) {
-    // @ts-expect-error
+    // @ts-ignore
     tasks.push(Object.assign({ data: list.slice(0, 100) }, data));
     if (list.length < 100) break;
     list = list.slice(100);

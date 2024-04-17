@@ -72,7 +72,7 @@ export const formatPlayTime = (time: number) => {
 export const debounce = (fn, delay: number, immediate: boolean = true) => {
   let timer: null | NodeJS.Timeout = null;
   return function (...args) {
-    // @ts-expect-error
+    // @ts-ignore
     const self = this;
     const nowTimer = !timer;
     if (timer) clearTimeout(timer);

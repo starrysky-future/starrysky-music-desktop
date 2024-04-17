@@ -29,7 +29,7 @@ export const setStop = () => {
 };
 
 export const setMediaDeviceId = (mediaDeviceId: string) => {
-  // @ts-expect-error
+  // @ts-ignore
   return audio ? audio.setSinkId(mediaDeviceId) : Promise.resolve();
 };
 

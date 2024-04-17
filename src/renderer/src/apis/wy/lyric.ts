@@ -1,25 +1,32 @@
 import { needleHttp } from '../request';
 import { eapi } from '../crypto';
 
-export const getLyric = async ({ songmid }) => {
-  const res = await needleHttp('https://interface3.music.163.com/eapi/song/lyric/v1', 'post', {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-      origin: 'https://music.163.com'
-    },
-    form: eapi('/api/song/lyric/v1', {
-      id: songmid,
-      cp: false,
-      tv: 0,
-      lv: 0,
-      rv: 0,
-      kv: 0,
-      yv: 0,
-      ytv: 0,
-      yrv: 0
-    })
-  });
+export const getLyric = async ({ songmid }, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌词获取失败');
+
+  let res;
+  try {
+    res = await needleHttp('https://interface3.music.163.com/eapi/song/lyric/v1', 'post', {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        origin: 'https://music.163.com'
+      },
+      form: eapi('/api/song/lyric/v1', {
+        id: songmid,
+        cp: false,
+        tv: 0,
+        lv: 0,
+        rv: 0,
+        kv: 0,
+        yv: 0,
+        ytv: 0,
+        yrv: 0
+      })
+    });
+  } catch (error) {
+    return getLyric({ songmid }, tryNum + 1);
+  }
 
   const fixTimeLabelLrc = fixTimeLabel(res.lrc.lyric, res.tlyric?.lyric, res.romalrc?.lyric);
   const info = parseTools.parse(
@@ -30,7 +37,6 @@ export const getLyric = async ({ songmid }) => {
     fixTimeLabelLrc.tlrc,
     fixTimeLabelLrc.romalrc
   );
-  console.log('歌词信息', info);
 
   return info;
 };

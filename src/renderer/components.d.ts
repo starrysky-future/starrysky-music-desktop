@@ -13,6 +13,7 @@ declare module 'vue' {
     Loading: typeof import('./src/components/tools/Loading.vue')['default']
     MusicList: typeof import('./src/components/page/MusicList.vue')['default']
     Nav: typeof import('./src/components/page/Nav.vue')['default']
+    NoData: typeof import('./src/components/tools/NoData.vue')['default']
     Pagination: typeof import('./src/components/tools/Pagination.vue')['default']
     PlayMod: typeof import('./src/components/page/PlayMod.vue')['default']
     Popup: typeof import('./src/components/base/Popup.vue')['default']

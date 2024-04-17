@@ -1,12 +1,19 @@
 import { axiosHttp } from '../request';
 import { buildParams, decodeLyric, parseLrc, lrcTools } from './utils';
 
-export const getLyric = async ({ songmid }, isGetLyricx = true) => {
-  const res = await axiosHttp(
-    `http://newlyric.kuwo.cn/newlyric.lrc?${buildParams(songmid, isGetLyricx)}`,
-    'get',
-    {}
-  );
+export const getLyric = async ({ songmid }, isGetLyricx = true, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌词获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(
+      `http://newlyric.kuwo.cn/newlyric.lrc?${buildParams(songmid, isGetLyricx)}`,
+      'get',
+      {}
+    );
+  } catch (error) {
+    return getLyric({ songmid }, (isGetLyricx = true), tryNum + 1);
+  }
 
   const lrc = await decodeLyric(
     Buffer.from(Buffer.from(res, 'utf-8').toString('base64'), 'base64'),

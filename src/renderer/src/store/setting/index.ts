@@ -5,7 +5,6 @@ export const useSetStore = defineStore('useSetStore', () => {
   const themeId = ref<string>('blue');
   const apiSource = ref<string>('test');
   const isKeepList = ref<boolean>(false);
-  const loadingErr = ref<boolean>(false);
 
-  return { themeId, isKeepList, apiSource, loadingErr };
+  return { themeId, isKeepList, apiSource };
 });

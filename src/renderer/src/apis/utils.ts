@@ -79,7 +79,6 @@ export const formatPlayTime = (time) => {
 export const getPlayTime = (time) => {
   if (!/(\d\d:\d\d:\d\d)$/.test(time)) return time;
   const [h, m, s] = time.split(':');
-  console.log(time);
 
   return (~~h * 60 * 60 + ~~m * 60 + ~~s) * 1000;
 };

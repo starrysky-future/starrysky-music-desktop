@@ -33,27 +33,45 @@ export const config = {
   }
 };
 
-export const getSongList = async (sortId, tagId, pageSize) => {
-  const res = await axiosHttp(
-    `http://www2.kugou.kugou.com/yueku/v9/special/getSpecial?is_ajax=1&cdn=cdn&t=${sortId}&c=${tagId}&p=${pageSize}`,
-    'get',
-    {}
-  );
+export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单列表获取失败');
 
-  const info = await getListInfo(tagId);
+  let res;
+  let info;
+  try {
+    res = await axiosHttp(
+      `http://www2.kugou.kugou.com/yueku/v9/special/getSpecial?is_ajax=1&cdn=cdn&t=${sortId}&c=${tagId}&p=${pageSize}`,
+      'get',
+      {}
+    );
+    info = await getListInfo(tagId);
+  } catch (error) {
+    return getSongList(sortId, tagId, pageSize, tryNum + 1);
+  }
 
   return { list: filterList(res.special_db), ...info };
 };
 
-export const getSongListDetail = async (id, page) => {
-  const res = await axiosHttp(
-    `http://www2.kugou.kugou.com/yueku/v9/special/single/${id}-5-9999.html`,
-    'get',
-    {}
-  );
-  const listData = res.match(config.regExps.listData);
-  const listInfo = res.match(config.regExps.listInfo);
-  const list = await getMusicList(JSON.parse(listData[1]));
+export const getSongListDetail = async (id, pageSize, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
+
+  let res;
+  let listData;
+  let listInfo;
+  let list;
+
+  try {
+    res = await axiosHttp(
+      `http://www2.kugou.kugou.com/yueku/v9/special/single/${id}-5-9999.html`,
+      'get',
+      {}
+    );
+    listData = res.match(config.regExps.listData);
+    listInfo = res.match(config.regExps.listInfo);
+    list = await getMusicList(JSON.parse(listData[1]));
+  } catch (error) {
+    return getSongListDetail(id, pageSize, tryNum + 1);
+  }
 
   let name;
   let pic;
@@ -72,7 +90,7 @@ export const getSongListDetail = async (id, page) => {
         desc
       }
     },
-    page,
+    pageSize,
     limit: 10000,
     total: list.length,
     source: 'kg'

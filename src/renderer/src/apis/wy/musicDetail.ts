@@ -2,19 +2,27 @@ import { needleHttp } from '../request';
 import { weapi } from '../crypto';
 import { sizeFormate, formatPlayTime } from '../utils';
 
-// 获取歌曲列表
-export const getMusicList = async (ids: Array<string> = []) => {
-  const res = await needleHttp('https://music.163.com/weapi/v3/song/detail', 'post', {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-      origin: 'https://music.163.com'
-    },
-    form: weapi({
-      c: '[' + ids.map((id) => '{"id":' + id + '}').join(',') + ']',
-      ids: '[' + ids.join(',') + ']'
-    })
-  });
+// 获取歌曲详情列表
+export const getMusicList = async (ids: Array<string> = [], tryNum) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
+
+  let res;
+  try {
+    res = await needleHttp('https://music.163.com/weapi/v3/song/detail', 'post', {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        origin: 'https://music.163.com'
+      },
+      form: weapi({
+        c: '[' + ids.map((id) => '{"id":' + id + '}').join(',') + ']',
+        ids: '[' + ids.join(',') + ']'
+      })
+    });
+  } catch (error) {
+    return getMusicList(ids, tryNum + 1);
+  }
+
   return filterList(res.songs, res.privileges);
 };
 

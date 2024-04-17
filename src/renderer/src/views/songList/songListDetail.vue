@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import sources from '@r/apis';
@@ -16,17 +16,24 @@ const setStore = useSetStore();
 const playStore = usePlayStore();
 const { sourceId, curListId } = storeToRefs(songListStore);
 const { musicList, listId } = storeToRefs(musicListStore);
-const { isKeepList, loadingErr } = storeToRefs(setStore);
+const { isKeepList } = storeToRefs(setStore);
 const { playList } = storeToRefs(playStore);
 
-const showList = computed(() => {
-  console.log(musicList.value[curListId.value].list[listId.value]);
+const loading = ref<boolean>(false);
 
+const showList = computed(() => {
   return (
-    (musicList.value[curListId.value].list[listId.value] &&
-      musicList.value[curListId.value].list[listId.value].list &&
-      musicList.value[curListId.value].list[listId.value].list.length > 0) ||
-    loadingErr.value
+    musicList.value[curListId.value].list[listId.value] &&
+    musicList.value[curListId.value].list[listId.value].list &&
+    musicList.value[curListId.value].list[listId.value].list.length > 0
+  );
+});
+
+const noData = computed(() => {
+  return (
+    musicList.value[curListId.value].list[listId.value] &&
+    musicList.value[curListId.value].list[listId.value].list &&
+    musicList.value[curListId.value].list[listId.value].list.length === 0
   );
 });
 
@@ -34,12 +41,8 @@ const showList = computed(() => {
 isKeepList.value = true;
 
 const setPlay = () => {
-  if (
-    musicList.value[curListId.value].list[listId.value] &&
-    musicList.value[curListId.value].list[listId.value].list &&
-    musicList.value[curListId.value].list[listId.value].list.length === 0
-  )
-    return;
+  if (noData.value) return;
+
   playList.value.playId = playList.value.defaultList.list.length;
   playList.value.playListId = 'defaultList';
   const newList: Array<SKY.Play.MusicListItem> = ([] as Array<SKY.Play.MusicListItem>).concat(
@@ -54,12 +57,7 @@ const setPlay = () => {
 };
 
 const setCollect = () => {
-  if (
-    musicList.value[curListId.value].list[listId.value] &&
-    musicList.value[curListId.value].list[listId.value].list &&
-    musicList.value[curListId.value].list[listId.value].list.length === 0
-  )
-    return;
+  if (noData.value) return;
   const collectList = {
     id: listId.value,
     name: musicList.value[curListId.value].list[listId.value].info.name,
@@ -74,20 +72,22 @@ const goback = () => {
 };
 
 const getData = async () => {
-  if (
-    musicList.value[curListId.value].list[listId.value] &&
-    musicList.value[curListId.value].list[listId.value].list &&
-    musicList.value[curListId.value].list[listId.value].list.length > 0
-  )
-    return;
-  const data = await sources[sourceId.value].getSongListDetail(listId.value, 1);
+  if (showList.value) return;
 
-  musicList.value[curListId.value].page = data.page;
-  musicList.value[curListId.value].limit = data.limit;
-  musicList.value[curListId.value].total = data.total;
-  musicList.value[curListId.value].source = data.source;
+  loading.value = true;
 
-  musicList.value[curListId.value].list[listId.value] = data.list;
+  try {
+    const data = await sources[sourceId.value].getSongListDetail(listId.value, 1);
+    loading.value = false;
+    musicList.value[curListId.value].page = data.page;
+    musicList.value[curListId.value].limit = data.limit;
+    musicList.value[curListId.value].total = data.total;
+    musicList.value[curListId.value].source = data.source;
+    musicList.value[curListId.value].list[listId.value] = data.list;
+  } catch (error) {
+    console.log(error);
+    loading.value = false;
+  }
 };
 getData();
 </script>
@@ -119,7 +119,8 @@ getData();
     </div>
     <div class="main">
       <MusicList v-if="showList" />
-      <Loading v-else />
+      <Loading v-else-if="loading" />
+      <NoData v-else />
     </div>
   </div>
 </template>

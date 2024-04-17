@@ -21,7 +21,8 @@ export const config = {
   }
 };
 
-export const getSongList = async (sortId, tagId, pageSize) => {
+export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单列表获取失败');
   let id;
   let type;
   if (tagId) {
@@ -32,7 +33,12 @@ export const getSongList = async (sortId, tagId, pageSize) => {
     id = null;
   }
 
-  const res = await axiosHttp(getListUrl({ sortId, id, type, pageSize }), 'get', {});
+  let res;
+  try {
+    res = await axiosHttp(getListUrl({ sortId, id, type, pageSize }), 'get', {});
+  } catch (error) {
+    return getSongList(sortId, tagId, pageSize, tryNum + 1);
+  }
 
   if (!id || type == '10000') {
     return {
@@ -52,7 +58,7 @@ export const getSongList = async (sortId, tagId, pageSize) => {
   };
 };
 
-export const getSongListDetail = async (id, page) => {
+export const getSongListDetail = (id, pageSize, tryNum = 0) => {
   if (/[?&:/]/.test(id)) id = id.replace(config.regExps.listDetailLink, '$1');
   else if (/^digest-/.test(id)) {
     const idArr = id.split('__');
@@ -64,21 +70,29 @@ export const getSongListDetail = async (id, page) => {
       case '8':
         break;
       case '13':
-        return getAlbumListDetail(id, page);
+        return getAlbumListDetail(id, pageSize, tryNum);
       case '5':
       default:
-        return getListDetailDigest5(id, page);
+        return getListDetailDigest5(id, pageSize, tryNum);
     }
   }
-  return getSongListDetailDigest8(id, page);
+  return getSongListDetailDigest8(id, pageSize, tryNum);
 };
 
-const getSongListDetailDigest8 = async (id, page) => {
-  const res = await axiosHttp(
-    `http://nplserver.kuwo.cn/pl.svc?op=getlistinfo&pid=${id}&pn=${page - 1}&rn=${config.limit_song}&encode=utf8&keyset=pl2012&identity=kuwo&pcmp4=1&vipver=MUSIC_9.0.5.0_W1&newver=1`,
-    'get',
-    {}
-  );
+const getSongListDetailDigest8 = async (id, pageSize, tryNum) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(
+      `http://nplserver.kuwo.cn/pl.svc?op=getlistinfo&pid=${id}&pn=${pageSize - 1}&rn=${config.limit_song}&encode=utf8&keyset=pl2012&identity=kuwo&pcmp4=1&vipver=MUSIC_9.0.5.0_W1&newver=1`,
+      'get',
+      {}
+    );
+    if (res.musiclist.length === 0) throw new Error('再次请求');
+  } catch (error) {
+    return getSongListDetailDigest8(id, pageSize, tryNum + 1);
+  }
 
   return {
     list: {
@@ -91,19 +105,27 @@ const getSongListDetailDigest8 = async (id, page) => {
         play_count: formatPlayCount(res.playnum)
       }
     },
-    page,
+    pageSize,
     limit: res.rn,
     total: res.total,
     source: 'kw'
   };
 };
 
-const getAlbumListDetail = async (id, page) => {
-  let res = await axiosHttp(
-    `http://search.kuwo.cn/r.s?pn=${page - 1}&rn=${config.limit_song}&stype=albuminfo&albumid=${id}&show_copyright_off=0&encoding=utf&vipver=MUSIC_9.1.0`,
-    'get',
-    {}
-  );
+const getAlbumListDetail = async (id, pageSize, tryNum) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(
+      `http://search.kuwo.cn/r.s?pn=${pageSize - 1}&rn=${config.limit_song}&stype=albuminfo&albumid=${id}&show_copyright_off=0&encoding=utf&vipver=MUSIC_9.1.0`,
+      'get',
+      {}
+    );
+  } catch (error) {
+    return getAlbumListDetail(id, pageSize, tryNum + 1);
+  }
+
   res = objStr2JSON(res);
   res.name = decodeName(res.name);
   return {
@@ -116,33 +138,47 @@ const getAlbumListDetail = async (id, page) => {
         author: decodeName(res.artist)
       }
     },
-    page,
+    pageSize,
     limit: config.limit_song,
     total: parseInt(res.songnum),
     source: 'kw'
   };
 };
 
-const getListDetailDigest5 = async (id, page) => {
-  const detailId = await getListDetailDigest5Info(id);
-  return getListDetailDigest5Music(detailId, page);
+const getListDetailDigest5 = async (id, pageSize, tryNum) => {
+  const detailId = await getListDetailDigest5Info(id, tryNum);
+  return getListDetailDigest5Music(detailId, pageSize, tryNum);
 };
 
-const getListDetailDigest5Info = async (id) => {
-  const res = await axiosHttp(
-    `http://qukudata.kuwo.cn/q.k?op=query&cont=ninfo&node=${id}&pn=0&rn=1&fmt=json&src=mbox&level=2`,
-    'get',
-    {}
-  );
+const getListDetailDigest5Info = async (id, tryNum) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(
+      `http://qukudata.kuwo.cn/q.k?op=query&cont=ninfo&node=${id}&pn=0&rn=1&fmt=json&src=mbox&level=2`,
+      'get',
+      {}
+    );
+  } catch (error) {
+    return getListDetailDigest5Info(id, tryNum + 1);
+  }
 
   return res.child.length ? res.child[0].sourceid : null;
 };
-const getListDetailDigest5Music = async (id, page) => {
-  const res = await axiosHttp(
-    `http://nplserver.kuwo.cn/pl.svc?op=getlistinfo&pid=${id}&pn=${page - 1}}&rn=${config.limit_song}&encode=utf-8&keyset=pl2012&identity=kuwo&pcmp4=1`,
-    'get',
-    {}
-  );
+const getListDetailDigest5Music = async (id, pageSize, tryNum) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(
+      `http://nplserver.kuwo.cn/pl.svc?op=getlistinfo&pid=${id}&pn=${pageSize - 1}}&rn=${config.limit_song}&encode=utf-8&keyset=pl2012&identity=kuwo&pcmp4=1`,
+      'get',
+      {}
+    );
+  } catch (error) {
+    return getListDetailDigest5Music(id, pageSize, tryNum + 1);
+  }
 
   return {
     list: {
@@ -155,7 +191,7 @@ const getListDetailDigest5Music = async (id, page) => {
         play_count: formatPlayCount(res.playnum)
       }
     },
-    page,
+    pageSize,
     limit: res.rn,
     total: res.total,
     source: 'kw'

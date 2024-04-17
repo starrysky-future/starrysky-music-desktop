@@ -2,14 +2,17 @@ import { axiosHttp } from '../request';
 import { decodeLyric } from './utils';
 import { decodeName } from '../utils';
 
-export const getLyric = async ({ name, hash, _interval }) => {
-  const info = await searchLyric(name, hash, _interval);
-  if (!info) {
-    return Promise.reject(new Error('歌词获取失败'));
-  }
-  const res = await getLyricDownload(info.id, info.accessKey);
+export const getLyric = async ({ name, hash, _interval }, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌词获取失败');
+  let res;
+  try {
+    const info = await searchLyric(name, hash, _interval);
+    if (!info) throw new Error('歌词获取失败');
 
-  console.log('获取歌词', res);
+    res = await getLyricDownload(info.id, info.accessKey);
+  } catch (error) {
+    return getLyric({ name, hash, _interval }, tryNum + 1);
+  }
 
   return res;
 };

@@ -26,45 +26,57 @@ export const config = {
   limit_song: 50
 };
 
-export const getSongList = async (sortId, tagId, page) => {
-  const res = await axiosHttp(getSongListUrl(sortId, tagId, page), 'get', {});
+export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单列表获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(getSongListUrl(sortId, tagId, pageSize), 'get', {});
+  } catch (error) {
+    return getSongList(sortId, tagId, pageSize, tryNum + 1);
+  }
 
   return {
     list: filterList(res.retMsg.playlist),
     total: parseInt(res.retMsg.countSize),
-    page,
+    pageSize,
     limit: config.pageNo,
     source: 'mg'
   };
 };
 
-export const getSongListDetail = async (id, page) => {
-  console.log(111);
+export const getSongListDetail = async (id, pageSize, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
 
-  const res = await new Promise((resolve, reject) => {
-    Promise.all([getSongListDetailList(id, page), getListDetailInfo(id)])
-      .then(([listData, info]) => {
-        listData.list.info = info;
-        resolve(listData);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  let res;
+  try {
+    res = await new Promise((resolve, reject) => {
+      Promise.all([getSongListDetailList(id, pageSize), getListDetailInfo(id)])
+        .then(([listData, info]) => {
+          listData.list.info = info;
+          resolve(listData);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  } catch (error) {
+    return getSongListDetail(id, pageSize, tryNum + 1);
+  }
 
   return res;
 };
 
-const getSongListDetailList = async (id, page) => {
+const getSongListDetailList = async (id, pageSize) => {
   const res = await axiosHttp(
-    `https://app.c.nf.migu.cn/MIGUM2.0/v1.0/user/queryMusicListSongs.do?musicListId=${id}&pageNo=${page}&pageSize=${config.limit_song}`,
+    `https://app.c.nf.migu.cn/MIGUM2.0/v1.0/user/queryMusicListSongs.do?musicListId=${id}&pageNo=${pageSize}&pageSize=${config.limit_song}`,
     'get',
     {}
   );
 
   return {
     list: { list: filterMusicInfoList(res.list), info: {} },
-    page,
+    pageSize,
     limit: config.limit_song,
     total: res.totalCount,
     source: 'mg'

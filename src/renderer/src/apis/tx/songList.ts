@@ -17,9 +17,15 @@ export const config = {
   limit_list: 100000
 };
 
-export const getSongList = async (sortId, tagId, pageSize) => {
-  const res = await axiosHttp(getListUrl(sortId, tagId, pageSize), 'get', {});
-  console.log(res);
+export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单列表获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(getListUrl(sortId, tagId, pageSize), 'get', {});
+  } catch (error) {
+    return getSongList(sortId, tagId, pageSize, tryNum + 1);
+  }
 
   if (tagId) {
     return filterList2(res.playlist.data, pageSize);
@@ -27,17 +33,24 @@ export const getSongList = async (sortId, tagId, pageSize) => {
   return filterList(res.playlist.data, pageSize);
 };
 
-export const getSongListDetail = async (id) => {
-  const res = await axiosHttp(
-    `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&new_format=1&disstid=${id}&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`,
-    'get',
-    {
-      headers: {
-        id: id
+export const getSongListDetail = async (id, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单详情列表获取失败');
+
+  let res;
+  try {
+    res = await axiosHttp(
+      `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&new_format=1&disstid=${id}&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`,
+      'get',
+      {
+        headers: {
+          id: id
+        }
       }
-    }
-  );
-  console.log(res);
+    );
+  } catch (error) {
+    return getSongListDetail(id, tryNum + 1);
+  }
+
   const cdlist = res.cdlist[0];
 
   return {
@@ -97,7 +110,7 @@ const getListUrl = (sortId, id, pageSize) => {
   )}`;
 };
 
-const filterList = (data, page) => {
+const filterList = (data, pageSize) => {
   return {
     list: data.v_playlist.map((item) => ({
       play_count: formatPlayCount(item.access_num),
@@ -112,12 +125,12 @@ const filterList = (data, page) => {
       source: 'tx'
     })),
     total: data.total,
-    page,
+    pageSize,
     limit: config.pageNo,
     source: 'tx'
   };
 };
-const filterList2 = ({ content }, page) => {
+const filterList2 = ({ content }, pageSize) => {
   return {
     list: content.v_item.map(({ basic }) => ({
       play_count: formatPlayCount(basic.play_cnt),
@@ -131,7 +144,7 @@ const filterList2 = ({ content }, page) => {
       source: 'tx'
     })),
     total: content.total_cnt,
-    page,
+    pageSize,
     limit: config.pageNo,
     source: 'tx'
   };

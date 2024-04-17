@@ -7,24 +7,24 @@ import wy from './wy/index';
 const sources = {
   sources: [
     {
-      name: '酷我音乐',
-      id: 'kw'
-    },
-    {
-      name: '酷狗音乐',
-      id: 'kg'
+      name: '网易音乐',
+      id: 'wy'
     },
     {
       name: 'QQ音乐',
       id: 'tx'
     },
     {
-      name: '网易音乐',
-      id: 'wy'
+      name: '酷狗音乐',
+      id: 'kg'
     },
     {
       name: '咪咕音乐',
       id: 'mg'
+    },
+    {
+      name: '酷我音乐',
+      id: 'kw'
     }
   ],
   kg,

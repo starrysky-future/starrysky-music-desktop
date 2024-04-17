@@ -1,11 +1,5 @@
 import needle from 'needle';
-import pinia from '@r/store';
-import { storeToRefs } from 'pinia';
-import { useSetStore } from '@r/store/setting';
 import axios from 'axios';
-
-const setStore = useSetStore(pinia);
-const { loadingErr } = storeToRefs(setStore);
 
 export const needleHttp = async (
   url,
@@ -32,15 +26,9 @@ export const needleHttp = async (
   options.response_timeout = timeout;
 
   return new Promise((resolve, reject) => {
-    loadingErr.value = false;
     needle.request(method, url, data, options, (err, res, body) => {
       if (err) {
         reject(err);
-      }
-
-      if (body && body?.code && body.code !== 200) {
-        loadingErr.value = true;
-        reject(body.msg);
       }
       resolve(JSON.parse(body));
     });

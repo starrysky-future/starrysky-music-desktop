@@ -1,0 +1,188 @@
+<script lang="ts" setup>
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import sources from '@r/apis';
+import { useSongListStore, useMusicListStore } from '@r/store/songList';
+import { usePlayStore } from '@r/store/play';
+import { useSetStore } from '@r/store/setting';
+import { playSong } from '@r/plugins/player/playList';
+
+const router = useRouter();
+
+const songListStore = useSongListStore();
+const musicListStore = useMusicListStore();
+const setStore = useSetStore();
+const playStore = usePlayStore();
+const { sourceId, curListId } = storeToRefs(songListStore);
+const { musicList, listId } = storeToRefs(musicListStore);
+const { isKeepList, loadingErr } = storeToRefs(setStore);
+const { playList } = storeToRefs(playStore);
+
+const showList = computed(() => {
+  console.log(musicList.value[curListId.value].list[listId.value]);
+
+  return (
+    (musicList.value[curListId.value].list[listId.value] &&
+      musicList.value[curListId.value].list[listId.value].list &&
+      musicList.value[curListId.value].list[listId.value].list.length > 0) ||
+    loadingErr.value
+  );
+});
+
+// 页面保存
+isKeepList.value = true;
+
+const setPlay = () => {
+  if (
+    musicList.value[curListId.value].list[listId.value] &&
+    musicList.value[curListId.value].list[listId.value].list &&
+    musicList.value[curListId.value].list[listId.value].list.length === 0
+  )
+    return;
+  playList.value.playId = playList.value.defaultList.list.length;
+  playList.value.playListId = 'defaultList';
+  const newList: Array<SKY.Play.MusicListItem> = ([] as Array<SKY.Play.MusicListItem>).concat(
+    playList.value.defaultList.list,
+    musicList.value[curListId.value].list[listId.value].list
+  );
+  playList.value.defaultList.list = Array.from(new Set(newList));
+  playList.value.playId =
+    playList.value.playId >= playList.value.defaultList.list.length ? 0 : playList.value.playId;
+
+  playSong(playList.value.defaultList.list[playList.value.playId]);
+};
+
+const setCollect = () => {
+  if (
+    musicList.value[curListId.value].list[listId.value] &&
+    musicList.value[curListId.value].list[listId.value].list &&
+    musicList.value[curListId.value].list[listId.value].list.length === 0
+  )
+    return;
+  const collectList = {
+    id: listId.value,
+    name: musicList.value[curListId.value].list[listId.value].info.name,
+    list: musicList.value[curListId.value].list[listId.value].list
+  };
+  playList.value[listId.value] = collectList;
+};
+
+const goback = () => {
+  router.push({ name: 'songList' });
+  isKeepList.value = false;
+};
+
+const getData = async () => {
+  if (
+    musicList.value[curListId.value].list[listId.value] &&
+    musicList.value[curListId.value].list[listId.value].list &&
+    musicList.value[curListId.value].list[listId.value].list.length > 0
+  )
+    return;
+  const data = await sources[sourceId.value].getSongListDetail(listId.value, 1);
+
+  musicList.value[curListId.value].page = data.page;
+  musicList.value[curListId.value].limit = data.limit;
+  musicList.value[curListId.value].total = data.total;
+  musicList.value[curListId.value].source = data.source;
+
+  musicList.value[curListId.value].list[listId.value] = data.list;
+};
+getData();
+</script>
+
+<template>
+  <div class="list_detail">
+    <div class="header">
+      <div class="header_left">
+        <img
+          v-if="musicList[curListId].list[listId]?.info.img"
+          class="img"
+          :src="musicList[curListId].list[listId]?.info.img"
+        />
+        <div v-else class="img no_img">SKY</div>
+        <div class="info">
+          <div class="name">
+            <span class="select">{{ musicList[curListId].list[listId]?.info.name }}</span>
+          </div>
+          <div class="desc multipleTextHide-3">
+            <span class="select">{{ musicList[curListId].list[listId]?.info.desc }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="header_right">
+        <div class="btn_style" @click="setPlay">播放</div>
+        <div class="btn_style" @click="setCollect">收藏</div>
+        <div class="btn_style" @click="goback">返回</div>
+      </div>
+    </div>
+    <div class="main">
+      <MusicList v-if="showList" />
+      <Loading v-else />
+    </div>
+  </div>
+</template>
+
+<style lang="less" scoped>
+.list_detail {
+  .header {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .header_left {
+      display: flex;
+      .img {
+        display: block;
+        border: 1px solid;
+        border-color: var(--color-primary);
+        border-radius: 4px;
+        width: 80px;
+        height: 80px;
+      }
+      .no_img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-primary);
+        background-color: var(--color-primary-light-400-alpha-700);
+      }
+      .info {
+        padding: 2px 8px;
+        .name {
+          font-size: 14px;
+        }
+        .desc {
+          padding-top: 6px;
+          font-size: 12px;
+          color: var(--color-font-label);
+        }
+      }
+    }
+    .header_right {
+      display: flex;
+      flex-shrink: 0;
+      border-radius: 4px;
+      background-color: var(--color-primary-light-400-alpha-700);
+      overflow: hidden;
+      .btn_style {
+        cursor: pointer;
+        width: 60px;
+        height: 36px;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-primary);
+        &:hover {
+          background-color: var(--color-primary-light-400-alpha-300);
+        }
+      }
+    }
+  }
+  .main {
+    height: 416px;
+  }
+}
+</style>

@@ -1,0 +1,125 @@
+<script lang="ts" setup>
+import { ref, VNodeRef } from 'vue';
+import { usePlayStore } from '@r/store/play';
+
+const playStore = usePlayStore();
+
+const hasHover = ref<boolean>(true);
+const minDom = ref<VNodeRef | null>(null);
+const changeWinState = (operate: string): void => {
+  if (operate === 'min') {
+    hasHover.value = false;
+
+    minDom.value.addEventListener('mousemove', () => {
+      hasHover.value = true;
+      minDom.value.removeEventListener('mousemove', () => {});
+    });
+  }
+
+  if (operate === 'quit') {
+    window.api.setData('playList', JSON.stringify(playStore.playList));
+  }
+  window.api![operate]();
+};
+</script>
+
+<template>
+  <div class="rightBtns">
+    <div
+      ref="minDom"
+      class="min icon_position"
+      :class="{ minHover: hasHover }"
+      @click="changeWinState('min')"
+    >
+      <div class="min_icon icon_WH">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 24 24"
+          space="preserve"
+        >
+          <use xlink:href="#icon-min" />
+        </svg>
+      </div>
+    </div>
+    <!-- <div @click="changeWinState('max')" class="max icon_position">
+      <div class="max_icon icon_WH">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 24 24"
+          space="preserve"
+        >
+          <use xlink:href="#icon-max" />
+        </svg>
+      </div>
+    </div> -->
+    <div class="close icon_position" @click="changeWinState('quit')">
+      <div class="close_icon icon_WH">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 24 24"
+          space="preserve"
+        >
+          <use xlink:href="#icon-close" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style lang="less" scoped>
+@icon-width: 40px;
+
+.rightBtns {
+  display: flex;
+  height: 30px;
+  -webkit-app-region: no-drag;
+  .min {
+    width: @icon-width;
+    .min_icon {
+      color: var(--color-btn-min);
+    }
+  }
+  .minHover:hover {
+    background-color: var(--color-primary-light-400-alpha-500);
+  }
+
+  .max {
+    width: @icon-width;
+    .max_icon {
+      color: var(--color-btn-max);
+    }
+    &:hover {
+      background-color: var(--color-primary-light-400-alpha-500);
+    }
+  }
+  .close {
+    width: @icon-width;
+    .close_icon {
+      color: var(--color-btn-close);
+    }
+    &:hover {
+      background-color: var(--color-btn-close-hover);
+    }
+  }
+
+  .icon_WH {
+    width: 16px;
+    height: 16px;
+  }
+  .icon_position {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+}
+</style>

@@ -10,7 +10,7 @@ const router = useRouter();
 const songListStore = useSongListStore();
 const musicListStore = useMusicListStore();
 const { songList, sourceId, sortId, curListId, tagId, pageSize } = storeToRefs(songListStore);
-const { listId } = storeToRefs(musicListStore);
+const { musiclistId } = storeToRefs(musicListStore);
 
 const loading = ref<boolean>(false);
 
@@ -21,8 +21,19 @@ const showList = computed(() => {
   );
 });
 
+const setSourceId = (id: string) => {
+  sourceId.value = id;
+  sortId.value = sources[sourceId.value].config.sortList[0].id;
+  pageSize.value = 1;
+};
+
+const setSort = (id: string) => {
+  sortId.value = id;
+  pageSize.value = 1;
+};
+
 const goDetail = (item: SKY.SongList.ListItemType) => {
-  listId.value = item.id;
+  musiclistId.value = item.id;
   console.log(item);
 
   router.push({
@@ -64,7 +75,14 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <Tabs />
+  <Tabs
+    is-page="songList"
+    :sort-list="sources[sourceId].config.sortList"
+    :active-source-id="sourceId"
+    :active-sort-id="sortId"
+    @set-source-id="setSourceId"
+    @set-sort="setSort"
+  />
   <div class="songList scroll">
     <div v-if="showList" class="main">
       <template v-for="item in songList[curListId].list[pageSize - 1]" :key="item.id">

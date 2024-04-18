@@ -1,35 +1,17 @@
 declare namespace SKY {
   namespace Play {
-    interface PlayListItme {
+    interface PlayListItem {
       id: string;
       name: string;
-      list: Array<MusicListItem>;
+      list: Array<SKY.MusicListItem>;
     }
-    interface MusicListItem {
-      singer: string;
-      name: string;
-      albumName: string;
-      albumId: string;
-      source: string;
-      interval: string;
-      _interval: number;
-      songmid: string;
-      img: string;
-      lrc: null;
-      hash?: string;
-      otherSource: null;
-      types: array;
-      _types: object;
-      typeUrl: object;
-    }
-
     interface PlayList {
       playId: number;
       playListId: string;
-      defaultList: PlayListItme;
-      loveList: PlayListItme;
+      defaultList: PlayListItem;
+      loveList: PlayListItem;
     }
-    interface CurPlayInfo extends MusicListItem {
+    interface CurPlayInfo extends SKY.MusicListItem {
       curLyric: string;
       isPlay: boolean;
     }

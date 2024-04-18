@@ -8,9 +8,8 @@ export const getLyric = async ({ songmid }, tryNum = 0) => {
   try {
     res = await needleHttp('https://interface3.music.163.com/eapi/song/lyric/v1', 'post', {
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-        origin: 'https://music.163.com'
+        myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        myOrigin: 'https://music.163.com'
       },
       form: eapi('/api/song/lyric/v1', {
         id: songmid,

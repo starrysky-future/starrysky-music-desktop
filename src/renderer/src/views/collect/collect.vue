@@ -6,9 +6,9 @@ import { computed } from 'vue';
 const playStore = usePlayStore();
 const { playList } = storeToRefs(playStore);
 
-const list = computed<Array<SKY.Play.PlayListItme>>(() => {
+const labelList = computed<Array<SKY.Play.PlayListItem>>(() => {
   if (!playList.value) return [];
-  const showList: Array<SKY.Play.PlayListItme> = [];
+  const showList: Array<SKY.Play.PlayListItem> = [];
   showList.push(playList.value.defaultList);
   showList.push(playList.value.loveList);
   playList.value.playListId;
@@ -17,15 +17,23 @@ const list = computed<Array<SKY.Play.PlayListItme>>(() => {
     const [key, list] = item;
 
     if (key !== 'playId' && key !== 'playListId' && key !== 'defaultList' && key !== 'loveList') {
-      showList.push(list as SKY.Play.PlayListItme);
+      showList.push(list as SKY.Play.PlayListItem);
     }
   });
 
   return showList;
 });
 
-const setPlayListId = (id: string) => {
-  playList.value.playListId = id;
+const showList = computed(() => {
+  return playList.value[playList.value.playListId].list.length > 0;
+});
+
+const contentList = computed(() => {
+  return playList.value[playList.value.playListId].list;
+});
+
+const setPlayListId = (info) => {
+  playList.value.playListId = info.id;
 };
 </script>
 
@@ -34,19 +42,15 @@ const setPlayListId = (id: string) => {
     <div class="collect_left">
       <div class="collect_left_header">我的列表</div>
       <div class="collect_left_main scroll">
-        <div
-          v-for="item in list"
-          :key="item.id"
-          class="list_label singleTextHide"
-          :class="{ active: item.id === playList.playListId }"
-          @click="setPlayListId(item.id)"
-        >
-          {{ item.name }}
-        </div>
+        <LayoutLeft
+          :list="labelList"
+          :active-id="playList.playListId"
+          @set-active-id="setPlayListId"
+        />
       </div>
     </div>
     <div class="collect_right">
-      <MusicList />
+      <MusicList :show-list="showList" :list="contentList" />
     </div>
   </div>
 </template>
@@ -66,28 +70,14 @@ const setPlayListId = (id: string) => {
       border-color: var(--color-primary-light-900);
     }
     .collect_left_main {
-      height: 475px;
+      height: 476px;
       border-right: 0.5px solid;
       border-color: var(--color-primary-light-900);
-      display: flex;
-      flex-direction: column;
-      .list_label {
-        padding: 0 6px;
-        cursor: pointer;
-        height: 40px;
-        line-height: 40px;
-        font-size: 13px;
-        padding-left: 8px;
-        &:hover {
-          color: var(--color-primary);
-          background-color: var(--color-primary-light-400-alpha-500);
-        }
-      }
     }
   }
   .collect_right {
     flex: 1;
-    height: 515px;
+    height: 516px;
   }
   .active {
     color: var(--color-primary);

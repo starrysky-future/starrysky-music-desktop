@@ -1,44 +1,38 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
-import { useSongListStore } from '@r/store/songList';
 import sources from '@r/apis';
 
-const songListStore = useSongListStore();
-const { sourceId, sortId, pageSize } = storeToRefs(songListStore);
+const props = defineProps<{
+  isPage: string;
+  activeSourceId: string;
+  sortList?: SKY.SongList.SortList;
+  hasBorder?: boolean;
+  activeSortId?: string | number;
+}>();
 
-const setsourceId = (id: string) => {
-  sourceId.value = id;
-  sortId.value = sources[sourceId.value].config.sortList[0].id;
-  pageSize.value = 1;
-};
-
-const setSort = (id: string) => {
-  sortId.value = id;
-  pageSize.value = 1;
-};
+const emits = defineEmits(['setSourceId', 'setSort']);
 </script>
 
 <template>
-  <div class="tabs">
-    <div class="tag">默认</div>
+  <div class="tabs" :class="{ has_border: props.hasBorder }">
+    <div v-if="props.isPage === 'songList'" class="tag">默认</div>
     <div class="sources">
       <div
         v-for="item in sources.sources"
         :key="item.id"
         class="sourcesItlem"
-        :class="{ active: sourceId === item.id }"
-        @click="setsourceId(item.id)"
+        :class="{ active: item.id === props.activeSourceId }"
+        @click="emits('setSourceId', item.id)"
       >
         {{ item.name }}
       </div>
     </div>
-    <div class="sort">
+    <div v-if="props.isPage === 'songList'" class="sort">
       <div
-        v-for="item in sources[sourceId].config.sortList"
+        v-for="item in props.sortList"
         :key="item.id"
         class="sourcesItlem"
-        :class="{ active: sortId === item.id }"
-        @click="setSort(item.id)"
+        :class="{ active: item.id === props.activeSortId }"
+        @click="emits('setSort', item.id)"
       >
         {{ item.name }}
       </div>
@@ -52,10 +46,10 @@ const setSort = (id: string) => {
   display: flex;
   padding: 10px;
   .tag {
+    margin-right: 30px;
     cursor: pointer;
   }
   .sources {
-    margin: 0 30px;
     display: flex;
   }
   .sourcesItlem {
@@ -63,6 +57,7 @@ const setSort = (id: string) => {
     margin: 0 5px;
   }
   .sort {
+    margin-left: 30px;
     display: flex;
     cursor: pointer;
   }
@@ -80,5 +75,9 @@ const setSort = (id: string) => {
       background-color: var(--color-primary);
     }
   }
+}
+.has_border {
+  border-bottom: 0.5px solid;
+  border-color: var(--color-primary-light-900);
 }
 </style>

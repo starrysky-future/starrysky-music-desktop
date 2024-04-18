@@ -10,9 +10,8 @@ export const getMusicList = async (ids: Array<string> = [], tryNum) => {
   try {
     res = await needleHttp('https://music.163.com/weapi/v3/song/detail', 'post', {
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-        origin: 'https://music.163.com'
+        myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        myOrigin: 'https://music.163.com'
       },
       form: weapi({
         c: '[' + ids.map((id) => '{"id":' + id + '}').join(',') + ']',
@@ -26,21 +25,19 @@ export const getMusicList = async (ids: Array<string> = [], tryNum) => {
   return filterList(res.songs, res.privileges);
 };
 
-// 获取歌曲信息
+// 获取单个歌曲信息
 export const getMusicInfo = async (songmid: string) => {
   const res = await needleHttp('https://music.163.com/weapi/v3/song/detail', 'post', {
     headers: {
-      'User-Agent':
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-      Referer: 'https://music.163.com/song?id=' + songmid,
-      origin: 'https://music.163.com'
+      myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+      myReferer: 'https://music.163.com/song?id=' + songmid,
+      myOrigin: 'https://music.163.com'
     },
     form: weapi({
       c: `[{"id":${songmid}}]`,
       ids: `[${songmid}]`
     })
   });
-  console.log('歌曲信息', res);
 
   return res.songs[0];
 };
@@ -54,7 +51,7 @@ export const getSinger = (singers) => {
 };
 
 export const filterList = (songs, privileges) => {
-  const list: Array<SKY.SongList.MusicListItem> = [];
+  const list: Array<SKY.MusicListItem> = [];
   songs.forEach((item, index) => {
     const types: Array<SKY.Apis.Types> = [];
     const _types: SKY.Apis._types = { flac24bit: {}, flac: {} };

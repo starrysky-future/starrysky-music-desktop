@@ -15,7 +15,7 @@ const musicListStore = useMusicListStore();
 const setStore = useSetStore();
 const playStore = usePlayStore();
 const { sourceId, curListId } = storeToRefs(songListStore);
-const { musicList, listId } = storeToRefs(musicListStore);
+const { musicList, musiclistId } = storeToRefs(musicListStore);
 const { isKeepList } = storeToRefs(setStore);
 const { playList } = storeToRefs(playStore);
 
@@ -23,17 +23,17 @@ const loading = ref<boolean>(false);
 
 const showList = computed(() => {
   return (
-    musicList.value[curListId.value].list[listId.value] &&
-    musicList.value[curListId.value].list[listId.value].list &&
-    musicList.value[curListId.value].list[listId.value].list.length > 0
+    musicList.value[curListId.value].list[musiclistId.value] &&
+    musicList.value[curListId.value].list[musiclistId.value].list &&
+    musicList.value[curListId.value].list[musiclistId.value].list.length > 0
   );
 });
 
 const noData = computed(() => {
   return (
-    musicList.value[curListId.value].list[listId.value] &&
-    musicList.value[curListId.value].list[listId.value].list &&
-    musicList.value[curListId.value].list[listId.value].list.length === 0
+    musicList.value[curListId.value].list[musiclistId.value] &&
+    musicList.value[curListId.value].list[musiclistId.value].list &&
+    musicList.value[curListId.value].list[musiclistId.value].list.length === 0
   );
 });
 
@@ -45,9 +45,9 @@ const setPlay = () => {
 
   playList.value.playId = playList.value.defaultList.list.length;
   playList.value.playListId = 'defaultList';
-  const newList: Array<SKY.Play.MusicListItem> = ([] as Array<SKY.Play.MusicListItem>).concat(
+  const newList: Array<SKY.MusicListItem> = ([] as Array<SKY.MusicListItem>).concat(
     playList.value.defaultList.list,
-    musicList.value[curListId.value].list[listId.value].list
+    musicList.value[curListId.value].list[musiclistId.value].list
   );
   playList.value.defaultList.list = Array.from(new Set(newList));
   playList.value.playId =
@@ -59,11 +59,11 @@ const setPlay = () => {
 const setCollect = () => {
   if (noData.value) return;
   const collectList = {
-    id: listId.value,
-    name: musicList.value[curListId.value].list[listId.value].info.name,
-    list: musicList.value[curListId.value].list[listId.value].list
+    id: musiclistId.value,
+    name: musicList.value[curListId.value].list[musiclistId.value].info.name,
+    list: musicList.value[curListId.value].list[musiclistId.value].list
   };
-  playList.value[listId.value] = collectList;
+  playList.value[musiclistId.value] = collectList;
 };
 
 const goback = () => {
@@ -71,19 +71,26 @@ const goback = () => {
   isKeepList.value = false;
 };
 
+const list = computed(() => {
+  return (
+    musicList.value[curListId.value].list[musiclistId.value] &&
+    musicList.value[curListId.value].list[musiclistId.value].list
+  );
+});
+
 const getData = async () => {
   if (showList.value) return;
 
   loading.value = true;
 
   try {
-    const data = await sources[sourceId.value].getSongListDetail(listId.value, 1);
+    const data = await sources[sourceId.value].getSongListDetail(musiclistId.value, 1);
     loading.value = false;
-    musicList.value[curListId.value].page = data.page;
+    musicList.value[curListId.value].pageSize = data.pageSize;
     musicList.value[curListId.value].limit = data.limit;
     musicList.value[curListId.value].total = data.total;
     musicList.value[curListId.value].source = data.source;
-    musicList.value[curListId.value].list[listId.value] = data.list;
+    musicList.value[curListId.value].list[musiclistId.value] = data.list;
   } catch (error) {
     console.log(error);
     loading.value = false;
@@ -97,17 +104,17 @@ getData();
     <div class="header">
       <div class="header_left">
         <img
-          v-if="musicList[curListId].list[listId]?.info.img"
+          v-if="musicList[curListId].list[musiclistId]?.info.img"
           class="img"
-          :src="musicList[curListId].list[listId]?.info.img"
+          :src="musicList[curListId].list[musiclistId]?.info.img"
         />
         <div v-else class="img no_img">SKY</div>
         <div class="info">
           <div class="name">
-            <span class="select">{{ musicList[curListId].list[listId]?.info.name }}</span>
+            <span class="select">{{ musicList[curListId].list[musiclistId]?.info.name }}</span>
           </div>
           <div class="desc multipleTextHide-3">
-            <span class="select">{{ musicList[curListId].list[listId]?.info.desc }}</span>
+            <span class="select">{{ musicList[curListId].list[musiclistId]?.info.desc }}</span>
           </div>
         </div>
       </div>
@@ -118,9 +125,7 @@ getData();
       </div>
     </div>
     <div class="main">
-      <MusicList v-if="showList" />
-      <Loading v-else-if="loading" />
-      <NoData v-else />
+      <MusicList :loading="loading" :show-list="showList" :list="list" />
     </div>
   </div>
 </template>
@@ -135,6 +140,7 @@ getData();
     .header_left {
       display: flex;
       .img {
+        flex-shrink: 0;
         display: block;
         border: 1px solid;
         border-color: var(--color-primary);

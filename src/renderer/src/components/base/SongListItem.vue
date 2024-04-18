@@ -29,6 +29,7 @@ const props = defineProps<{ list: SKY.SongList.ListItemType }>();
     opacity: 0.6;
   }
   .img {
+    flex-shrink: 0;
     width: 120px;
     height: 120px;
     display: block;

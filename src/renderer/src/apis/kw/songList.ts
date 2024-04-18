@@ -89,9 +89,9 @@ const getSongListDetailDigest8 = async (id, pageSize, tryNum) => {
       'get',
       {}
     );
-    if (res.musiclist.length === 0) throw new Error('再次请求');
+    if (res.result !== 'ok') throw new Error('再次请求');
   } catch (error) {
-    return getSongListDetailDigest8(id, pageSize, tryNum + 1);
+    return getSongListDetail(id, pageSize, tryNum + 1);
   }
 
   return {
@@ -288,6 +288,7 @@ const filterListDetail = (rawData) => {
       songmid: item.id,
       source: 'kw',
       interval: formatPlayTime(parseInt(item.duration)),
+      _interval: item.duration * 1000,
       img: null,
       lrc: null,
       otherSource: null,
@@ -335,6 +336,7 @@ const albumfilterListDetail = (rawList, albumName, albumId) => {
       songmid: item.id,
       source: 'kw',
       interval: null,
+      _interval: 0,
       img: item.pic,
       lrc: null,
       otherSource: null,

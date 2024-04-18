@@ -47,15 +47,14 @@ export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
 };
 
 // 获取歌单列表内的音乐
-export const getSongListDetail = async (id, page, tryNum = 0) => {
+export const getSongListDetail = async (id, pageSize, tryNum = 0) => {
   if (tryNum > 2) throw new Error('歌单详情列表获取失败');
   // 先获取歌单所有音乐id
   let idRes;
   try {
     idRes = await needleHttp('https://music.163.com/api/linux/forward', 'post', {
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
+        myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
       },
       form: linuxapi({
         method: 'POST',
@@ -68,18 +67,18 @@ export const getSongListDetail = async (id, page, tryNum = 0) => {
       })
     });
   } catch (error) {
-    return getSongListDetail(id, page, tryNum + 1);
+    return getSongListDetail(id, pageSize, tryNum + 1);
   }
 
   const limit = 1000;
-  const rangeStart = (page - 1) * limit;
+  const rangeStart = (pageSize - 1) * limit;
   let list;
   if (idRes.playlist.trackIds.length == idRes.privileges.length) {
     list = filterList(idRes.playlist.tracks, idRes.privileges);
   } else {
     try {
       const ids = idRes.playlist.trackIds
-        .slice(rangeStart, limit * page)
+        .slice(rangeStart, limit * pageSize)
         .map((trackId) => trackId.id);
       list = await getMusicList(ids, tryNum);
     } catch (err) {
@@ -98,7 +97,7 @@ export const getSongListDetail = async (id, page, tryNum = 0) => {
         author: idRes.playlist.creator.nickname
       }
     },
-    page,
+    pageSize,
     limit,
     total: idRes.playlist.trackIds.length,
     source: 'wy'

@@ -25,7 +25,7 @@ export const searchLyric = async (name, hash, _interval) => {
       headers: {
         'KG-RC': 1,
         'KG-THash': 'expand_search_manager.cpp:852736169:451',
-        'User-Agent': 'KuGou2012-9020-ExpandSearchManager'
+        myUA: 'KuGou2012-9020-ExpandSearchManager'
       }
     }
   );
@@ -45,7 +45,7 @@ export const getLyricDownload = async (id, accessKey) => {
       headers: {
         'KG-RC': 1,
         'KG-THash': 'expand_search_manager.cpp:852736169:451',
-        'User-Agent': 'KuGou2012-9020-ExpandSearchManager'
+        myUA: 'KuGou2012-9020-ExpandSearchManager'
       }
     }
   );

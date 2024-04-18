@@ -34,32 +34,9 @@ declare namespace SKY {
 
     type Sources = Array<Source>;
 
-    // 歌曲
-    interface MusicListItem {
-      singer: string;
-      name: string;
-      albumName: string;
-      albumId: string;
-      source: string;
-      interval: string;
-      _interval: number;
-      songmid: string;
-      copyrightId?: string;
-      img: string;
-      lrc: null;
-      lrcUrl?: string;
-      mrcUrl?: string;
-      trcUrl?: string;
-      hash?: string;
-      otherSource: null;
-      types: array;
-      _types: object;
-      typeUrl: object;
-    }
-
     type MusicList = {
       [key: string]: {
-        list: Array<MusicListItem>;
+        list: Array<SKY.MusicListItem>;
         info: {
           name: string;
           img: string;
@@ -76,7 +53,7 @@ declare namespace SKY {
 
     interface MusicObj {
       list: MusicList;
-      page: number;
+      pageSize: number;
       limit: number;
       total: number;
       source: string;
@@ -88,5 +65,11 @@ declare namespace SKY {
       width?: number;
       height?: number;
     }
+
+    interface SortListItem {
+      name: string;
+      id: string;
+    }
+    type SortList = Array<SortListItem>;
   }
 }

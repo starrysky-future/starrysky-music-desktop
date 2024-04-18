@@ -43,7 +43,8 @@ export const getSongListDetail = async (id, tryNum = 0) => {
       'get',
       {
         headers: {
-          id: id
+          myOrigin: 'https://y.qq.com',
+          myReferer: `https://y.qq.com/n/yqq/playsquare/${id}.html`
         }
       }
     );
@@ -189,6 +190,7 @@ const filterListDetail = (rawList) => {
       albumId: item.album.mid,
       source: 'tx',
       interval: formatPlayTime(item.interval),
+      _interval: item.interval * 1000,
       songId: item.id,
       albumMid: item.album.mid,
       strMediaMid: item.file.media_mid,

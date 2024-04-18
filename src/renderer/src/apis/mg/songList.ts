@@ -31,7 +31,12 @@ export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp(getSongListUrl(sortId, tagId, pageSize), 'get', {});
+    res = await axiosHttp(getSongListUrl(sortId, tagId, pageSize), 'get', {
+      headers: {
+        myUA: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        myReferer: 'https://m.music.migu.cn/'
+      }
+    });
   } catch (error) {
     return getSongList(sortId, tagId, pageSize, tryNum + 1);
   }
@@ -71,7 +76,12 @@ const getSongListDetailList = async (id, pageSize) => {
   const res = await axiosHttp(
     `https://app.c.nf.migu.cn/MIGUM2.0/v1.0/user/queryMusicListSongs.do?musicListId=${id}&pageNo=${pageSize}&pageSize=${config.limit_song}`,
     'get',
-    {}
+    {
+      headers: {
+        myUA: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        myReferer: 'https://m.music.migu.cn/'
+      }
+    }
   );
 
   return {
@@ -87,7 +97,12 @@ const getListDetailInfo = async (id) => {
   const res = await axiosHttp(
     `https://c.musicapp.migu.cn/MIGUM3.0/resource/playlist/v2.0?playlistId=${id}`,
     'get',
-    {}
+    {
+      headers: {
+        myUA: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        myReferer: 'https://m.music.migu.cn/'
+      }
+    }
   );
 
   return {

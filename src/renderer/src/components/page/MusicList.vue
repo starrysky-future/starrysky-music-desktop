@@ -1,21 +1,16 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
-import { useMusicListStore } from '@r/store/songList';
-import { usePlayStore } from '@r/store/play';
 import { useRoute } from 'vue-router';
-import { computed, ref, reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import { playSong } from '@r/plugins/player/playList';
-import { useSongListStore } from '@r/store/songList';
 
-const curInfo = ref<SKY.SongList.MusicListItem>();
+const props = defineProps<{
+  list: Array<SKY.MusicListItem> | undefined;
+  showList: boolean | undefined;
+  loading?: boolean;
+}>();
+
+const curInfo = ref<SKY.MusicListItem>();
 const active = ref<string>('');
-
-const songListStore = useSongListStore();
-const musicListStore = useMusicListStore();
-const playStore = usePlayStore();
-const { curListId } = storeToRefs(songListStore);
-const { musicList, listId } = storeToRefs(musicListStore);
-const { playList } = storeToRefs(playStore);
 
 const isVisible = ref<boolean>(false);
 const position = reactive({
@@ -25,17 +20,7 @@ const position = reactive({
 
 const route = useRoute();
 
-const showList = computed(() => {
-  if (route.name === 'songListDetail') {
-    return musicList.value[curListId.value].list[listId.value].list;
-  } else if (route.name === 'collect') {
-    return playList.value[playList.value.playListId].list;
-  } else {
-    return [];
-  }
-});
-
-const getMenu = (songInfo: SKY.SongList.MusicListItem, $event) => {
+const getMenu = (songInfo: SKY.MusicListItem, $event) => {
   active.value = songInfo.songmid;
   curInfo.value = songInfo;
   isVisible.value = true;
@@ -54,27 +39,31 @@ const getMenu = (songInfo: SKY.SongList.MusicListItem, $event) => {
       <div class="w_10">时长</div>
     </div>
     <div class="main scroll">
-      <div
-        v-for="(item, index) in showList"
-        :key="item.songmid"
-        class="music_item"
-        :class="{ active: active === item.songmid }"
-        :data-song-info="JSON.stringify(item)"
-        @dblclick="playSong(item, route.name === 'collect')"
-        @click.right="getMenu(item, $event)"
-      >
-        <div class="w_5">{{ index }}</div>
-        <div class="w_30 pd_right singleTextHide">
-          <span class="select" @click.stop>{{ item.name }}</span>
+      <template v-if="props.showList">
+        <div
+          v-for="(item, index) in props.list"
+          :key="item.songmid"
+          class="music_item"
+          :class="{ active: active === item.songmid }"
+          :data-song-info="JSON.stringify(item)"
+          @dblclick="playSong(item, route.name === 'collect')"
+          @click.right="getMenu(item, $event)"
+        >
+          <div class="w_5">{{ index }}</div>
+          <div class="w_30 pd_right singleTextHide">
+            <span class="select" @click.stop>{{ item.name }}</span>
+          </div>
+          <div class="w_20 pd_right singleTextHide">
+            <span class="select" @click.stop>{{ item.singer }}</span>
+          </div>
+          <div class="w_35 pd_right singleTextHide">
+            <span class="select" @click.stop>{{ item.albumName }}</span>
+          </div>
+          <div class="w_10">{{ item.interval }}</div>
         </div>
-        <div class="w_20 pd_right singleTextHide">
-          <span class="select" @click.stop>{{ item.singer }}</span>
-        </div>
-        <div class="w_35 pd_right singleTextHide">
-          <span class="select" @click.stop>{{ item.albumName }}</span>
-        </div>
-        <div class="w_10">{{ item.interval }}</div>
-      </div>
+      </template>
+      <Loading v-else-if="props.loading" />
+      <NoData v-else />
     </div>
   </div>
   <div v-show="isVisible">
@@ -127,7 +116,7 @@ const getMenu = (songInfo: SKY.SongList.MusicListItem, $event) => {
     flex: 0 0 35%;
   }
   .pd_right {
-    padding-right: 4px;
+    padding-right: 6px;
   }
 }
 </style>

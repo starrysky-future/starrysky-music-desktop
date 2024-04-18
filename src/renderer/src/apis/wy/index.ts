@@ -1,15 +1,19 @@
 import { getLyric } from './lyric';
 import { apis } from '../api-source';
 import { config, getSongList, getSongListDetail } from './songList';
+import { lbConfig, getLeaderBoardList } from './leaderBoard';
 
 const wy = {
   config,
+  lbConfig,
   getMusicUrl(songInfo, type) {
     return apis('wy').getMusicUrl(songInfo, type);
   },
   getLyric,
   getSongList,
-  getSongListDetail
+  getSongListDetail,
+
+  getLeaderBoardList
 };
 
 export default wy;

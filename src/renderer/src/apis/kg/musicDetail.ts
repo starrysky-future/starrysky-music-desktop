@@ -67,7 +67,7 @@ const createGetMusicInfosTask = (hashs) => {
 
 export const filterMusicInfoList = (rawList) => {
   const ids = new Set();
-  const list: Array<SKY.SongList.MusicListItem> = [];
+  const list: Array<SKY.MusicListItem> = [];
   rawList.forEach((item) => {
     if (!item) return;
     if (ids.has(item.audio_info.audio_id)) return;

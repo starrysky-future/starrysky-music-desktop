@@ -5,11 +5,18 @@ const props = defineProps<{
   isPage: string;
   activeSourceId: string;
   sortList?: SKY.SongList.SortList;
-  hasBorder?: boolean;
   activeSortId?: string | number;
+  hasBorder?: boolean;
+  hasSearch?: boolean;
 }>();
 
+const searchValue = defineModel<string>();
+
 const emits = defineEmits(['setSourceId', 'setSort']);
+
+const setSearchValue = (val: string) => {
+  searchValue.value = val;
+};
 </script>
 
 <template>
@@ -26,7 +33,7 @@ const emits = defineEmits(['setSourceId', 'setSort']);
         {{ item.name }}
       </div>
     </div>
-    <div v-if="props.isPage === 'songList'" class="sort">
+    <div v-if="props.isPage === 'songList' || props.isPage === 'search'" class="sort">
       <div
         v-for="item in props.sortList"
         :key="item.id"
@@ -37,14 +44,20 @@ const emits = defineEmits(['setSourceId', 'setSort']);
         {{ item.name }}
       </div>
     </div>
+    <div v-if="hasSearch" class="search">
+      <SearchInput placeholder="搜索" @set-value="setSearchValue" />
+    </div>
   </div>
 </template>
 
 <style lang="less" scoped>
 .tabs {
-  font-size: 14px;
   display: flex;
-  padding: 10px;
+  align-items: center;
+  font-size: 14px;
+
+  height: 40px;
+  padding: 0 10px;
   .tag {
     margin-right: 30px;
     cursor: pointer;
@@ -60,6 +73,11 @@ const emits = defineEmits(['setSourceId', 'setSort']);
     margin-left: 30px;
     display: flex;
     cursor: pointer;
+  }
+  .search {
+    margin-left: 30px;
+    width: 300px;
+    height: 24px;
   }
 
   .active {

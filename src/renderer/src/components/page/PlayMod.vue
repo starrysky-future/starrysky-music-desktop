@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, reactive, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import {
@@ -18,8 +19,10 @@ import {
 import { initPlayInfo, addList } from '@r/plugins/player/playList';
 import { getRandomList, removeList } from '@r/utils';
 
+const route = useRoute();
+
 const isVisible = ref<boolean>(false);
-const randomList = ref<Array<SKY.Play.MusicListItem>>();
+const randomList = ref<Array<SKY.MusicListItem>>();
 const isMute = ref<boolean>(false);
 const setPopup = ref<string>('volume');
 const position = reactive<SKY.SongList.Position>({
@@ -126,7 +129,7 @@ const prePlay = () => {
     playInfo = curList[nextId];
   }
 
-  initPlayInfo(playInfo);
+  initPlayInfo(playInfo, route.name);
 };
 
 const nextPlay = () => {
@@ -150,7 +153,7 @@ const nextPlay = () => {
     playInfo = curList[nextId];
   }
 
-  initPlayInfo(playInfo);
+  initPlayInfo(playInfo, route.name);
 };
 
 const iconVolume = computed(() => {

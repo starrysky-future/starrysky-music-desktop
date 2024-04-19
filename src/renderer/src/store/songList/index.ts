@@ -15,7 +15,7 @@ const initList = (list) => {
 };
 
 export const useSongListStore = defineStore('useSongListStore', () => {
-  const sourceId = ref<string>('wy');
+  const sourceId = ref<string>(sources.sources[0].id);
   const tagId = ref<string>('');
   const sortId = ref<string>(sources[sourceId.value].config.sortList[0].id);
 

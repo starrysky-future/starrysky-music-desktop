@@ -1,7 +1,7 @@
 import { needleHttp } from '../request';
 import { weapi, linuxapi } from '../crypto';
 import { formatPlayCount, dateFormat } from '@r/utils';
-import { getMusicList, filterList } from './musicDetail';
+import { getMusicList, filterMusicList } from './musicDetail';
 
 export const config = {
   sortList: [
@@ -74,7 +74,7 @@ export const getSongListDetail = async (id, pageSize, tryNum = 0) => {
   const rangeStart = (pageSize - 1) * limit;
   let list;
   if (idRes.playlist.trackIds.length == idRes.privileges.length) {
-    list = filterList(idRes.playlist.tracks, idRes.privileges);
+    list = filterMusicList(idRes.playlist.tracks, idRes.privileges);
   } else {
     try {
       const ids = idRes.playlist.trackIds
@@ -104,7 +104,7 @@ export const getSongListDetail = async (id, pageSize, tryNum = 0) => {
   };
 };
 
-const filterSongList = (rawData) => {
+export const filterSongList = (rawData) => {
   return rawData.map((item) => ({
     play_count: formatPlayCount(item.playCount),
     id: String(item.id),

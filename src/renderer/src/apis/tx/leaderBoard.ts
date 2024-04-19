@@ -1,5 +1,5 @@
 import { axiosHttp } from '../request';
-import { sizeFormate, formatSingerName, formatPlayTime } from '../utils';
+import { filterListDetail } from './songList';
 
 export const lbConfig = {
   topList: [
@@ -39,7 +39,7 @@ export const lbConfig = {
 };
 
 export const getLeaderBoardList = async (bangid, pageSize, tryNum = 0) => {
-  if (tryNum > 2) return Promise.reject(new Error('排行榜列表获取失败'));
+  if (tryNum > 2) throw new Error('排行榜列表获取失败');
   bangid = parseInt(bangid);
   let period;
   if (lbConfig.periods[bangid]) {
@@ -81,7 +81,7 @@ export const getLeaderBoardList = async (bangid, pageSize, tryNum = 0) => {
 
   return {
     total: res.toplist.data.songInfoList.length,
-    list: filterData(res.toplist.data.songInfoList),
+    list: filterListDetail(res.toplist.data.songInfoList),
     limit: lbConfig.limit_song,
     pageSize,
     source: 'tx'
@@ -114,63 +114,4 @@ const getPeriods = async (bangid, tryNum) => {
   }
 
   return period;
-};
-
-const filterData = (rawList) => {
-  return rawList.map((item) => {
-    const types: Array<SKY.Apis.Types> = [];
-    const _types: SKY.Apis._types = { flac24bit: {}, flac: {} };
-    if (item.file.size_128mp3 !== 0) {
-      const size = sizeFormate(item.file.size_128mp3);
-      types.push({ type: '128k', size });
-      _types['128k'] = {
-        size
-      };
-    }
-    if (item.file.size_320mp3 !== 0) {
-      const size = sizeFormate(item.file.size_320mp3);
-      types.push({ type: '320k', size });
-      _types['320k'] = {
-        size
-      };
-    }
-    if (item.file.size_flac !== 0) {
-      const size = sizeFormate(item.file.size_flac);
-      types.push({ type: 'flac', size });
-      _types.flac = {
-        size
-      };
-    }
-    if (item.file.size_hires !== 0) {
-      const size = sizeFormate(item.file.size_hires);
-      types.push({ type: 'flac24bit', size });
-      _types.flac24bit = {
-        size
-      };
-    }
-    return {
-      singer: formatSingerName(item.singer, 'name'),
-      name: item.title,
-      albumName: item.album.name,
-      albumId: item.album.mid,
-      source: 'tx',
-      interval: formatPlayTime(item.interval),
-      _interval: item.interval,
-      songId: item.id,
-      albumMid: item.album.mid,
-      strMediaMid: item.file.media_mid,
-      songmid: item.mid,
-      img:
-        item.album.name === '' || item.album.name === '空'
-          ? item.singer?.length
-            ? `https://y.gtimg.cn/music/photo_new/T001R500x500M000${item.singer[0].mid}.jpg`
-            : ''
-          : `https://y.gtimg.cn/music/photo_new/T002R500x500M000${item.album.mid}.jpg`,
-      lrc: null,
-      otherSource: null,
-      types,
-      _types,
-      typeUrl: {}
-    };
-  });
 };

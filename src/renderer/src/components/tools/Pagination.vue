@@ -1,34 +1,30 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useSongListStore } from '@r/store/songList';
 
-const songListStore = useSongListStore();
-const { songList, curListId, pageSize } = storeToRefs(songListStore);
+const props = defineProps<{
+  size: number;
+  totalSize: number;
+}>();
 
-const size = computed(() => {
-  return songList.value[curListId.value].total >= 10 ? 10 : songList.value[curListId.value].total;
-});
-const totalSize = computed(() => {
-  return Math.ceil(songList.value[curListId.value].total / songList.value[curListId.value].limit);
-});
+const pageSize = defineModel<number>();
+
 const hidePre = computed(() => {
   return pageSize.value === 1;
 });
 const hideNext = computed(() => {
-  return pageSize.value === totalSize.value;
+  return pageSize.value === props.totalSize;
 });
 
 const setPageSize = (size: number, opr?: string) => {
   if (
     (opr === 'prepro' && pageSize.value !== 1) ||
-    (opr === 'nextpro' && pageSize.value !== totalSize.value)
+    (opr === 'nextpro' && pageSize.value !== props.totalSize)
   ) {
     pageSize.value = size;
   }
   if (
     (opr === 'pre' && pageSize.value! > 1) ||
-    (opr === 'next' && pageSize.value! < totalSize.value)
+    (opr === 'next' && pageSize.value! < props.totalSize)
   ) {
     pageSize.value! += size;
   }

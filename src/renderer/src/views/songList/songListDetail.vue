@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import sources from '@r/apis';
 import { useSongListStore, useMusicListStore } from '@r/store/songList';
@@ -9,6 +9,7 @@ import { useSetStore } from '@r/store/setting';
 import { playSong } from '@r/plugins/player/playList';
 
 const router = useRouter();
+const route = useRoute();
 
 const songListStore = useSongListStore();
 const musicListStore = useMusicListStore();
@@ -53,7 +54,7 @@ const setPlay = () => {
   playList.value.playId =
     playList.value.playId >= playList.value.defaultList.list.length ? 0 : playList.value.playId;
 
-  playSong(playList.value.defaultList.list[playList.value.playId]);
+  playSong(playList.value.defaultList.list[playList.value.playId], route.name);
 };
 
 const setCollect = () => {

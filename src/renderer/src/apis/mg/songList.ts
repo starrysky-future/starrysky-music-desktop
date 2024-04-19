@@ -138,7 +138,7 @@ const filterList = (rawData) => {
 
 export const filterMusicInfoList = (rawList) => {
   const ids = new Set();
-  const list: Array<SKY.SongList.MusicListItem> = [];
+  const list: Array<SKY.MusicListItem> = [];
   rawList.forEach((item) => {
     if (!item.songId || ids.has(item.songId)) return;
     ids.add(item.songId);

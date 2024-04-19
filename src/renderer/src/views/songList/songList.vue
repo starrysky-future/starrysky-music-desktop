@@ -14,6 +14,13 @@ const { musiclistId } = storeToRefs(musicListStore);
 
 const loading = ref<boolean>(false);
 
+const size = computed(() => {
+  return songList.value[curListId.value].total >= 10 ? 10 : songList.value[curListId.value].total;
+});
+const totalSize = computed(() => {
+  return Math.ceil(songList.value[curListId.value].total / songList.value[curListId.value].limit);
+});
+
 const showList = computed(() => {
   return (
     songList.value[curListId.value].list[pageSize.value - 1] &&
@@ -93,7 +100,7 @@ watchEffect(async () => {
     <NoData v-else />
   </div>
   <div class="floor">
-    <Pagination />
+    <Pagination v-model="pageSize" :size="size" :total-size="totalSize" />
   </div>
 </template>
 

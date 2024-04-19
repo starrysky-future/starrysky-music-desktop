@@ -46,7 +46,7 @@ const getMenu = (songInfo: SKY.MusicListItem, $event) => {
           class="music_item"
           :class="{ active: active === item.songmid }"
           :data-song-info="JSON.stringify(item)"
-          @dblclick="playSong(item, route.name === 'collect')"
+          @dblclick="playSong(item, route.name)"
           @click.right="getMenu(item, $event)"
         >
           <div class="w_5">{{ index }}</div>

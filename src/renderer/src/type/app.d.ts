@@ -8,8 +8,12 @@ declare namespace SKY {
     interval: string;
     _interval: number;
     songmid: string;
+    copyrightId?: string;
     img: string;
     lrc: null;
+    lrcUrl?: string;
+    mrcUrl?: string;
+    trcUrl?: string;
     hash?: string;
     otherSource: null;
     types: array;

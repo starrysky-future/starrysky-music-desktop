@@ -151,7 +151,7 @@ const filterList2 = ({ content }, pageSize) => {
   };
 };
 
-const filterListDetail = (rawList) => {
+export const filterListDetail = (rawList) => {
   return rawList.map((item) => {
     const types: Array<SKY.Apis.Types> = [];
     const _types: SKY.Apis._types = { flac24bit: {}, flac: {} };

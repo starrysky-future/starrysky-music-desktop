@@ -6,34 +6,6 @@ const { createThemeColors } = require('./utils');
 
 const defaultThemes = [
   {
-    id: 'green',
-    name: '绿意盎然',
-    isDark: false,
-    config: {
-      primary: 'rgb(77, 175, 124)',
-      font: 'rgb(33, 33, 33)',
-      '--color-app-background': 'var(--color-primary-light-600-alpha-700)',
-      '--color-main-background': 'rgba(255, 255, 255, 1)',
-      '--color-nav-font': 'var(--color-primary)',
-      '--background-image': 'none',
-      '--background-image-position': 'center',
-      '--background-image-size': 'cover',
-
-      '--color-btn-hide': 'var(--color-primary)',
-      '--color-btn-min': 'var(--color-primary)',
-      '--color-btn-max': 'var(--color-primary)',
-      '--color-btn-close': 'var(--color-primary)',
-      '--color-btn-close-hover': '#F28F8F',
-
-      '--color-badge-primary': 'var(--color-primary)',
-      '--color-badge-secondary': '#4baed5',
-      '--color-badge-tertiary': '#e7aa36',
-
-      '--color-font': 'var(--color-850)',
-      '--color-font-label': 'var(--color-450)'
-    }
-  },
-  {
     id: 'blue',
     name: '蓝田生玉',
     isDark: false,
@@ -56,6 +28,34 @@ const defaultThemes = [
       '--color-badge-primary': 'var(--color-primary)',
       '--color-badge-secondary': '#5cbf9b',
       '--color-badge-tertiary': '#5cbf9b',
+
+      '--color-font': 'var(--color-850)',
+      '--color-font-label': 'var(--color-450)'
+    }
+  },
+  {
+    id: 'green',
+    name: '绿意盎然',
+    isDark: false,
+    config: {
+      primary: 'rgb(77, 175, 124)',
+      font: 'rgb(33, 33, 33)',
+      '--color-app-background': 'var(--color-primary-light-600-alpha-700)',
+      '--color-main-background': 'rgba(255, 255, 255, 1)',
+      '--color-nav-font': 'var(--color-primary)',
+      '--background-image': 'none',
+      '--background-image-position': 'center',
+      '--background-image-size': 'cover',
+
+      '--color-btn-hide': 'var(--color-primary)',
+      '--color-btn-min': 'var(--color-primary)',
+      '--color-btn-max': 'var(--color-primary)',
+      '--color-btn-close': 'var(--color-primary)',
+      '--color-btn-close-hover': '#F28F8F',
+
+      '--color-badge-primary': 'var(--color-primary)',
+      '--color-badge-secondary': '#4baed5',
+      '--color-badge-tertiary': '#e7aa36',
 
       '--color-font': 'var(--color-850)',
       '--color-font-label': 'var(--color-450)'

@@ -1,28 +1,37 @@
 import pinia from '@r/store';
+import { RouteRecordName } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import sources from '@r/apis';
 import { usePlayStore } from '@r/store/play';
 import { useSongListStore } from '@r/store/songList';
+import { useLeaderBoardStore } from '@r/store/leaderBoard';
 import { debounce, addUnique, insertList } from '@r/utils';
 import { setResource, onLoadeddata, setStop } from '@r/plugins/player';
 
 const playStore = usePlayStore(pinia);
 const songListStore = useSongListStore(pinia);
+const leaderBoardStore = useLeaderBoardStore(pinia);
 const { sourceId } = storeToRefs(songListStore);
 const { curPlayInfo, statulyric, playList } = storeToRefs(playStore);
+const { LBsourceId } = storeToRefs(leaderBoardStore);
 
-export const playSong = debounce(async (info: SKY.Play.MusicListItem, isCollect?: boolean) => {
-  if (!isCollect) {
-    const unique = addUnique(playList.value.defaultList.list, info, 'songmid');
-    if (unique) {
-      playList.value.playId = playList.value.defaultList.list.length - 1;
+export const playSong = debounce(
+  async (info: SKY.MusicListItem, name: RouteRecordName | null | undefined) => {
+    const isCollect = name === 'collect';
+
+    if (!isCollect) {
+      const unique = addUnique(playList.value.defaultList.list, info, 'songmid');
+      if (unique) {
+        playList.value.playId = playList.value.defaultList.list.length - 1;
+      }
     }
-  }
 
-  initPlayInfo(info);
-}, 500);
+    initPlayInfo(info, name);
+  },
+  500
+);
 
-export const playLater = (info: SKY.Play.MusicListItem) => {
+export const playLater = (info: SKY.MusicListItem) => {
   insertList(
     playList.value[playList.value.playListId].list,
     info,
@@ -31,22 +40,26 @@ export const playLater = (info: SKY.Play.MusicListItem) => {
   );
 };
 
-export const addList = (info: SKY.Play.MusicListItem, listName: string) => {
+export const addList = (info: SKY.MusicListItem, listName: string) => {
   addUnique(playList.value[listName].list, info, 'songmid');
 };
 
-export const initPlayInfo = async (info: SKY.Play.MusicListItem) => {
+export const initPlayInfo = async (
+  info: SKY.MusicListItem,
+  name: RouteRecordName | null | undefined
+) => {
   setStop();
+  const sourceid = name === 'leaderBoard' ? LBsourceId.value : sourceId.value;
 
   playStore.setMaxplayTime(info._interval / 1000);
   curPlayInfo.value = { ...info, isPlay: false, curLyric: '' };
 
-  const resMusic = await sources[sourceId.value].getMusicUrl(info, info.types[0].type);
+  const resMusic = await sources[sourceid].getMusicUrl(info, info.types[0].type);
 
   // img
-  if (!curPlayInfo.value.img && sources[sourceId.value].getPic) {
+  if (!curPlayInfo.value.img && sources[sourceid].getPic) {
     try {
-      const resImg = await sources[sourceId.value].getPic(info);
+      const resImg = await sources[sourceid].getPic(info);
       console.log(resImg);
       curPlayInfo.value.img = resImg;
     } catch (error) {
@@ -56,7 +69,9 @@ export const initPlayInfo = async (info: SKY.Play.MusicListItem) => {
 
   // 歌词
   try {
-    const resLyric = await sources[sourceId.value].getLyric(info);
+    statulyric.value = {};
+    curPlayInfo.value.curLyric = '';
+    const resLyric = await sources[sourceid].getLyric(info);
     parseStatulyric(resLyric.lyric);
   } catch (error) {
     console.log(error);

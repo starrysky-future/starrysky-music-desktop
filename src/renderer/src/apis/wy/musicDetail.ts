@@ -22,7 +22,7 @@ export const getMusicList = async (ids: Array<string> = [], tryNum) => {
     return getMusicList(ids, tryNum + 1);
   }
 
-  return filterList(res.songs, res.privileges);
+  return filterMusicList(res.songs, res.privileges);
 };
 
 // 获取单个歌曲信息
@@ -50,7 +50,7 @@ export const getSinger = (singers) => {
   return arr.join('、');
 };
 
-export const filterList = (songs, privileges) => {
+export const filterMusicList = (songs, privileges) => {
   const list: Array<SKY.MusicListItem> = [];
   songs.forEach((item, index) => {
     const types: Array<SKY.Apis.Types> = [];

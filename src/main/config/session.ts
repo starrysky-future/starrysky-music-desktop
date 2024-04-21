@@ -11,16 +11,24 @@ export const setSession = () => {
   };
   session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
     const setHeader = {};
-    if (details.requestHeaders.myUA) {
-      setHeader['User-Agent'] = details.requestHeaders.myUA;
+    if (details.requestHeaders.myua) {
+      setHeader['User-Agent'] = details.requestHeaders.myua;
+      delete details.requestHeaders.myua;
     }
-    if (details.requestHeaders.myReferer) {
-      setHeader['Referer'] = details.requestHeaders.myReferer;
+    if (details.requestHeaders.myreferer) {
+      setHeader['Referer'] = details.requestHeaders.myreferer;
+      delete details.requestHeaders.myreferer;
     }
-    if (details.requestHeaders.myOrigin) {
-      setHeader['Origin'] = details.requestHeaders.myOrigin;
+    if (details.requestHeaders.myorigin) {
+      setHeader['Origin'] = details.requestHeaders.myorigin;
+      delete details.requestHeaders.myorigin;
     }
-    details.requestHeaders = { ...details.requestHeaders, ...defaultHeaders, ...setHeader };
+    details.requestHeaders = {
+      ...defaultHeaders,
+      ...details.requestHeaders,
+      ...setHeader
+    };
+
     callback({ requestHeaders: details.requestHeaders });
   });
 };

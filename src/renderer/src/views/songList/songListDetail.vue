@@ -22,8 +22,9 @@ const { playList } = storeToRefs(playStore);
 
 const loading = ref<boolean>(false);
 
-const showList = computed(() => {
+const hasList = computed(() => {
   return (
+    musicList.value[curListId.value] &&
     musicList.value[curListId.value].list[musiclistId.value] &&
     musicList.value[curListId.value].list[musiclistId.value].list &&
     musicList.value[curListId.value].list[musiclistId.value].list.length > 0
@@ -32,6 +33,7 @@ const showList = computed(() => {
 
 const noData = computed(() => {
   return (
+    musicList.value[curListId.value] &&
     musicList.value[curListId.value].list[musiclistId.value] &&
     musicList.value[curListId.value].list[musiclistId.value].list &&
     musicList.value[curListId.value].list[musiclistId.value].list.length === 0
@@ -80,7 +82,7 @@ const list = computed(() => {
 });
 
 const getData = async () => {
-  if (showList.value) return;
+  if (hasList.value) return;
 
   loading.value = true;
 
@@ -126,7 +128,7 @@ getData();
       </div>
     </div>
     <div class="main">
-      <MusicList :loading="loading" :show-list="showList" :list="list" />
+      <MusicList :loading="loading" :show-list="hasList" :list="list" />
     </div>
   </div>
 </template>

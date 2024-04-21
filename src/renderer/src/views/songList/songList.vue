@@ -21,7 +21,7 @@ const totalSize = computed(() => {
   return Math.ceil(songList.value[curListId.value].total / songList.value[curListId.value].limit);
 });
 
-const showList = computed(() => {
+const hasList = computed(() => {
   return (
     songList.value[curListId.value].list[pageSize.value - 1] &&
     songList.value[curListId.value].list[pageSize.value - 1].length > 0
@@ -39,22 +39,16 @@ const setSort = (id: string) => {
   pageSize.value = 1;
 };
 
-const goDetail = (item: SKY.SongList.ListItemType) => {
-  musiclistId.value = item.id;
-  console.log(item);
+const goDetail = (id: string) => {
+  musiclistId.value = id;
 
   router.push({
-    name: 'songListDetail',
-    query: {
-      img: item.img,
-      name: item.name,
-      desc: item.desc
-    }
+    name: 'songListDetail'
   });
 };
 
 watchEffect(async () => {
-  if (showList.value) return;
+  if (hasList.value) return;
 
   loading.value = true;
   try {
@@ -91,9 +85,9 @@ watchEffect(async () => {
     @set-sort="setSort"
   />
   <div class="songList scroll">
-    <div v-if="showList" class="main">
+    <div v-if="hasList" class="main">
       <template v-for="item in songList[curListId].list[pageSize - 1]" :key="item.id">
-        <SongListItem :list="item" @click="goDetail(item)" />
+        <SongListItem :list="item" @click="goDetail(item.id)" />
       </template>
     </div>
     <Loading v-else-if="loading" />

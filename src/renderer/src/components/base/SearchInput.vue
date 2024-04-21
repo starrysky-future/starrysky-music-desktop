@@ -4,10 +4,15 @@ import { ref } from 'vue';
 const props = defineProps<{
   placeholder: string;
 }>();
-const value = ref<string>();
+const value = ref<string>('');
 const isFocus = ref<boolean>(false);
 
 const emits = defineEmits(['setValue']);
+
+const clearValue = () => {
+  value.value = '';
+  emits('setValue', '');
+};
 
 const setFocus = () => {
   isFocus.value = true;
@@ -26,8 +31,34 @@ const setBlur = () => {
       @focus="setFocus"
       @blur="setBlur"
     />
-    <div class="search_input_btn">关闭</div>
-    <div class="search_input_btn" @click="emits('setValue', value)">搜索</div>
+    <div class="search_input_btn">
+      <div v-show="value" class="search_input_btn_icon search_input_btn_clear" @click="clearValue">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 24 24"
+          space="preserve"
+        >
+          <use xlink:href="#icon-close" />
+        </svg>
+      </div>
+    </div>
+    <div class="search_input_btn" @click="emits('setValue', value)">
+      <div class="search_input_btn_icon">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 36 36"
+          space="preserve"
+        >
+          <use xlink:href="#icon-search" />
+        </svg>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -58,6 +89,21 @@ const setBlur = () => {
     width: 10%;
     height: 100%;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      background-color: var(--color-primary-light-300);
+    }
+    .search_input_btn_icon {
+      width: 20px;
+      height: 20px;
+      color: var(--color-primary);
+    }
+    .search_input_btn_clear {
+      width: 18px;
+      height: 18px;
+    }
   }
 }
 .searchInputActive {

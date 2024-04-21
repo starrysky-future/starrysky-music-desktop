@@ -15,10 +15,6 @@ declare namespace SKY {
 
     type ListType = Array<ListItemType>;
 
-    type SongListSource = {
-      [key: string]: SongList;
-    };
-
     interface SongList {
       limit: number;
       list: Array<ListType>;
@@ -27,6 +23,11 @@ declare namespace SKY {
       total: number;
     }
 
+    // 歌单列表数据存储类型
+    type SongListSource = {
+      [key: string]: SongList;
+    };
+
     interface Source {
       name: string;
       id: string;
@@ -34,21 +35,21 @@ declare namespace SKY {
 
     type Sources = Array<Source>;
 
-    type MusicList = {
-      [key: string]: {
-        list: Array<SKY.MusicListItem>;
-        info: {
-          name: string;
-          img: string;
-          desc: string;
-          play_count?: number;
-          author?: string;
-        };
+    type MusicListType = Array<SKY.MusicListItem>;
+
+    type MusicListOrInfo = {
+      list: MusicListType;
+      info: {
+        name: string;
+        img: string;
+        desc: string;
+        play_count?: number;
+        author?: string;
       };
     };
 
-    type MusicObjSource = {
-      [key: string]: MusicObj;
+    type MusicList = {
+      [key: string]: MusicListOrInfo;
     };
 
     interface MusicObj {
@@ -58,6 +59,23 @@ declare namespace SKY {
       total: number;
       source: string;
     }
+
+    // 歌曲列表数据存储类型
+    type MusicObjSource = {
+      [key: string]: MusicObj;
+    };
+
+    interface SearchMusicListItem {
+      list: Array<MusicListType>;
+      pageSize: number;
+      limit: number;
+      total: number;
+      source: string;
+    }
+
+    type SearchMusicList = {
+      [key: string]: SearchMusicListItem;
+    };
 
     interface Position {
       x: number;

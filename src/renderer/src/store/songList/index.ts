@@ -43,18 +43,20 @@ export const useSongListStore = defineStore('useSongListStore', () => {
 
 export const useMusicListStore = defineStore('useMusicListStore', () => {
   const initlist: SKY.SongList.MusicObjSource = initList({
-    list: {},
+    list: {
+      list: [],
+      info: {
+        play_count: 0,
+        name: '',
+        img: '',
+        desc: '',
+        author: ''
+      }
+    },
     pageSize: 1,
     limit: 100000,
     total: 0,
-    source: 'wy',
-    info: {
-      play_count: 0,
-      name: '',
-      img: '',
-      desc: '',
-      author: ''
-    }
+    source: 'wy'
   });
   const musicList = ref<SKY.SongList.MusicObjSource>(initlist);
   const musiclistId = ref<string>('');

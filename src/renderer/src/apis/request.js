@@ -27,10 +27,17 @@ export const needleHttp = async (
 
   return new Promise((resolve, reject) => {
     needle.request(method, url, data, options, (err, res, body) => {
-      if (err) {
-        reject(err);
+      if (!err) {
+        body = res.body = res.raw.toString();
+        try {
+          res.body = JSON.parse(res.body);
+        } catch (_) {
+          console.log(_);
+        }
+        body = res.body;
+        resolve(body);
       }
-      resolve(JSON.parse(body));
+      reject(err);
     });
   });
 };

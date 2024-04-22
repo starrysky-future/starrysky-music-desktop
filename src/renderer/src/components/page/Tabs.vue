@@ -10,12 +10,10 @@ const props = defineProps<{
   hasSearch?: boolean;
 }>();
 
-const searchValue = defineModel<string>();
-
-const emits = defineEmits(['setSourceId', 'setSort']);
+const emits = defineEmits(['setSourceId', 'setSort', 'setSearchValue']);
 
 const setSearchValue = (val: string) => {
-  searchValue.value = val;
+  emits('setSearchValue', val);
 };
 </script>
 

@@ -5,7 +5,7 @@ import { playSong } from '@r/plugins/player/playList';
 
 const props = defineProps<{
   list: Array<SKY.MusicListItem> | undefined;
-  showList: boolean | undefined;
+  hasList: boolean | undefined;
   loading?: boolean;
 }>();
 
@@ -39,7 +39,7 @@ const getMenu = (songInfo: SKY.MusicListItem, $event) => {
       <div class="w_10">时长</div>
     </div>
     <div class="main scroll">
-      <template v-if="props.showList">
+      <template v-if="props.hasList">
         <div
           v-for="(item, index) in props.list"
           :key="item.songmid"

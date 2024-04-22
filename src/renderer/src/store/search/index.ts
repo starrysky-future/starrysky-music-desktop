@@ -19,62 +19,107 @@ const initList = (list) => {
   return res;
 };
 
-const initSongList: SKY.SongList.SongListSource = initList({
-  limit: 30,
-  list: [],
-  pageSize: 1,
-  source: 'wy',
-  total: 0
-});
-
-const initMusicList: SKY.SongList.MusicObjSource = initList({
-  list: {
-    list: [],
-    info: {
-      play_count: 0,
-      name: '',
-      img: '',
-      desc: '',
-      author: ''
-    }
-  },
-  pageSize: 1,
-  limit: 100000,
-  total: 0,
-  source: 'wy'
-});
-
-const initMusic: SKY.SongList.SearchMusicList = initList({
-  list: [],
-  pageSize: 1,
-  limit: 100000,
-  total: 0,
-  source: 'wy'
-});
-
 export const useSearchSongListStore = defineStore('useSearchSongListStore', () => {
+  const initSongList: SKY.SongList.SongListSource = initList({
+    limit: 30,
+    list: [],
+    pageSize: 1,
+    source: 'wy',
+    total: 0
+  });
+
   const searchSourceId = ref<string>(sources.sources[0].id);
   const searchSortId = ref<string>(sortList[0].id);
   const searchPageSize = ref<number>(1);
+  const searchSongList = ref<SKY.SongList.SongListSource>(initSongList);
 
   const searchCurListId = computed(() => {
     return searchSourceId.value + '_' + searchSortId.value;
   });
 
-  const searchSongList = ref<SKY.SongList.SongListSource>(initSongList);
+  const resetSongList = () => {
+    searchSongList.value = initList({
+      limit: 30,
+      list: [],
+      pageSize: 1,
+      source: 'wy',
+      total: 0
+    });
+  };
 
-  return { searchSongList, searchSourceId, searchSortId, searchPageSize, searchCurListId };
+  return {
+    searchSongList,
+    searchSourceId,
+    searchSortId,
+    searchPageSize,
+    searchCurListId,
+    resetSongList
+  };
 });
 
 export const useSearchMusicListStore = defineStore('useSearchMusicListStore', () => {
+  const initMusicList: SKY.SongList.MusicObjSource = initList({
+    list: {
+      list: [],
+      info: {
+        play_count: 0,
+        name: '',
+        img: '',
+        desc: '',
+        author: ''
+      }
+    },
+    pageSize: 1,
+    limit: 100000,
+    total: 0,
+    source: 'wy'
+  });
+
   const searchMusicList = ref<SKY.SongList.MusicObjSource>(initMusicList);
   const searchMusiclistId = ref<string>('');
 
-  return { searchMusicList, searchMusiclistId };
+  const resetMusicList = () => {
+    searchMusicList.value = initList({
+      list: {
+        list: [],
+        info: {
+          play_count: 0,
+          name: '',
+          img: '',
+          desc: '',
+          author: ''
+        }
+      },
+      pageSize: 1,
+      limit: 100000,
+      total: 0,
+      source: 'wy'
+    });
+  };
+
+  return { searchMusicList, searchMusiclistId, resetMusicList };
 });
 
 export const useSearchMusicStore = defineStore('useSearchMusicStore', () => {
-  const searchMusicList = ref<SKY.SongList.SearchMusicList>(initMusic);
+  const initMusic: SKY.SongList.SearchMusicList = initList({
+    list: [],
+    pageSize: 1,
+    limit: 100000,
+    total: 0,
+    source: 'wy'
+  });
 
-  return { searchMusicList };
+  const searchMusic = ref<SKY.SongList.SearchMusicList>(initMusic);
+
+  const resetMusic = () => {
+    searchMusic.value = initList({
+      list: [],
+      pageSize: 1,
+      limit: 100000,
+      total: 0,
+      source: 'wy'
+    });
+  };
+
+  return { searchMusic, resetMusic };
 });

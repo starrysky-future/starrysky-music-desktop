@@ -14,11 +14,12 @@ const { musiclistId } = storeToRefs(musicListStore);
 
 const loading = ref<boolean>(false);
 
-const size = computed(() => {
-  return songList.value[curListId.value].total >= 10 ? 10 : songList.value[curListId.value].total;
-});
 const totalSize = computed(() => {
   return Math.ceil(songList.value[curListId.value].total / songList.value[curListId.value].limit);
+});
+
+const size = computed(() => {
+  return totalSize.value >= 10 ? 10 : totalSize.value;
 });
 
 const hasList = computed(() => {
@@ -43,7 +44,8 @@ const goDetail = (id: string) => {
   musiclistId.value = id;
 
   router.push({
-    name: 'songListDetail'
+    name: 'songListDetail',
+    query: { pageName: 'songList' }
   });
 };
 

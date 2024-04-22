@@ -1,22 +1,35 @@
 <script lang="ts" setup>
-import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useSetStore } from '@r/store/setting';
 
 const router = useRouter();
-const route = useRoute();
 
 const setStore = useSetStore();
-const { isKeepList } = storeToRefs(setStore);
+const { keepSearchDetail, keepSongListDetail } = storeToRefs(setStore);
+const active = ref<string>('songList');
 
 const changeCurPage = (path: string): void => {
-  if (path === 'songList' && isKeepList.value) {
+  if (path === 'songList' && keepSongListDetail.value) {
     router.push({
-      name: 'songListDetail'
+      name: 'songListDetail',
+      query: {
+        pageName: 'songList'
+      }
+    });
+  } else if (path === 'search' && keepSearchDetail.value) {
+    router.push({
+      name: 'songListDetail',
+      query: {
+        pageName: 'search'
+      }
     });
   } else {
     router.push({ name: path });
   }
+
+  active.value = path;
 };
 </script>
 
@@ -37,7 +50,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: route.name === 'songList' || route.name === 'songListDetail' }"
+      :class="{ active: active === 'songList' }"
       class="common_style icon_position"
       @click="changeCurPage('songList')"
     >
@@ -55,7 +68,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: route.name === 'leaderBoard' }"
+      :class="{ active: active === 'leaderBoard' }"
       class="common_style icon_position"
       @click="changeCurPage('leaderBoard')"
     >
@@ -73,7 +86,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: route.name === 'collect' }"
+      :class="{ active: active === 'collect' }"
       class="common_style icon_position"
       @click="changeCurPage('collect')"
     >
@@ -91,7 +104,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: route.name === 'search' }"
+      :class="{ active: active === 'search' }"
       class="common_style icon_position"
       @click="changeCurPage('search')"
     >
@@ -109,7 +122,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: route.name === 'setting' }"
+      :class="{ active: active === 'setting' }"
       class="common_style icon_position"
       @click="changeCurPage('setting')"
     >

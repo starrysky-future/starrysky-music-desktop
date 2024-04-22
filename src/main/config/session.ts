@@ -24,6 +24,10 @@ export const setSession = () => {
       setHeader['Origin'] = details.requestHeaders.myOrigin;
       delete details.requestHeaders.myOrigin;
     }
+    if (details.requestHeaders.myCookie) {
+      setHeader['cookie'] = details.requestHeaders.myCookie;
+      delete details.requestHeaders.myCookie;
+    }
     details.requestHeaders = {
       ...defaultHeaders,
       ...details.requestHeaders,

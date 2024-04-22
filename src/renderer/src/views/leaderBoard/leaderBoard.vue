@@ -17,7 +17,7 @@ const setActiveId = (info) => {
 
 const loading = ref<boolean>(false);
 
-const showList = computed(() => {
+const hasList = computed(() => {
   return (
     leaderBoardList.value[leaderBoardlistId.value] &&
     leaderBoardList.value[leaderBoardlistId.value].length > 0
@@ -75,7 +75,7 @@ onBeforeUnmount(() => {
       />
     </div>
     <div class="leaderBoard_right scroll">
-      <MusicList :loading="loading" :show-list="showList" :list="list" />
+      <MusicList :loading="loading" :has-list="hasList" :list="list" />
     </div>
   </div>
 </template>

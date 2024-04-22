@@ -3,7 +3,7 @@ import { createRouter, RouteRecordRaw, Router, createWebHashHistory } from 'vue-
 const routes: Array<RouteRecordRaw> = [
   {
     name: 'songList',
-    path: '/songList',
+    path: '/',
     component: () => import('@r/views/songList/songList.vue')
   },
   {
@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     name: 'collect',
-    path: '/',
+    path: '/collect',
     component: () => import('@r/views/collect/collect.vue')
   },
   {

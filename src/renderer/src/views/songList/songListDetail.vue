@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import sources from '@r/apis';
 import { useSongListStore, useMusicListStore } from '@r/store/songList';
+import { useSearchSongListStore, useSearchMusicListStore } from '@r/store/search';
 import { usePlayStore } from '@r/store/play';
 import { useSetStore } from '@r/store/setting';
 import { playSong } from '@r/plugins/player/playList';
@@ -11,37 +12,69 @@ import { playSong } from '@r/plugins/player/playList';
 const router = useRouter();
 const route = useRoute();
 
+const pageName = route.query.pageName;
+
 const songListStore = useSongListStore();
 const musicListStore = useMusicListStore();
-const setStore = useSetStore();
-const playStore = usePlayStore();
 const { sourceId, curListId } = storeToRefs(songListStore);
 const { musicList, musiclistId } = storeToRefs(musicListStore);
-const { isKeepList } = storeToRefs(setStore);
+
+const searchSongListStore = useSearchSongListStore();
+const searchMusicListStore = useSearchMusicListStore();
+const { searchSourceId, searchCurListId } = storeToRefs(searchSongListStore);
+const { searchMusicList, searchMusiclistId } = storeToRefs(searchMusicListStore);
+
+const playStore = usePlayStore();
 const { playList } = storeToRefs(playStore);
+
+const setStore = useSetStore();
+const { keepSearchDetail, keepSongListDetail } = storeToRefs(setStore);
+
+let detailSourceId;
+let detailList;
+let listKey;
+let pageKey;
+
+if (pageName === 'search') {
+  console.log('search');
+  detailSourceId = searchSourceId.value;
+  detailList = searchMusicList.value;
+  listKey = searchCurListId.value;
+  pageKey = searchMusiclistId.value;
+
+  keepSearchDetail.value = 'search';
+} else if (pageName === 'songList') {
+  console.log('songList');
+  detailSourceId = sourceId.value;
+  detailList = musicList.value;
+  listKey = curListId.value;
+  pageKey = musiclistId.value;
+
+  keepSongListDetail.value = 'songList';
+}
+
+console.log('detailSourceId', detailSourceId);
+console.log('detailList', detailList);
+console.log('listKey', listKey);
+console.log('pageKey', pageKey);
 
 const loading = ref<boolean>(false);
 
 const hasList = computed(() => {
   return (
-    musicList.value[curListId.value] &&
-    musicList.value[curListId.value].list[musiclistId.value] &&
-    musicList.value[curListId.value].list[musiclistId.value].list &&
-    musicList.value[curListId.value].list[musiclistId.value].list.length > 0
+    detailList[listKey].list[pageKey] &&
+    detailList[listKey].list[pageKey].list &&
+    detailList[listKey].list[pageKey].list.length > 0
   );
 });
 
 const noData = computed(() => {
   return (
-    musicList.value[curListId.value] &&
-    musicList.value[curListId.value].list[musiclistId.value] &&
-    musicList.value[curListId.value].list[musiclistId.value].list &&
-    musicList.value[curListId.value].list[musiclistId.value].list.length === 0
+    detailList[listKey].list[pageKey] &&
+    detailList[listKey].list[pageKey].list &&
+    detailList[listKey].list[pageKey].list.length === 0
   );
 });
-
-// 页面保存
-isKeepList.value = true;
 
 const setPlay = () => {
   if (noData.value) return;
@@ -50,7 +83,7 @@ const setPlay = () => {
   playList.value.playListId = 'defaultList';
   const newList: Array<SKY.MusicListItem> = ([] as Array<SKY.MusicListItem>).concat(
     playList.value.defaultList.list,
-    musicList.value[curListId.value].list[musiclistId.value].list
+    detailList[listKey].list[pageKey].list
   );
   playList.value.defaultList.list = Array.from(new Set(newList));
   playList.value.playId =
@@ -62,23 +95,24 @@ const setPlay = () => {
 const setCollect = () => {
   if (noData.value) return;
   const collectList = {
-    id: musiclistId.value,
-    name: musicList.value[curListId.value].list[musiclistId.value].info.name,
-    list: musicList.value[curListId.value].list[musiclistId.value].list
+    id: pageKey,
+    name: detailList[listKey].list[pageKey].info.name,
+    list: detailList[listKey].list[pageKey].list
   };
-  playList.value[musiclistId.value] = collectList;
+  playList.value[pageKey] = collectList;
 };
 
 const goback = () => {
-  router.push({ name: 'songList' });
-  isKeepList.value = false;
+  router.push({ name: pageName as string });
+  if (pageName === 'search') {
+    keepSearchDetail.value = '';
+  } else if (pageName === 'songList') {
+    keepSongListDetail.value = '';
+  }
 };
 
 const list = computed(() => {
-  return (
-    musicList.value[curListId.value].list[musiclistId.value] &&
-    musicList.value[curListId.value].list[musiclistId.value].list
-  );
+  return detailList[listKey].list[pageKey] && detailList[listKey].list[pageKey].list;
 });
 
 const getData = async () => {
@@ -87,13 +121,13 @@ const getData = async () => {
   loading.value = true;
 
   try {
-    const data = await sources[sourceId.value].getSongListDetail(musiclistId.value, 1);
+    const data = await sources[detailSourceId].getSongListDetail(pageKey, 1);
     loading.value = false;
-    musicList.value[curListId.value].pageSize = data.pageSize;
-    musicList.value[curListId.value].limit = data.limit;
-    musicList.value[curListId.value].total = data.total;
-    musicList.value[curListId.value].source = data.source;
-    musicList.value[curListId.value].list[musiclistId.value] = data.list;
+    detailList[listKey].pageSize = data.pageSize;
+    detailList[listKey].limit = data.limit;
+    detailList[listKey].total = data.total;
+    detailList[listKey].source = data.source;
+    detailList[listKey].list[pageKey] = data.list;
   } catch (error) {
     console.log(error);
     loading.value = false;
@@ -107,17 +141,17 @@ getData();
     <div class="header">
       <div class="header_left">
         <img
-          v-if="musicList[curListId].list[musiclistId]?.info.img"
+          v-if="detailList[listKey].list[pageKey]?.info.img"
           class="img"
-          :src="musicList[curListId].list[musiclistId]?.info.img"
+          :src="detailList[listKey].list[pageKey]?.info.img"
         />
         <div v-else class="img no_img">SKY</div>
         <div class="info">
           <div class="name">
-            <span class="select">{{ musicList[curListId].list[musiclistId]?.info.name }}</span>
+            <span class="select">{{ detailList[listKey].list[pageKey]?.info.name }}</span>
           </div>
           <div class="desc multipleTextHide-3">
-            <span class="select">{{ musicList[curListId].list[musiclistId]?.info.desc }}</span>
+            <span class="select">{{ detailList[listKey].list[pageKey]?.info.desc }}</span>
           </div>
         </div>
       </div>
@@ -128,7 +162,7 @@ getData();
       </div>
     </div>
     <div class="main">
-      <MusicList :loading="loading" :show-list="hasList" :list="list" />
+      <MusicList :loading="loading" :has-list="hasList" :list="list" />
     </div>
   </div>
 </template>

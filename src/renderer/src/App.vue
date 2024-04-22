@@ -10,7 +10,7 @@ initSet();
     </div>
     <div class="mian">
       <router-view v-slot="{ Component }">
-        <keep-alive include="songList">
+        <keep-alive exclude="songListDetail">
           <component :is="Component" :key="$route.fullPath" />
         </keep-alive>
       </router-view>

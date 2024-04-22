@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { formatPlayCount } from '@r/utils';
 import { decodeName, formatPlayTime } from '../utils';
 
@@ -35,7 +35,7 @@ export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp(getListUrl({ sortId, id, type, pageSize }), 'get', {});
+    res = await http(getListUrl({ sortId, id, type, pageSize }), 'get', {});
   } catch (error) {
     return getSongList(sortId, tagId, pageSize, tryNum + 1);
   }
@@ -84,7 +84,7 @@ const getSongListDetailDigest8 = async (id, pageSize, tryNum) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://nplserver.kuwo.cn/pl.svc?op=getlistinfo&pid=${id}&pn=${pageSize - 1}&rn=${config.limit_song}&encode=utf8&keyset=pl2012&identity=kuwo&pcmp4=1&vipver=MUSIC_9.0.5.0_W1&newver=1`,
       'get',
       {}
@@ -117,7 +117,7 @@ const getAlbumListDetail = async (id, pageSize, tryNum) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://search.kuwo.cn/r.s?pn=${pageSize - 1}&rn=${config.limit_song}&stype=albuminfo&albumid=${id}&show_copyright_off=0&encoding=utf&vipver=MUSIC_9.1.0`,
       'get',
       {}
@@ -155,7 +155,7 @@ const getListDetailDigest5Info = async (id, tryNum) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://qukudata.kuwo.cn/q.k?op=query&cont=ninfo&node=${id}&pn=0&rn=1&fmt=json&src=mbox&level=2`,
       'get',
       {}
@@ -171,7 +171,7 @@ const getListDetailDigest5Music = async (id, pageSize, tryNum) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://nplserver.kuwo.cn/pl.svc?op=getlistinfo&pid=${id}&pn=${pageSize - 1}}&rn=${config.limit_song}&encode=utf-8&keyset=pl2012&identity=kuwo&pcmp4=1`,
       'get',
       {}

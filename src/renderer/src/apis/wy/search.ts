@@ -21,7 +21,7 @@ export const searchMusic = async (searchInfo, pageSize, tryNum = 0) => {
       offset: sConfig.limit_song * (pageSize - 1)
     });
 
-    if (!res || res.code !== 200) throw new Error('搜索歌曲失败');
+    if (!res || res.code! !== 200) throw new Error('搜索歌曲失败');
     console.log('搜索数据', res);
 
     list = filterMusicList(res.result.songs || []);

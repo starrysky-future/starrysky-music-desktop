@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { decodeName, formatSingerName, formatPlayTime } from '../utils';
 
 export const lbConfig = {
@@ -55,7 +55,7 @@ export const getLeaderBoardList = async (bangid, pageSize, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://kbangserver.kuwo.cn/ksong.s?from=pc&fmt=json&pn=${pageSize - 1}&rn=${lbConfig.limit_song}&type=bang&data=content&id=${bangid}&show_copyright_off=0&pcmp4=1&isbang=1`,
       'get',
       {}

@@ -1,4 +1,4 @@
-import { needleHttp } from '../request';
+import http from '../request';
 import { weapi } from '../crypto';
 import { getMusicList } from './musicDetail';
 
@@ -81,12 +81,15 @@ const getTrackIds = async (bangid, tryNum) => {
   let trackIds;
   console.log('bangid', bangid);
   try {
-    const res = await needleHttp('https://music.163.com/weapi/v3/playlist/detail', 'post', {
-      form: weapi({
+    const res = await http('https://music.163.com/weapi/v3/playlist/detail', 'post', {
+      data: weapi({
         id: bangid,
         n: 100000,
         p: 1
-      })
+      }),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
 
     trackIds = res.playlist.trackIds.map((trackId) => trackId.id);

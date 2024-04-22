@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { decodeName } from '../utils';
 import { formatPlayCount, dateFormat } from '@r/utils';
 import { getMusicList } from './musicDetail';
@@ -39,7 +39,7 @@ export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
   let res;
   let info;
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://www2.kugou.kugou.com/yueku/v9/special/getSpecial?is_ajax=1&cdn=cdn&t=${sortId}&c=${tagId}&p=${pageSize}`,
       'get',
       {}
@@ -61,7 +61,7 @@ export const getSongListDetail = async (id, pageSize, tryNum = 0) => {
   let list;
 
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://www2.kugou.kugou.com/yueku/v9/special/single/${id}-5-9999.html`,
       'get',
       {}
@@ -100,7 +100,7 @@ export const getSongListDetail = async (id, pageSize, tryNum = 0) => {
 // 获取列表信息
 const getListInfo = async (tagId) => {
   const url = getInfoUrl(tagId);
-  const res = await axiosHttp(url, 'get', {});
+  const res = await http(url, 'get', {});
 
   return {
     limit: res.data.params.pagesize,

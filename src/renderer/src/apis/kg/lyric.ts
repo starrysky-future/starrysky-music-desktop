@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { decodeLyric } from './utils';
 import { decodeName } from '../utils';
 
@@ -18,7 +18,7 @@ export const getLyric = async ({ name, hash, _interval }, tryNum = 0) => {
 };
 
 export const searchLyric = async (name, hash, _interval) => {
-  const res = await axiosHttp(
+  const res = await http(
     `http://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=${encodeURIComponent(name)}&hash=${hash}&timelength=${_interval}`,
     'get',
     {
@@ -38,7 +38,7 @@ export const searchLyric = async (name, hash, _interval) => {
 };
 
 export const getLyricDownload = async (id, accessKey) => {
-  const res = await axiosHttp(
+  const res = await http(
     `http://lyrics.kugou.com/download?ver=1&client=pc&id=${id}&accesskey=${accessKey}&fmt=krc&charset=utf8`,
     'get',
     {

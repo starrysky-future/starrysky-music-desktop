@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { filterMusicInfoList } from './songList';
 
 export const lbConfig = {
@@ -22,7 +22,7 @@ export const getLeaderBoardList = async (bangid, pageSize, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `https://app.c.nf.migu.cn/MIGUM2.0/v1.0/content/querycontentbyId.do?columnId=${bangid}&needAll=0`,
       'get',
       {}

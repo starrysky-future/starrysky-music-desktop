@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { sizeFormate, decodeName, formatSingerName, formatPlayTime } from '../utils';
 
 export const lbConfig = {
@@ -65,7 +65,7 @@ export const getLeaderBoardList = async (bangid, pageSize, tryNum = 0) => {
   let res;
 
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://mobilecdnbj.kugou.com/api/v3/rank/song?version=9108&ranktype=1&plat=0&pagesize=${lbConfig.limit_song}&area_code=1&page=${pageSize}&rankid=${bangid}&with_res_tag=0&show_portrait_mv=1`,
       'get',
       {}

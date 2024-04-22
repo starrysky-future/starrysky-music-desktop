@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { buildParams, decodeLyric, parseLrc, lrcTools } from './utils';
 
 export const getLyric = async ({ songmid }, isGetLyricx = true, tryNum = 0) => {
@@ -6,7 +6,7 @@ export const getLyric = async ({ songmid }, isGetLyricx = true, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `http://newlyric.kuwo.cn/newlyric.lrc?${buildParams(songmid, isGetLyricx)}`,
       'get',
       {}

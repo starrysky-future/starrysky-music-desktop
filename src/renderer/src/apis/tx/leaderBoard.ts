@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { filterListDetail } from './songList';
 
 export const lbConfig = {
@@ -50,11 +50,11 @@ export const getLeaderBoardList = async (bangid, pageSize, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp('https://u.y.qq.com/cgi-bin/musicu.fcg', 'post', {
+    res = await http('https://u.y.qq.com/cgi-bin/musicu.fcg', 'post', {
       headers: {
         myUA: 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)'
       },
-      body: {
+      data: {
         toplist: {
           module: 'musicToplist.ToplistInfoServer',
           method: 'GetDetail',
@@ -93,7 +93,7 @@ const getPeriods = async (bangid, tryNum) => {
   let period;
 
   try {
-    const res = await axiosHttp('https://c.y.qq.com/node/pc/wk_v15/top.html', 'get', {});
+    const res = await http('https://c.y.qq.com/node/pc/wk_v15/top.html', 'get', {});
     let result = res.match(lbConfig.regExps.periodList);
     if (!result) throw new Error('result获取失败');
 

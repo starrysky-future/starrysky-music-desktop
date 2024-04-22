@@ -1,5 +1,5 @@
 import { decodeName, formatPlayTime, sizeFormate, filterImg } from '../utils';
-import { axiosHttp } from '../request';
+import http from '../request';
 
 // 歌曲列表
 export const getMusicList = (list) => {
@@ -15,7 +15,7 @@ export const getMusicInfos = async (hashs) => {
 export const createHttpFetch = async (url, method, options) => {
   let res;
   try {
-    res = await axiosHttp(url, method, options);
+    res = await http(url, method, options);
   } catch (err) {
     console.log(err);
   }
@@ -52,7 +52,7 @@ const createGetMusicInfosTask = (hashs) => {
   const url = 'http://gateway.kugou.com/v3/album_audio/audio';
   return tasks.map((task) =>
     createHttpFetch(url, 'POST', {
-      body: task,
+      data: task,
       headers: {
         'KG-THash': '13a3164',
         'KG-RC': '1',

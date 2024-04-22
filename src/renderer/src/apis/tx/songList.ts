@@ -1,4 +1,4 @@
-import { axiosHttp } from '../request';
+import http from '../request';
 import { formatPlayCount, dateFormat } from '@r/utils';
 import { decodeName, sizeFormate, formatSingerName, formatPlayTime } from '../utils';
 
@@ -22,7 +22,7 @@ export const getSongList = async (sortId, tagId, pageSize, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp(getListUrl(sortId, tagId, pageSize), 'get', {});
+    res = await http(getListUrl(sortId, tagId, pageSize), 'get', {});
   } catch (error) {
     return getSongList(sortId, tagId, pageSize, tryNum + 1);
   }
@@ -38,7 +38,7 @@ export const getSongListDetail = async (id, tryNum = 0) => {
 
   let res;
   try {
-    res = await axiosHttp(
+    res = await http(
       `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&new_format=1&disstid=${id}&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`,
       'get',
       {

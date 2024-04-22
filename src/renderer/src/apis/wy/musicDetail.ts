@@ -1,4 +1,4 @@
-import { needleHttp } from '../request';
+import http from '../request';
 import { weapi } from '../crypto';
 import { sizeFormate, formatPlayTime } from '../utils';
 
@@ -8,12 +8,13 @@ export const getMusicList = async (ids: Array<string> = [], tryNum) => {
 
   let res;
   try {
-    res = await needleHttp('https://music.163.com/weapi/v3/song/detail', 'post', {
+    res = await http('https://music.163.com/weapi/v3/song/detail', 'post', {
       headers: {
         myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-        myOrigin: 'https://music.163.com'
+        myOrigin: 'https://music.163.com',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      form: weapi({
+      data: weapi({
         c: '[' + ids.map((id) => '{"id":' + id + '}').join(',') + ']',
         ids: '[' + ids.join(',') + ']'
       })
@@ -27,13 +28,14 @@ export const getMusicList = async (ids: Array<string> = [], tryNum) => {
 
 // 获取单个歌曲信息
 export const getMusicInfo = async (songmid: string) => {
-  const res = await needleHttp('https://music.163.com/weapi/v3/song/detail', 'post', {
+  const res = await http('https://music.163.com/weapi/v3/song/detail', 'post', {
     headers: {
       myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
       myReferer: 'https://music.163.com/song?id=' + songmid,
-      myOrigin: 'https://music.163.com'
+      myOrigin: 'https://music.163.com',
+      'Content-Type': 'application/x-www-form-urlencoded'
     },
-    form: weapi({
+    data: weapi({
       c: `[{"id":${songmid}}]`,
       ids: `[${songmid}]`
     })

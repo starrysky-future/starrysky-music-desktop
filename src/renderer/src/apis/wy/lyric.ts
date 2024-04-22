@@ -1,4 +1,4 @@
-import { needleHttp } from '../request';
+import http from '../request';
 import { eapi } from '../crypto';
 
 export const getLyric = async ({ songmid }, tryNum = 0) => {
@@ -6,12 +6,13 @@ export const getLyric = async ({ songmid }, tryNum = 0) => {
 
   let res;
   try {
-    res = await needleHttp('https://interface3.music.163.com/eapi/song/lyric/v1', 'post', {
+    res = await http('https://interface3.music.163.com/eapi/song/lyric/v1', 'post', {
       headers: {
         myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-        myOrigin: 'https://music.163.com'
+        myOrigin: 'https://music.163.com',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      form: eapi('/api/song/lyric/v1', {
+      data: eapi('/api/song/lyric/v1', {
         id: songmid,
         cp: false,
         tv: 0,

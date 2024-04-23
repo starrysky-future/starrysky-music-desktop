@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useSetStore } from '@r/store/setting';
@@ -7,8 +6,7 @@ import { useSetStore } from '@r/store/setting';
 const router = useRouter();
 
 const setStore = useSetStore();
-const { keepSearchDetail, keepSongListDetail } = storeToRefs(setStore);
-const active = ref<string>('songList');
+const { keepSearchDetail, keepSongListDetail, navName } = storeToRefs(setStore);
 
 const changeCurPage = (path: string): void => {
   if (path === 'songList' && keepSongListDetail.value) {
@@ -29,7 +27,7 @@ const changeCurPage = (path: string): void => {
     router.push({ name: path });
   }
 
-  active.value = path;
+  navName.value = path;
 };
 </script>
 
@@ -50,7 +48,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: active === 'songList' }"
+      :class="{ active: navName === 'songList' }"
       class="common_style icon_position"
       @click="changeCurPage('songList')"
     >
@@ -68,7 +66,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: active === 'leaderBoard' }"
+      :class="{ active: navName === 'leaderBoard' }"
       class="common_style icon_position"
       @click="changeCurPage('leaderBoard')"
     >
@@ -86,7 +84,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: active === 'collect' }"
+      :class="{ active: navName === 'collect' }"
       class="common_style icon_position"
       @click="changeCurPage('collect')"
     >
@@ -104,7 +102,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: active === 'search' }"
+      :class="{ active: navName === 'search' }"
       class="common_style icon_position"
       @click="changeCurPage('search')"
     >
@@ -122,7 +120,7 @@ const changeCurPage = (path: string): void => {
       </div>
     </div>
     <div
-      :class="{ active: active === 'setting' }"
+      :class="{ active: navName === 'setting' }"
       class="common_style icon_position"
       @click="changeCurPage('setting')"
     >

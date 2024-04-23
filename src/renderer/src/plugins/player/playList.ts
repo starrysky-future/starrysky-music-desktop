@@ -1,5 +1,4 @@
 import pinia from '@r/store';
-import { RouteRecordName } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import sources from '@r/apis';
 import { usePlayStore } from '@r/store/play';
@@ -7,29 +6,31 @@ import { useSongListStore } from '@r/store/songList';
 import { useLeaderBoardStore } from '@r/store/leaderBoard';
 import { debounce, addUnique, insertList } from '@r/utils';
 import { setResource, onLoadeddata, setStop } from '@r/plugins/player';
+import { useSetStore } from '@r/store/setting';
+import { useSearchSongListStore } from '@r/store/search';
 
 const playStore = usePlayStore(pinia);
 const songListStore = useSongListStore(pinia);
 const leaderBoardStore = useLeaderBoardStore(pinia);
+const setStore = useSetStore(pinia);
+const searchSongListStore = useSearchSongListStore(pinia);
+
 const { sourceId } = storeToRefs(songListStore);
 const { curPlayInfo, statulyric, playList } = storeToRefs(playStore);
 const { LBsourceId } = storeToRefs(leaderBoardStore);
+const { searchSourceId } = storeToRefs(searchSongListStore);
+const { navName } = storeToRefs(setStore);
 
-export const playSong = debounce(
-  async (info: SKY.MusicListItem, name: RouteRecordName | null | undefined) => {
-    const isCollect = name === 'collect';
-
-    if (!isCollect) {
-      const unique = addUnique(playList.value.defaultList.list, info, 'songmid');
-      if (unique) {
-        playList.value.playId = playList.value.defaultList.list.length - 1;
-      }
+export const playSong = debounce(async (info: SKY.MusicListItem) => {
+  if (navName.value !== 'collect') {
+    const unique = addUnique(playList.value.defaultList.list, info, 'songmid');
+    if (unique) {
+      playList.value.playId = playList.value.defaultList.list.length - 1;
     }
+  }
 
-    initPlayInfo(info, name);
-  },
-  500
-);
+  initPlayInfo(info);
+}, 500);
 
 export const playLater = (info: SKY.MusicListItem) => {
   insertList(
@@ -44,12 +45,16 @@ export const addList = (info: SKY.MusicListItem, listName: string) => {
   addUnique(playList.value[listName].list, info, 'songmid');
 };
 
-export const initPlayInfo = async (
-  info: SKY.MusicListItem,
-  name: RouteRecordName | null | undefined
-) => {
+export const initPlayInfo = async (info: SKY.MusicListItem) => {
   setStop();
-  const sourceid = name === 'leaderBoard' ? LBsourceId.value : sourceId.value;
+  let sourceid;
+  if (navName.value === 'leaderBoard') {
+    sourceid = LBsourceId.value;
+  } else if (navName.value === 'search') {
+    sourceid = searchSourceId.value;
+  } else if (navName.value === 'songList') {
+    sourceid = sourceId.value;
+  }
 
   playStore.setMaxplayTime(info._interval / 1000);
   curPlayInfo.value = { ...info, isPlay: false, curLyric: '' };

@@ -52,7 +52,7 @@ onMounted(() => {
 });
 
 const getClick = (id: string) => {
-  if (id === 'play') playSong(props.curInfo, route.name);
+  if (id === 'play') playSong(props.curInfo);
   if (id === 'nextPlay') playLater(props.curInfo);
   if (id === 'loveList') addList(props.curInfo, id);
   isVisible.value = false;

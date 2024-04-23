@@ -2,6 +2,7 @@ import { config, getSongList, getSongListDetail } from './songList';
 import { getLyric } from './lyric';
 import { lbConfig, getLeaderBoardList } from './leaderBoard';
 import { apis } from '../api-source';
+import { searchMusic, searchSongList } from './search';
 
 const kg = {
   config,
@@ -13,7 +14,10 @@ const kg = {
   getSongList,
   getSongListDetail,
 
-  getLeaderBoardList
+  getLeaderBoardList,
+
+  searchMusic,
+  searchSongList
 };
 
 export default kg;

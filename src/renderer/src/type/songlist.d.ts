@@ -1,7 +1,7 @@
 declare namespace SKY {
   namespace SongList {
     interface ListItemType {
-      play_count: string;
+      play_count: number;
       id: string;
       author: string;
       name: string;

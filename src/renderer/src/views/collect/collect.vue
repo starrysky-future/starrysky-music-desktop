@@ -24,7 +24,7 @@ const labelList = computed<Array<SKY.Play.PlayListItem>>(() => {
   return showList;
 });
 
-const showList = computed(() => {
+const hasList = computed(() => {
   return playList.value[playList.value.playListId].list.length > 0;
 });
 
@@ -50,7 +50,7 @@ const setPlayListId = (info) => {
       </div>
     </div>
     <div class="collect_right">
-      <MusicList :show-list="showList" :list="contentList" />
+      <MusicList :has-list="hasList" :list="contentList" />
     </div>
   </div>
 </template>

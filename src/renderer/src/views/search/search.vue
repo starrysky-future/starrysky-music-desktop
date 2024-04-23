@@ -137,14 +137,17 @@ const getMusic = async () => {
   }
 };
 
-const stopWatch = watch([searchValue, searchSortId, searchPageSize], ([val, sortVal]) => {
-  if (!val) return;
-  if (sortVal === 'searchSongList') {
-    getSongList();
-  } else {
-    getMusic();
+const stopWatch = watch(
+  [searchValue, searchSortId, searchPageSize, searchSourceId],
+  ([val, sortVal]) => {
+    if (!val) return;
+    if (sortVal === 'searchSongList') {
+      getSongList();
+    } else {
+      getMusic();
+    }
   }
-});
+);
 
 onBeforeUnmount(() => {
   stopWatch();

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useRoute } from 'vue-router';
 import { ref, reactive } from 'vue';
 import { playSong } from '@r/plugins/player/playList';
 
@@ -17,8 +16,6 @@ const position = reactive({
   x: 0,
   y: 0
 });
-
-const route = useRoute();
 
 const getMenu = (songInfo: SKY.MusicListItem, $event) => {
   active.value = songInfo.songmid;
@@ -46,7 +43,7 @@ const getMenu = (songInfo: SKY.MusicListItem, $event) => {
           class="music_item"
           :class="{ active: active === item.songmid }"
           :data-song-info="JSON.stringify(item)"
-          @dblclick="playSong(item, route.name)"
+          @dblclick="playSong(item)"
           @click.right="getMenu(item, $event)"
         >
           <div class="w_5">{{ index }}</div>

@@ -6,6 +6,7 @@ export const useSetStore = defineStore('useSetStore', () => {
   const apiSource = ref<string>('test');
   const keepSearchDetail = ref<string>('');
   const keepSongListDetail = ref<string>('');
+  const navName = ref<string>('songList');
 
-  return { themeId, keepSearchDetail, keepSongListDetail, apiSource };
+  return { themeId, keepSearchDetail, keepSongListDetail, apiSource, navName };
 });

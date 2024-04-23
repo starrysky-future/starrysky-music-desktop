@@ -4,10 +4,13 @@ declare namespace SKY {
     name: string;
     albumName: string;
     albumId: string;
+    albumMid?: string;
+    strMediaMid?: string;
     source: string;
     interval: string;
     _interval: number;
     songmid: string;
+    songId?: string;
     copyrightId?: string;
     img: string;
     lrc: null;

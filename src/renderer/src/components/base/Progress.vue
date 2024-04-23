@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="domProgress" class="progress">
+  <div ref="domProgress" class="progress" @click.stop>
     <div
       class="progress_type progress_cur cur_transition"
       :style="{ transform: `scaleX(${props.progress || 0})` }"

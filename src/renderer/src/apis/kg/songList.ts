@@ -116,7 +116,7 @@ const getInfoUrl = (tagId) => {
     : 'http://www2.kugou.kugou.com/yueku/v9/special/getSpecial?is_smarty=1&';
 };
 
-const filterList = (rawData) => {
+export const filterList = (rawData) => {
   return rawData.map((item) => ({
     play_count: item.total_play_count || formatPlayCount(item.play_count),
     id: item.specialid,
@@ -130,6 +130,7 @@ const filterList = (rawData) => {
     source: 'kg'
   }));
 };
+
 const parseHtmlDesc = (html) => {
   const prefix = '<div class="pc_specail_text pc_singer_tab_content" id="specailIntroduceWrap">';
   let index = html.indexOf(prefix);

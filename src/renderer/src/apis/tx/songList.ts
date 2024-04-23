@@ -185,7 +185,7 @@ export const filterListDetail = (rawList) => {
     }
     return {
       singer: formatSingerName(item.singer, 'name'),
-      name: item.title,
+      name: item.name,
       albumName: item.album.name,
       albumId: item.album.mid,
       source: 'tx',

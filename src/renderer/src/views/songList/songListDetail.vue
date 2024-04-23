@@ -53,11 +53,6 @@ if (pageName === 'search') {
   keepSongListDetail.value = 'songList';
 }
 
-console.log('detailSourceId', detailSourceId);
-console.log('detailList', detailList);
-console.log('listKey', listKey);
-console.log('pageKey', pageKey);
-
 const loading = ref<boolean>(false);
 
 const hasList = computed(() => {
@@ -89,7 +84,7 @@ const setPlay = () => {
   playList.value.playId =
     playList.value.playId >= playList.value.defaultList.list.length ? 0 : playList.value.playId;
 
-  playSong(playList.value.defaultList.list[playList.value.playId], route.name);
+  playSong(playList.value.defaultList.list[playList.value.playId]);
 };
 
 const setCollect = () => {

@@ -1,6 +1,7 @@
 import { config, getSongList, getSongListDetail } from './songList';
 import { apis } from '../api-source';
 import { lbConfig, getLeaderBoardList } from './leaderBoard';
+import { searchMusic, searchSongList } from './search';
 
 const tx = {
   config,
@@ -11,7 +12,10 @@ const tx = {
   getSongList,
   getSongListDetail,
 
-  getLeaderBoardList
+  getLeaderBoardList,
+
+  searchMusic,
+  searchSongList
 };
 
 export default tx;

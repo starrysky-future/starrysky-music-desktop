@@ -198,7 +198,7 @@ const getListDetailDigest5Music = async (id, pageSize, tryNum) => {
   };
 };
 
-const objStr2JSON = (str) => {
+export const objStr2JSON = (str) => {
   return JSON.parse(
     str.replace(/('(?=(,\s*')))|('(?=:))|((?<=([:,]\s*))')|((?<={)')|('(?=}))/g, '"')
   );

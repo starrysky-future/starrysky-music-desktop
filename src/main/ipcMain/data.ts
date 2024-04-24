@@ -6,7 +6,7 @@ export default () => {
     setData(name, data);
   });
 
-  ipcMain.handleOnce('getData', async (_event, name: string) => {
+  ipcMain.handle('getData', async (_event, name: string) => {
     return await getData(name);
   });
 };

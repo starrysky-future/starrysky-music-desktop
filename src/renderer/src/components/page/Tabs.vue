@@ -82,6 +82,7 @@ const setSearchValue = (val: string) => {
     color: var(--color-primary);
     position: relative;
     &::after {
+      display: block;
       content: '';
       position: absolute;
       left: 0;

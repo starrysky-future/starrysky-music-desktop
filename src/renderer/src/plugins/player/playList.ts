@@ -6,20 +6,20 @@ import { useSongListStore } from '@r/store/songList';
 import { useLeaderBoardStore } from '@r/store/leaderBoard';
 import { debounce, addUnique, insertList } from '@r/utils';
 import { setResource, onLoadeddata, setStop } from '@r/plugins/player';
-import { useSetStore } from '@r/store/setting';
+import { useNavStore } from '@r/store/nav';
 import { useSearchSongListStore } from '@r/store/search';
 
 const playStore = usePlayStore(pinia);
 const songListStore = useSongListStore(pinia);
 const leaderBoardStore = useLeaderBoardStore(pinia);
-const setStore = useSetStore(pinia);
+const navStore = useNavStore(pinia);
 const searchSongListStore = useSearchSongListStore(pinia);
 
 const { sourceId } = storeToRefs(songListStore);
 const { curPlayInfo, statulyric, playList } = storeToRefs(playStore);
 const { LBsourceId } = storeToRefs(leaderBoardStore);
 const { searchSourceId } = storeToRefs(searchSongListStore);
-const { navName } = storeToRefs(setStore);
+const { navName } = storeToRefs(navStore);
 
 export const playSong = debounce(async (info: SKY.MusicListItem) => {
   if (navName.value !== 'collect') {

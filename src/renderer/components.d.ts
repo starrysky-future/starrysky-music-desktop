@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    C: typeof import('./src/components/base/c.vue')['default']
     Icons: typeof import('./src/components/base/Icons.vue')['default']
     LayoutLeft: typeof import('./src/components/base/LayoutLeft.vue')['default']
     ListPopup: typeof import('./src/components/tools/ListPopup.vue')['default']
@@ -24,8 +23,8 @@ declare module 'vue' {
     RightBtns: typeof import('./src/components/page/RightBtns.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Search: typeof import('./src/components/base/Search.vue')['default']
     SearchInput: typeof import('./src/components/base/SearchInput.vue')['default']
+    SetTitle: typeof import('./src/components/base/SetTitle.vue')['default']
     SongListItem: typeof import('./src/components/base/SongListItem.vue')['default']
     Tabs: typeof import('./src/components/page/Tabs.vue')['default']
     YScroll: typeof import('./src/components/tools/y-scroll.vue')['default']

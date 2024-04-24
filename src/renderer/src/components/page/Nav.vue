@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { useSetStore } from '@r/store/setting';
+import { useNavStore } from '@r/store/nav';
 
 const router = useRouter();
 
-const setStore = useSetStore();
-const { keepSearchDetail, keepSongListDetail, navName } = storeToRefs(setStore);
+const navStore = useNavStore();
+const { keepSearchDetail, keepSongListDetail, navName } = storeToRefs(navStore);
 
 const changeCurPage = (path: string): void => {
   if (path === 'songList' && keepSongListDetail.value) {
@@ -162,6 +162,7 @@ const changeCurPage = (path: string): void => {
     background-color: var(--color-primary-light-400-alpha-500);
     position: relative;
     &::after {
+      display: block;
       content: '';
       width: 100%;
       height: 2px;

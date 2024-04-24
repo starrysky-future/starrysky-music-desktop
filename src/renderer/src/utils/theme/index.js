@@ -1,4 +1,10 @@
 import themes from './theme.json';
+import { storeToRefs } from 'pinia';
+import { useSetStore } from '@r/store/setting/index';
+import pinia from '@r/store';
+
+const setStore = useSetStore(pinia);
+const { setList } = storeToRefs(setStore);
 
 const dom_style = document.createElement('style');
 const setTheme = (style) => {
@@ -7,8 +13,8 @@ const setTheme = (style) => {
     .join('')}}`;
 };
 
-const applyThemeColor = (themeId) => {
-  const theme = themeSearch(themes, themeId);
+const applyThemeColor = () => {
+  const theme = themeSearch(themes, setList.value.themeId);
   setTheme(theme);
   document.body.appendChild(dom_style);
 };

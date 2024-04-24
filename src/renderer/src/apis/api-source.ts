@@ -10,7 +10,7 @@ import api_test_mg from './mg/api-test';
 import api_test_wy from './wy/api-test';
 
 const setStore = useSetStore(pinia);
-const { apiSource } = storeToRefs(setStore);
+const { setList } = storeToRefs(setStore);
 
 const allApi = {
   test_tx: api_test_tx,
@@ -30,7 +30,7 @@ for (const api of apiSourceInfo) {
   }
 }
 
-const getAPI = (source) => apiList[`${apiSource.value}_api_${source}`];
+const getAPI = (source) => apiList[`${setList.value.apiSource}_api_${source}`];
 
 const apis = (source) => {
   const api = getAPI(source);

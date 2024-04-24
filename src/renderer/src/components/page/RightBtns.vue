@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { ref, VNodeRef } from 'vue';
-import { usePlayStore } from '@r/store/play';
-
-const playStore = usePlayStore();
+import { saveData } from '@r/plugins/setting/setData';
 
 const hasHover = ref<boolean>(true);
 const minDom = ref<VNodeRef | null>(null);
@@ -17,7 +15,7 @@ const changeWinState = (operate: string): void => {
   }
 
   if (operate === 'quit') {
-    window.api.setData('playList', JSON.stringify(playStore.playList));
+    saveData();
   }
   window.api![operate]();
 };

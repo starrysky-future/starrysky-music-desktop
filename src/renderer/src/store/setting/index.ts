@@ -1,12 +1,24 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, defineAsyncComponent } from 'vue';
 
 export const useSetStore = defineStore('useSetStore', () => {
-  const themeId = ref<string>('blue');
-  const apiSource = ref<string>('test');
-  const keepSearchDetail = ref<string>('');
-  const keepSongListDetail = ref<string>('');
-  const navName = ref<string>('songList');
+  const setList = ref({
+    themeId: 'blue',
+    apiSource: 'test'
+  });
 
-  return { themeId, keepSearchDetail, keepSongListDetail, apiSource, navName };
+  return { setList };
 });
+
+export const setLabelList = [
+  {
+    id: 'SetBasic',
+    name: '基本设置',
+    com: defineAsyncComponent(() => import('@r/views/setting/components/SetBasic.vue'))
+  },
+  {
+    id: 'bfsz',
+    name: '播放设置',
+    com: defineAsyncComponent(() => import('@r/views/setting/components/SetPlay.vue'))
+  }
+];

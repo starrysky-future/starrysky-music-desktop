@@ -6,7 +6,7 @@ import sources from '@r/apis';
 import { useSongListStore, useMusicListStore } from '@r/store/songList';
 import { useSearchSongListStore, useSearchMusicListStore } from '@r/store/search';
 import { usePlayStore } from '@r/store/play';
-import { useSetStore } from '@r/store/setting';
+import { useNavStore } from '@r/store/nav';
 import { playSong } from '@r/plugins/player/playList';
 
 const router = useRouter();
@@ -27,8 +27,8 @@ const { searchMusicList, searchMusiclistId } = storeToRefs(searchMusicListStore)
 const playStore = usePlayStore();
 const { playList } = storeToRefs(playStore);
 
-const setStore = useSetStore();
-const { keepSearchDetail, keepSongListDetail } = storeToRefs(setStore);
+const navStore = useNavStore();
+const { keepSearchDetail, keepSongListDetail } = storeToRefs(navStore);
 
 let detailSourceId;
 let detailList;

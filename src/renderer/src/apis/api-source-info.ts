@@ -1,16 +1,14 @@
-// Support qualitys: 128k 320k flac wav
-
 const sources = [
   {
     id: 'test',
     name: '测试接口',
     disabled: false,
     supportQualitys: {
-      kw: ['128k', '320k', 'flac', 'wav'],
-      kg: ['128k', '320k', 'flac', 'wav'],
-      tx: ['128k', '320k', 'flac', 'wav'],
+      kw: ['128k', '320k', 'flac', 'flac24bit'],
+      kg: ['128k'],
+      tx: ['128k'],
       wy: ['128k', '320k', 'flac', 'flac24bit'],
-      mg: ['128k', '320k', 'flac', 'wav']
+      mg: ['128k', '320k', 'flac', 'flac24bit']
     }
   }
 ];

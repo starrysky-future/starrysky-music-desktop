@@ -1,5 +1,11 @@
 declare namespace SKY {
   namespace SongList {
+    interface CommonList {
+      limit: number;
+      pageSize: number;
+      total: number;
+      source: string;
+    }
     interface ListItemType {
       play_count: number;
       id: string;
@@ -15,12 +21,8 @@ declare namespace SKY {
 
     type ListType = Array<ListItemType>;
 
-    interface SongList {
-      limit: number;
+    interface SongList extends CommonList {
       list: Array<ListType>;
-      pageSize: number;
-      source: string;
-      total: number;
     }
 
     // 歌单列表数据存储类型
@@ -52,12 +54,8 @@ declare namespace SKY {
       [key: string]: MusicListOrInfo;
     };
 
-    interface MusicObj {
+    interface MusicObj extends CommonList {
       list: MusicList;
-      pageSize: number;
-      limit: number;
-      total: number;
-      source: string;
     }
 
     // 歌曲列表数据存储类型
@@ -65,12 +63,13 @@ declare namespace SKY {
       [key: string]: MusicObj;
     };
 
-    interface SearchMusicListItem {
+    // 搜索歌曲数据类型
+    interface SearchAllMusic extends CommonList {
+      list: Array<SKY.MusicListItem>;
+    }
+
+    interface SearchMusicListItem extends CommonList {
       list: Array<MusicListType>;
-      pageSize: number;
-      limit: number;
-      total: number;
-      source: string;
     }
 
     type SearchMusicList = {

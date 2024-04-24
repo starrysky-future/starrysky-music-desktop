@@ -18,12 +18,9 @@ export const searchMusic = async (searchInfo, pageSize, tryNum = 0) => {
     res = await http(
       `http://search.kuwo.cn/r.s?client=kt&all=${encodeURIComponent(searchInfo)}&pn=${pageSize - 1}&rn=${sConfig.limit_song}&uid=794762570&ver=kwplayer_ar_9.2.2.1&vipver=1&show_copyright_off=1&newver=1&ft=music&cluster=0&strategy=2012&encoding=utf8&rformat=json&vermerge=1&mobi=1&issubtitle=1`
     );
-
-    console.log('搜索歌曲', res);
   } catch (error) {
     return searchMusic(searchInfo, pageSize, tryNum + 1);
   }
-  console.log(filterMusicList(res.abslist));
 
   return {
     list: filterMusicList(res.abslist),
@@ -42,7 +39,6 @@ export const searchSongList = async (searchInfo, pageSize, tryNum = 0) => {
     res = await http(
       `http://search.kuwo.cn/r.s?all=${encodeURIComponent(searchInfo)}&pn=${pageSize - 1}&rn=${sConfig.limit_song}&rformat=json&encoding=utf8&ver=mbox&vipver=MUSIC_8.7.7.0_BCS37&plat=pc&devid=28156413&ft=playlist&pay=0&needliveshow=0`
     );
-    console.log('搜索歌单', res);
     res = objStr2JSON(res);
   } catch (error) {
     return searchSongList(searchInfo, pageSize, tryNum + 1);

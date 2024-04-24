@@ -18,7 +18,7 @@ export const usePlayStore = defineStore('usePlayStore', () => {
     types: [],
     _types: {},
     typeUrl: {},
-    curLyric: '',
+    statu: '',
     isPlay: false
   });
   const playList = ref<SKY.Play.PlayList>({

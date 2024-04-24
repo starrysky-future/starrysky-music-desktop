@@ -51,7 +51,6 @@ export const searchSongList = async (searchInfo, pageSize, tryNum = 0) => {
       total: pageSize == 1,
       offset: sConfig.limit_song * (pageSize - 1)
     });
-    console.log('歌单', res);
   } catch (error) {
     return searchSongList(searchInfo, pageSize, tryNum + 1);
   }

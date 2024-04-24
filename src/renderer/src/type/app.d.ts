@@ -18,7 +18,7 @@ declare namespace SKY {
     mrcUrl?: string;
     trcUrl?: string;
     hash?: string;
-    otherSource: null;
+    otherSource: unknown;
     types: array;
     _types: object;
     typeUrl: object;

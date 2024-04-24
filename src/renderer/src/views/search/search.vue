@@ -67,15 +67,19 @@ const goDetail = (id: string) => {
 };
 
 const setSourceId = (id: string) => {
+  resetData();
   searchSourceId.value = id;
   searchPageSize.value = 1;
 };
 const setSort = (id: string) => {
+  resetData();
   searchSortId.value = id;
   searchPageSize.value = 1;
 };
 const setSearchValue = (val: string) => {
-  resetData();
+  if (!val) {
+    resetData();
+  }
   searchValue.value = val;
 };
 

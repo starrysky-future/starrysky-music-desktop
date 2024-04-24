@@ -19,7 +19,6 @@ import { initPlayInfo, addList } from '@r/plugins/player/playList';
 import { getRandomList, removeList } from '@r/utils';
 
 const isVisible = ref<boolean>(false);
-const randomList = ref<Array<SKY.MusicListItem>>();
 const isMute = ref<boolean>(false);
 const setPopup = ref<string>('volume');
 const position = reactive<SKY.SongList.Position>({
@@ -50,15 +49,12 @@ const setCollect = () => {
   }
 };
 
-const setPlayState = () => {
+const setPlayState = (mode: string) => {
   if (playState.value === 'loop') {
     setLoopPlay(true);
-    playState.value = 'loopOnce';
-  } else if (playState.value === 'loopOnce') {
-    playState.value = 'random';
-  } else {
-    playState.value = 'loop';
   }
+
+  playState.value = mode;
 };
 
 const setPlayVolume = (dragProgress: number) => {
@@ -78,14 +74,30 @@ const setVolumePage = ($event) => {
   position.width = rect.width;
   position.height = rect.height;
 
+  if (setPopup.value === 'volume' || !isVisible.value) {
+    isVisible.value = !isVisible.value;
+  }
   setPopup.value = 'volume';
-  isVisible.value = !isVisible.value;
+};
+
+const showPlayState = ($event) => {
+  const rect = $event.target.getBoundingClientRect();
+  position.x = rect.x;
+  position.y = rect.y;
+  position.width = rect.width;
+  position.height = rect.height;
+  if (setPopup.value === 'mode' || !isVisible.value) {
+    console.log(isVisible.value);
+    isVisible.value = !isVisible.value;
+    console.log(isVisible.value);
+  }
+  setPopup.value = 'mode';
 };
 
 const stopTimeupdate = onTimeupdate(() => {
   const currentTime = getCurrentTime();
   if (statulyric.value[playProgress.value.nowPlayTimeStr]) {
-    curPlayInfo.value.curLyric = statulyric.value[playProgress.value.nowPlayTimeStr];
+    curPlayInfo.value.statu = statulyric.value[playProgress.value.nowPlayTimeStr];
   }
 
   playStore.setProgress(currentTime, playProgress.value.maxPlayTime);
@@ -97,10 +109,12 @@ const stopEnded = onEnded(() => {
 });
 
 const play = () => {
-  initPlayInfo(curPlayInfo.value);
-  if (isEmpty()) return;
-  curPlayInfo.value.isPlay = true;
-  setPlay();
+  if (isEmpty()) {
+    curPlayInfo.value.name && initPlayInfo(curPlayInfo.value);
+  } else {
+    curPlayInfo.value.isPlay = true;
+    setPlay();
+  }
 };
 const pause = () => {
   curPlayInfo.value.isPlay = false;
@@ -118,11 +132,7 @@ const prePlay = () => {
   let playInfo;
 
   if (playState.value === 'random') {
-    if (!randomList.value || randomList.value?.length === 0) {
-      randomList.value = getRandomList([...playList.value[playList.value.playListId].list]);
-    }
-
-    playInfo = randomList.value![nextId];
+    playInfo = randomList.value[nextId];
   } else {
     playInfo = curList[nextId];
   }
@@ -140,19 +150,19 @@ const nextPlay = () => {
       : (playList.value.playId += 1);
 
   let playInfo;
-
+  console.log(playState.value);
   if (playState.value === 'random') {
-    if (!randomList.value || randomList.value?.length === 0) {
-      randomList.value = getRandomList([...playList.value[playList.value.playListId].list]);
-    }
-
-    playInfo = randomList.value![nextId];
+    playInfo = randomList.value[nextId];
   } else {
     playInfo = curList[nextId];
   }
 
   initPlayInfo(playInfo);
 };
+
+const randomList = computed(() => {
+  return getRandomList([...playList.value[playList.value.playListId].list]);
+});
 
 const iconVolume = computed(() => {
   if (isMute.value) return 'mute';
@@ -192,7 +202,7 @@ onBeforeUnmount(() => {
         <div class="name singleTextHide">
           {{ curPlayInfo.name }} <i v-show="curPlayInfo.singer">-</i>{{ curPlayInfo.singer }}
         </div>
-        <div class="singleTextHide">{{ curPlayInfo.curLyric }}</div>
+        <div class="singleTextHide">{{ curPlayInfo.statu }}</div>
       </div>
     </div>
     <div class="main-mid">
@@ -273,7 +283,7 @@ onBeforeUnmount(() => {
           <use :xlink:href="`#icon-volume-${iconVolume}`" />
         </svg>
       </div>
-      <div class="icon_common" @click="setPlayState">
+      <div class="icon_common" @click="showPlayState" @click.stop>
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -298,7 +308,44 @@ onBeforeUnmount(() => {
           <Progress :progress="volume" @set-progress="setPlayVolume" />
         </div>
       </div>
-      <div v-else>2222</div>
+      <div v-else class="mode">
+        <div class="icon_common" @click="setPlayState('loop')">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-loop" />
+          </svg>
+        </div>
+        <div class="icon_common" @click="setPlayState('loopOnce')">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-loopOnce" />
+          </svg>
+        </div>
+        <div class="icon_common" @click="setPlayState('random')">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-random" />
+          </svg>
+        </div>
+      </div>
     </PositionPopup>
   </div>
 </template>
@@ -376,12 +423,6 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    .icon_common {
-      cursor: pointer;
-      width: 24px;
-      height: 24px;
-      color: var(--color-primary);
-    }
     .time {
       color: var(--color-550);
     }
@@ -410,5 +451,14 @@ onBeforeUnmount(() => {
     border-radius: 2px;
     overflow: hidden;
   }
+}
+.mode {
+}
+
+.icon_common {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  color: var(--color-primary);
 }
 </style>

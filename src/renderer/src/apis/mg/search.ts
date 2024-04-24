@@ -35,7 +35,6 @@ export const searchMusic = async (searchInfo, pageSize, tryNum = 0) => {
         }
       }
     );
-    console.log('搜索歌曲', res);
   } catch (error) {
     return searchMusic(searchInfo, pageSize, tryNum + 1);
   }
@@ -70,7 +69,6 @@ export const searchSongList = async (searchInfo, pageSize, tryNum = 0) => {
         }
       }
     );
-    console.log('搜索歌单', res);
     if (
       res.statusCode !== 200 ||
       (res.code !== undefined

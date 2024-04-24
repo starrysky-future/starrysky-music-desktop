@@ -12,7 +12,7 @@ declare namespace SKY {
       loveList: PlayListItem;
     }
     interface CurPlayInfo extends SKY.MusicListItem {
-      curLyric: string;
+      statu: string;
       isPlay: boolean;
     }
 

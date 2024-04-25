@@ -12,7 +12,6 @@ export const getLyric = async (info) => {
   // 歌词
   try {
     statulyric.value = {};
-    curPlayInfo.value.statu = '';
     const resLyric = await sources[curPlayInfo.value.source].getLyric(curPlayInfo.value);
     parseStatulyric(resLyric.lyric);
   } catch (error) {

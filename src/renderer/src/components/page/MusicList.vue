@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
+import { storeToRefs } from 'pinia';
+import { usePlayStore } from '@r/store/play';
 import { playSong } from '@r/plugins/player/playList';
+
+const playStore = usePlayStore();
+const { curPlayInfo } = storeToRefs(playStore);
 
 const props = defineProps<{
   list: Array<SKY.MusicListItem> | undefined;
@@ -10,6 +15,7 @@ const props = defineProps<{
 
 const curInfo = ref<SKY.MusicListItem>();
 const active = ref<string>('');
+const nowNum = ref<number>(0);
 
 const isVisible = ref<boolean>(false);
 const position = reactive({
@@ -17,7 +23,8 @@ const position = reactive({
   y: 0
 });
 
-const getMenu = (songInfo: SKY.MusicListItem, $event) => {
+const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
+  nowNum.value = index;
   active.value = songInfo.songmid;
   curInfo.value = songInfo;
   isVisible.value = true;
@@ -41,12 +48,28 @@ const getMenu = (songInfo: SKY.MusicListItem, $event) => {
           v-for="(item, index) in props.list"
           :key="item.songmid"
           class="music_item"
-          :class="{ active: active === item.songmid }"
+          :class="{ active: active === item.songmid && isVisible }"
           :data-song-info="JSON.stringify(item)"
-          @dblclick="playSong(item)"
-          @click.right="getMenu(item, $event)"
+          @dblclick="playSong(item, index)"
+          @click.right="getMenu(item, index, $event)"
         >
-          <div class="w_5">{{ index }}</div>
+          <div class="w_5">
+            <div v-if="curPlayInfo.songmid === item.songmid" class="commom_icon">
+              <svg
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xlink="http://www.w3.org/1999/xlink"
+                height="100%"
+                viewBox="0 0 16 16"
+                space="preserve"
+              >
+                <use xlink:href="#icon-list-play" />
+              </svg>
+            </div>
+            <template v-else>
+              {{ index + 1 }}
+            </template>
+          </div>
           <div class="w_30 pd_right singleTextHide">
             <span class="select" @click.stop>{{ item.name }}</span>
           </div>
@@ -64,7 +87,7 @@ const getMenu = (songInfo: SKY.MusicListItem, $event) => {
     </div>
   </div>
   <div v-show="isVisible">
-    <ListPopup v-model="isVisible" :position="position" :cur-info="curInfo" />
+    <ListPopup v-model="isVisible" :position="position" :cur-info="curInfo" :now-num="nowNum" />
   </div>
 </template>
 
@@ -111,6 +134,11 @@ const getMenu = (songInfo: SKY.MusicListItem, $event) => {
   }
   .w_35 {
     flex: 0 0 35%;
+  }
+  .commom_icon {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primary);
   }
   .pd_right {
     padding-right: 6px;

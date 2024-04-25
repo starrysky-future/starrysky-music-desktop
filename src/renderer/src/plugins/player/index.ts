@@ -4,7 +4,7 @@ export const createAudio = () => {
   if (audio) return;
   audio = new window.Audio();
   audio.controls = false; // 不显示控制面板
-  audio.autoplay = true; // 资源就绪后自动播放
+  audio.autoplay = true; // 自动播放
   audio.preload = 'auto'; // 当页面加载后载入整个音频
   audio.crossOrigin = 'anonymous'; // 支持跨域
 };

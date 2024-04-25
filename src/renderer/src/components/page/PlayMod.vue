@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, reactive, ref, computed } from 'vue';
+import { onBeforeUnmount, reactive, ref, computed, nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import {
@@ -17,6 +17,7 @@ import {
 } from '@r/plugins/player';
 import { initPlayInfo, addList } from '@r/plugins/player/playList';
 import { getRandomList, removeList } from '@r/utils';
+import eventBus from '@r/plugins/eventBus';
 
 const isVisible = ref<boolean>(false);
 const isMute = ref<boolean>(false);
@@ -68,35 +69,42 @@ const setVolumeMute = () => {
 };
 
 const setVolumePage = ($event) => {
+  if (setPopup.value === 'mode' && isVisible.value) {
+    isVisible.value = false;
+  }
   const rect = $event.target.getBoundingClientRect();
   position.x = rect.x;
   position.y = rect.y;
   position.width = rect.width;
   position.height = rect.height;
 
-  if (setPopup.value === 'volume' || !isVisible.value) {
+  nextTick(() => {
     isVisible.value = !isVisible.value;
-  }
+  });
+
   setPopup.value = 'volume';
 };
 
 const showPlayState = ($event) => {
+  if (setPopup.value === 'volume' && isVisible.value) {
+    isVisible.value = false;
+  }
   const rect = $event.target.getBoundingClientRect();
   position.x = rect.x;
   position.y = rect.y;
   position.width = rect.width;
   position.height = rect.height;
-  if (setPopup.value === 'mode' || !isVisible.value) {
-    console.log(isVisible.value);
+
+  nextTick(() => {
     isVisible.value = !isVisible.value;
-    console.log(isVisible.value);
-  }
+  });
+
   setPopup.value = 'mode';
 };
 
 const stopTimeupdate = onTimeupdate(() => {
   const currentTime = getCurrentTime();
-  if (statulyric.value[playProgress.value.nowPlayTimeStr]) {
+  if (currentTime > 0 && statulyric.value[playProgress.value.nowPlayTimeStr]) {
     curPlayInfo.value.statu = statulyric.value[playProgress.value.nowPlayTimeStr];
   }
 
@@ -142,7 +150,9 @@ const prePlay = () => {
 
 const nextPlay = () => {
   pause();
+
   const curList = playList.value[playList.value.playListId].list;
+
   if (curList.length === 0) return;
   const nextId =
     playList.value.playId === curList.length - 1
@@ -150,7 +160,7 @@ const nextPlay = () => {
       : (playList.value.playId += 1);
 
   let playInfo;
-  console.log(playState.value);
+
   if (playState.value === 'random') {
     playInfo = randomList.value[nextId];
   } else {
@@ -183,6 +193,8 @@ const isCollect = computed(() => {
   const loveList = playList.value.loveList.list;
   return loveList.findIndex((item) => item.songmid === curPlayInfo.value.songmid) >= 0;
 });
+
+eventBus.on('nextPlay', nextPlay);
 
 onBeforeUnmount(() => {
   stopTimeupdate();
@@ -453,6 +465,11 @@ onBeforeUnmount(() => {
   }
 }
 .mode {
+  width: 140px;
+  height: 40px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .icon_common {

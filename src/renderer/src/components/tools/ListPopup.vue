@@ -6,6 +6,7 @@ import { playSong, playLater, addList } from '@r/plugins/player/playList';
 const props = defineProps<{
   position: SKY.SongList.Position;
   curInfo: SKY.MusicListItem;
+  nowNum: number;
 }>();
 
 const route = useRoute();
@@ -52,7 +53,7 @@ onMounted(() => {
 });
 
 const getClick = (id: string) => {
-  if (id === 'play') playSong(props.curInfo);
+  if (id === 'play') playSong(props.curInfo, props.nowNum);
   if (id === 'nextPlay') playLater(props.curInfo);
   if (id === 'loveList') addList(props.curInfo, id);
   isVisible.value = false;

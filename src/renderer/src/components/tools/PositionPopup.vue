@@ -17,10 +17,12 @@ let y;
 
 watch(isVisible, (val) => {
   if (val) {
-    nextTick(() => {
-      popupWidth.value = domPositionPopup.value.clientWidth;
-      popupHeight.value = domPositionPopup.value.clientHeight;
-    });
+    if (val) {
+      nextTick(() => {
+        popupWidth.value = domPositionPopup.value.clientWidth;
+        popupHeight.value = domPositionPopup.value.clientHeight;
+      });
+    }
   }
 });
 

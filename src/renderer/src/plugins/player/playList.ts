@@ -6,19 +6,21 @@ import { setStop } from '@r/plugins/player';
 import { useNavStore } from '@r/store/nav';
 import { getLyric } from './lyric';
 import { getPic } from './pic';
-import { getMusic } from './musicUrl';
+import { getMusicUrl } from './musicUrl';
 
 const playStore = usePlayStore(pinia);
 const navStore = useNavStore(pinia);
 const { curPlayInfo, playList } = storeToRefs(playStore);
 const { navName } = storeToRefs(navStore);
 
-export const playSong = debounce(async (info: SKY.MusicListItem) => {
+export const playSong = debounce(async (info: SKY.MusicListItem, index: number) => {
   if (navName.value !== 'collect') {
     const unique = addUnique(playList.value.defaultList.list, info, 'songmid');
     if (unique) {
       playList.value.playId = playList.value.defaultList.list.length - 1;
     }
+  } else {
+    playList.value.playId = index;
   }
 
   initPlayInfo(info);
@@ -41,9 +43,9 @@ export const initPlayInfo = async (info: SKY.MusicListItem) => {
   setStop();
 
   playStore.setMaxplayTime(info._interval / 1000);
-  curPlayInfo.value = { ...info, isPlay: false, statu: '歌曲请求中...' };
+  curPlayInfo.value = { ...info, isPlay: curPlayInfo.value.isPlay, statu: curPlayInfo.value.statu };
 
   getPic(info);
   getLyric(info);
-  getMusic(info);
+  getMusicUrl(info);
 };

@@ -12,6 +12,7 @@ declare module 'vue' {
     ListPopup: typeof import('./src/components/tools/ListPopup.vue')['default']
     LoadIcon: typeof import('./src/components/base/LoadIcon.vue')['default']
     Loading: typeof import('./src/components/tools/Loading.vue')['default']
+    LyricPage: typeof import('./src/components/page/LyricPage.vue')['default']
     MusicList: typeof import('./src/components/page/MusicList.vue')['default']
     Nav: typeof import('./src/components/page/Nav.vue')['default']
     NoData: typeof import('./src/components/tools/NoData.vue')['default']
@@ -27,6 +28,8 @@ declare module 'vue' {
     SetTitle: typeof import('./src/components/base/SetTitle.vue')['default']
     SongListItem: typeof import('./src/components/base/SongListItem.vue')['default']
     Tabs: typeof import('./src/components/page/Tabs.vue')['default']
+    TipPopup: typeof import('./src/components/tools/TipPopup.vue')['default']
+    Tiptool: typeof import('./src/components/tools/Tiptool.vue')['default']
     YScroll: typeof import('./src/components/tools/y-scroll.vue')['default']
   }
 }

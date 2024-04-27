@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, reactive, ref, computed, nextTick } from 'vue';
+import { onBeforeUnmount, reactive, ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import {
@@ -69,35 +69,29 @@ const setVolumeMute = () => {
 };
 
 const setVolumePage = ($event) => {
-  if (setPopup.value === 'mode' && isVisible.value) {
-    isVisible.value = false;
-  }
   const rect = $event.target.getBoundingClientRect();
   position.x = rect.x;
   position.y = rect.y;
   position.width = rect.width;
   position.height = rect.height;
 
-  nextTick(() => {
+  if (!(setPopup.value === 'mode' && isVisible.value)) {
     isVisible.value = !isVisible.value;
-  });
+  }
 
   setPopup.value = 'volume';
 };
 
 const showPlayState = ($event) => {
-  if (setPopup.value === 'volume' && isVisible.value) {
-    isVisible.value = false;
-  }
   const rect = $event.target.getBoundingClientRect();
   position.x = rect.x;
   position.y = rect.y;
   position.width = rect.width;
   position.height = rect.height;
 
-  nextTick(() => {
+  if (!(setPopup.value === 'volume' && isVisible.value)) {
     isVisible.value = !isVisible.value;
-  });
+  }
 
   setPopup.value = 'mode';
 };
@@ -188,6 +182,17 @@ const iconVolume = computed(() => {
     return 'zero';
   }
 });
+
+const playStateText = computed(() => {
+  if (playState.value === 'loop') {
+    return '列表循环';
+  } else if (playState.value === 'loopOnce') {
+    return '单曲循环';
+  } else {
+    return '随机播放';
+  }
+});
+
 const isCollect = computed(() => {
   if (!curPlayInfo.value.songmid) return false;
   const loveList = playList.value.loveList.list;
@@ -219,52 +224,60 @@ onBeforeUnmount(() => {
     </div>
     <div class="main-mid">
       <div class="commom_icon icon_WH" @click="prePlay">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 40 40"
-          space="preserve"
-        >
-          <use xlink:href="#icon-play-pre" />
-        </svg>
+        <Tiptool text="上一首">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 40 40"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-pre" />
+          </svg>
+        </Tiptool>
       </div>
       <div v-show="!curPlayInfo.isPlay" class="commom_icon icon_mid" @click="play">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 40 40"
-          space="preserve"
-        >
-          <use xlink:href="#icon-play-play" />
-        </svg>
+        <Tiptool text="播放">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 40 40"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-play" />
+          </svg>
+        </Tiptool>
       </div>
       <div v-show="curPlayInfo.isPlay" class="commom_icon icon_mid" @click="pause">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 40 40"
-          space="preserve"
-        >
-          <use xlink:href="#icon-play-pause" />
-        </svg>
+        <Tiptool text="暂停">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 40 40"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-pause" />
+          </svg>
+        </Tiptool>
       </div>
       <div class="commom_icon icon_WH" @click="nextPlay">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 40 40"
-          space="preserve"
-        >
-          <use xlink:href="#icon-play-next" />
-        </svg>
+        <Tiptool text="下一首">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 40 40"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-next" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
     <div class="main-right">
@@ -272,40 +285,46 @@ onBeforeUnmount(() => {
         {{ playProgress.nowPlayTimeStr }} / {{ playProgress.maxPlayTimeStr }}
       </div>
       <div class="icon_common mgR" @click="setCollect">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use :xlink:href="`#icon-play-${isCollect ? 'collect' : 'noCollect'}`" />
-        </svg>
+        <Tiptool text="收藏到我的列表">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use :xlink:href="`#icon-play-${isCollect ? 'collect' : 'noCollect'}`" />
+          </svg>
+        </Tiptool>
       </div>
       <div class="icon_common mgR" @click="setVolumePage" @click.stop>
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use :xlink:href="`#icon-volume-${iconVolume}`" />
-        </svg>
+        <Tiptool text="音量">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use :xlink:href="`#icon-volume-${iconVolume}`" />
+          </svg>
+        </Tiptool>
       </div>
       <div class="icon_common" @click="showPlayState" @click.stop>
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use :xlink:href="`#icon-play-${playState}`" />
-        </svg>
+        <Tiptool :text="playStateText">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use :xlink:href="`#icon-play-${playState}`" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
   </div>
@@ -322,40 +341,46 @@ onBeforeUnmount(() => {
       </div>
       <div v-else class="mode">
         <div class="icon_common" @click="setPlayState('loop')">
-          <svg
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xlink="http://www.w3.org/1999/xlink"
-            height="100%"
-            viewBox="0 0 36 36"
-            space="preserve"
-          >
-            <use xlink:href="#icon-play-loop" />
-          </svg>
+          <Tiptool text="列表循环">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xlink="http://www.w3.org/1999/xlink"
+              height="100%"
+              viewBox="0 0 36 36"
+              space="preserve"
+            >
+              <use xlink:href="#icon-play-loop" />
+            </svg>
+          </Tiptool>
         </div>
         <div class="icon_common" @click="setPlayState('loopOnce')">
-          <svg
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xlink="http://www.w3.org/1999/xlink"
-            height="100%"
-            viewBox="0 0 36 36"
-            space="preserve"
-          >
-            <use xlink:href="#icon-play-loopOnce" />
-          </svg>
+          <Tiptool text="单曲循环">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xlink="http://www.w3.org/1999/xlink"
+              height="100%"
+              viewBox="0 0 36 36"
+              space="preserve"
+            >
+              <use xlink:href="#icon-play-loopOnce" />
+            </svg>
+          </Tiptool>
         </div>
         <div class="icon_common" @click="setPlayState('random')">
-          <svg
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xlink="http://www.w3.org/1999/xlink"
-            height="100%"
-            viewBox="0 0 36 36"
-            space="preserve"
-          >
-            <use xlink:href="#icon-play-random" />
-          </svg>
+          <Tiptool text="随机播放">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xlink="http://www.w3.org/1999/xlink"
+              height="100%"
+              viewBox="0 0 36 36"
+              space="preserve"
+            >
+              <use xlink:href="#icon-play-random" />
+            </svg>
+          </Tiptool>
         </div>
       </div>
     </PositionPopup>

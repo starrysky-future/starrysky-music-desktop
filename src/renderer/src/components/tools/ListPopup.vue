@@ -39,8 +39,8 @@ const APPDOM: HTMLElement = document.getElementById('app')!;
 
 onMounted(() => {
   x = computed(() => {
-    if (APPDOM?.clientWidth - 16 - props.position.x < domListPopup.value.clientWidth) {
-      return APPDOM?.clientWidth - 16 - domListPopup.value.clientWidth;
+    if (APPDOM?.clientWidth - 8 - props.position.x < domListPopup.value.clientWidth) {
+      return APPDOM?.clientWidth - 8 - domListPopup.value.clientWidth;
     }
     return props.position.x;
   });
@@ -61,7 +61,7 @@ const getClick = (id: string) => {
 </script>
 
 <template>
-  <Popup v-model="isVisible" :position="{ x: x, y: y }">
+  <Popup v-model="isVisible" :position="{ x: x, y: y }" has-listener>
     <div ref="domListPopup" class="list_popup">
       <div
         v-for="item in list"

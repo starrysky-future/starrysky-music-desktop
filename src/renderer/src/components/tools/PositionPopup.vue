@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { VNodeRef, computed, onMounted, ref, watch, nextTick } from 'vue';
+import { VNodeRef, computed, onMounted, ref, nextTick, onUpdated } from 'vue';
 const props = defineProps<{
   position: SKY.SongList.Position;
   direction: string;
@@ -15,18 +15,12 @@ const popupHeight = ref<number>(0);
 let x;
 let y;
 
-watch(isVisible, (val) => {
-  if (val) {
-    if (val) {
-      nextTick(() => {
-        popupWidth.value = domPositionPopup.value.clientWidth;
-        popupHeight.value = domPositionPopup.value.clientHeight;
-      });
-    }
-  }
-});
-
 onMounted(() => {
+  nextTick(() => {
+    popupWidth.value = domPositionPopup.value.clientWidth;
+    popupHeight.value = domPositionPopup.value.clientHeight;
+  });
+
   x = computed(() => {
     if (props.direction === 'top' || props.direction === 'bottom') {
       return props.position.x + props.position.width! / 2 - popupWidth.value / 2;
@@ -46,6 +40,13 @@ onMounted(() => {
     }
   });
 });
+
+onUpdated(() => {
+  nextTick(() => {
+    popupWidth.value = domPositionPopup.value.clientWidth;
+    popupHeight.value = domPositionPopup.value.clientHeight;
+  });
+});
 </script>
 
 <template>
@@ -55,6 +56,7 @@ onMounted(() => {
     :has-arrow="props.hasArrow"
     :arrow-info="props.arrowInfo"
     :direction="props.direction"
+    has-listener
   >
     <div ref="domPositionPopup">
       <slot></slot>

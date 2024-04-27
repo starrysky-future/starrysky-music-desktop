@@ -6,6 +6,7 @@ const props = defineProps<{
   direction?: string;
   hasArrow?: boolean;
   arrowInfo?: SKY.Play.ArrowInfo;
+  hasListener?: boolean;
 }>();
 
 let arrow_size;
@@ -28,13 +29,19 @@ if (props.hasArrow) {
 
 const isVisible = defineModel<boolean>();
 
+const setVisible = () => {
+  isVisible.value = false;
+};
+
 onMounted(() => {
-  document.addEventListener('click', () => {
-    isVisible.value = false;
-  });
+  if (props.hasListener) {
+    document.addEventListener('click', setVisible);
+  }
 });
 onBeforeUnmount(() => {
-  document.removeEventListener('click', () => {});
+  if (props.hasListener) {
+    document.removeEventListener('click', setVisible);
+  }
 });
 </script>
 

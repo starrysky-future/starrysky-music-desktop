@@ -31,8 +31,8 @@ const setBlur = () => {
       @focus="setFocus"
       @blur="setBlur"
     />
-    <div class="search_input_btn">
-      <div v-show="value" class="search_input_btn_icon search_input_btn_clear" @click="clearValue">
+    <div v-if="value" class="search_input_btn">
+      <div class="search_input_btn_icon search_input_btn_clear" @click="clearValue">
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,7 @@ const setBlur = () => {
   border-radius: 2px;
   background-color: var(--color-primary-light-700);
   .search_input_val {
-    width: 80%;
+    flex: 1 0 80%;
     padding: 4px;
     height: 100%;
     border: none;
@@ -86,7 +86,7 @@ const setBlur = () => {
   }
 
   .search_input_btn {
-    width: 10%;
+    flex: 0 0 10%;
     height: 100%;
     cursor: pointer;
     display: flex;

@@ -32,7 +32,6 @@ const getplayList = async () => {
 const getConfig = async () => {
   try {
     const res = await getData('config');
-    console.log(res);
 
     if (res) {
       setList.value = JSON.parse(res).setBasic;

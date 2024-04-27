@@ -9,15 +9,17 @@ const emits = defineEmits(['setActiveId']);
 
 <template>
   <div class="layout_left">
-    <div
-      v-for="item in props.list"
-      :key="item.id"
-      class="layout_left_name singleTextHide"
-      :class="{ active: item.id === props.activeId }"
-      @click="emits('setActiveId', item)"
-    >
-      {{ item.name }}
-    </div>
+    <template v-for="item in props.list" :key="item.id">
+      <Tiptool :text="item.name">
+        <div
+          class="layout_left_name singleTextHide"
+          :class="{ active: item.id === props.activeId }"
+          @click="emits('setActiveId', item)"
+        >
+          {{ item.name }}
+        </div>
+      </Tiptool>
+    </template>
   </div>
 </template>
 
@@ -35,6 +37,10 @@ const emits = defineEmits(['setActiveId']);
       color: var(--color-primary);
       background-color: var(--color-primary-light-400-alpha-500);
     }
+  }
+  .layout_left_name_span {
+    max-width: 100%;
+    display: inline-block;
   }
   .active {
     color: var(--color-primary);

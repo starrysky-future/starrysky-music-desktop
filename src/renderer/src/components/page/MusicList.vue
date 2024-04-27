@@ -71,13 +71,19 @@ const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
             </template>
           </div>
           <div class="w_30 pd_right singleTextHide">
-            <span class="select" @click.stop>{{ item.name }}</span>
+            <Tiptool :text="item.name">
+              <span class="select" @click.stop>{{ item.name }}</span>
+            </Tiptool>
           </div>
           <div class="w_20 pd_right singleTextHide">
-            <span class="select" @click.stop>{{ item.singer }}</span>
+            <Tiptool :text="item.singer">
+              <span class="select" @click.stop>{{ item.singer }}</span>
+            </Tiptool>
           </div>
           <div class="w_35 pd_right singleTextHide">
-            <span class="select" @click.stop>{{ item.albumName }}</span>
+            <Tiptool :text="item.albumName">
+              <span class="select" @click.stop>{{ item.albumName }}</span>
+            </Tiptool>
           </div>
           <div class="w_10">{{ item.interval }}</div>
         </div>

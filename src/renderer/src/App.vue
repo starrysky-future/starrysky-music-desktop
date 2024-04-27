@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { initSet } from '@r/plugins/setting';
+
 initSet();
 </script>
 <template>
@@ -18,6 +19,7 @@ initSet();
     <div class="floor">
       <PlayMod />
     </div>
+    <TipPopup />
   </div>
 
   <Icons />

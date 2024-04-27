@@ -35,16 +35,18 @@ const changeCurPage = (path: string): void => {
   <div class="nav">
     <div class="common_style icon_position logo">
       <div class="common_style_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use xlink:href="#icon-logo" />
-        </svg>
+        <Tiptool text="星空">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-logo" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
     <div
@@ -53,16 +55,18 @@ const changeCurPage = (path: string): void => {
       @click="changeCurPage('songList')"
     >
       <div class="common_style_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use xlink:href="#icon-song-list" />
-        </svg>
+        <Tiptool text="歌单">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-song-list" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
     <div
@@ -71,16 +75,18 @@ const changeCurPage = (path: string): void => {
       @click="changeCurPage('leaderBoard')"
     >
       <div class="common_style_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use xlink:href="#icon-leaderboard" />
-        </svg>
+        <Tiptool text="排行榜">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-leaderboard" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
     <div
@@ -89,16 +95,18 @@ const changeCurPage = (path: string): void => {
       @click="changeCurPage('collect')"
     >
       <div class="common_style_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use xlink:href="#icon-collect" />
-        </svg>
+        <Tiptool text="收藏">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-collect" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
     <div
@@ -107,16 +115,18 @@ const changeCurPage = (path: string): void => {
       @click="changeCurPage('search')"
     >
       <div class="common_style_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use xlink:href="#icon-search" />
-        </svg>
+        <Tiptool text="搜索">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-search" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
     <div
@@ -125,16 +135,18 @@ const changeCurPage = (path: string): void => {
       @click="changeCurPage('setting')"
     >
       <div class="common_style_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 36 36"
-          space="preserve"
-        >
-          <use xlink:href="#icon-setting" />
-        </svg>
+        <Tiptool text="设置">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-setting" />
+          </svg>
+        </Tiptool>
       </div>
     </div>
   </div>

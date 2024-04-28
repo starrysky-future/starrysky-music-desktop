@@ -6,7 +6,7 @@ import applyThemeColor from '@r/utils/theme/index.js';
 
 const playStore = usePlayStore(pinia);
 const setStore = useSetStore(pinia);
-const { playList, curPlayInfo } = storeToRefs(playStore);
+const { playList, curPlayInfo, volume, playState } = storeToRefs(playStore);
 const { setList } = storeToRefs(setStore);
 
 const getData = async (name: string) => {
@@ -34,12 +34,20 @@ const getConfig = async () => {
     const res = await getData('config');
 
     if (res) {
-      setList.value = JSON.parse(res).setBasic;
+      const data = JSON.parse(res);
+
+      setList.value = data.setBasic;
+      setPlayConfig(data.playConfig);
     }
   } catch (error) {
     console.log('获取config失败');
   }
   applyThemeColor();
+};
+
+const setPlayConfig = (playConfig) => {
+  volume.value = playConfig.volume;
+  playState.value = playConfig.playState;
 };
 
 export const initData = () => {

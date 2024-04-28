@@ -27,21 +27,27 @@ export const getMusicList = async (ids: Array<string> = [], tryNum) => {
 };
 
 // 获取单个歌曲信息
-export const getMusicInfo = async (songmid: string) => {
-  const res = await http('https://music.163.com/weapi/v3/song/detail', 'post', {
-    headers: {
-      myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-      myReferer: 'https://music.163.com/song?id=' + songmid,
-      myOrigin: 'https://music.163.com',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    data: weapi({
-      c: `[{"id":${songmid}}]`,
-      ids: `[${songmid}]`
-    })
-  });
+export const getMusicInfo = async (songmid: string, tryNum = 0) => {
+  if (tryNum > 2) throw new Error('歌单信息获取失败');
 
-  return res.songs[0];
+  try {
+    const res = await http('https://music.163.com/weapi/v3/song/detail', 'post', {
+      headers: {
+        myUA: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        myReferer: 'https://music.163.com/song?id=' + songmid,
+        myOrigin: 'https://music.163.com',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: weapi({
+        c: `[{"id":${songmid}}]`,
+        ids: `[${songmid}]`
+      })
+    });
+
+    return res.songs[0];
+  } catch (error) {
+    return getMusicInfo(songmid, tryNum + 1);
+  }
 };
 
 export const getSinger = (singers) => {

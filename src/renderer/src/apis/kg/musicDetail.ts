@@ -12,6 +12,50 @@ export const getMusicInfos = async (hashs) => {
   );
 };
 
+export const getPic = async (songInfo) => {
+  try {
+    const res = await http('http://media.store.kugou.com/v1/get_res_privilege', 'post', {
+      headers: {
+        'KG-RC': 1,
+        'KG-THash': 'expand_search_manager.cpp:852736169:451',
+        myUA: 'KuGou2012-9020-ExpandSearchManager'
+      },
+      data: {
+        appid: 1001,
+        area_code: '1',
+        behavior: 'play',
+        clientver: '9020',
+        need_hash_offset: 1,
+        relate: 1,
+        resource: [
+          {
+            album_audio_id:
+              songInfo.songmid.length == 32 // 修复歌曲ID存储变更导致图片获取失败的问题
+                ? songInfo.audioId.split('_')[0]
+                : songInfo.songmid,
+            album_id: songInfo.albumId,
+            hash: songInfo.hash,
+            id: 0,
+            name: `${songInfo.singer} - ${songInfo.name}.mp3`,
+            type: 'audio'
+          }
+        ],
+        token: '',
+        userid: 2626431536,
+        vip: 1
+      }
+    });
+
+    const info = res.data[0].info;
+    const img = info.imgsize ? info.image.replace('{size}', info.imgsize[0]) : info.image;
+    if (!img) throw new Error('获取图片失败');
+
+    return img;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 export const createHttpFetch = async (url, method, options) => {
   let res;
   try {

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, reactive } from 'vue';
 import { formatPlayTime } from '@r/utils';
+import { getMute } from '@r/plugins/player';
 
 export const usePlayStore = defineStore('usePlayStore', () => {
   const curPlayInfo = ref<SKY.Play.CurPlayInfo>({
@@ -38,6 +39,9 @@ export const usePlayStore = defineStore('usePlayStore', () => {
 
   const statulyric = ref({});
   const volume = ref<number>(1);
+  console.log(getMute());
+
+  const isMute = ref<boolean>(getMute());
   const playState = ref<string>('loop');
 
   const playProgress = reactive({
@@ -70,6 +74,7 @@ export const usePlayStore = defineStore('usePlayStore', () => {
     playProgress,
     statulyric,
     volume,
+    isMute,
     playState,
     setNowPlayTime,
     setMaxplayTime,

@@ -3,10 +3,11 @@ import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { useSetStore } from '@r/store/setting';
 import applyThemeColor from '@r/utils/theme/index.js';
+import { setMute } from '../player';
 
 const playStore = usePlayStore(pinia);
 const setStore = useSetStore(pinia);
-const { playList, curPlayInfo, volume, playState } = storeToRefs(playStore);
+const { playList, curPlayInfo, volume, isMute, playState } = storeToRefs(playStore);
 const { setList } = storeToRefs(setStore);
 
 const getData = async (name: string) => {
@@ -18,8 +19,9 @@ const getplayList = async () => {
     const res = await getData('playList');
     if (res) {
       playList.value = JSON.parse(res);
+
       curPlayInfo.value = {
-        ...playList.value[playList.value.playListId][playList.value.playId],
+        ...playList.value[playList.value.playListId].list[playList.value.playId],
         curLyric: '',
         isPlay: false
       };
@@ -48,6 +50,9 @@ const getConfig = async () => {
 const setPlayConfig = (playConfig) => {
   volume.value = playConfig.volume;
   playState.value = playConfig.playState;
+  isMute.value = playConfig.mute;
+
+  setMute(playConfig.mute);
 };
 
 export const initData = () => {

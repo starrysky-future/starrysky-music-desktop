@@ -84,6 +84,7 @@ const setMusicUrl = (url, info, isUrl, infoList?, tryNum?) => {
     setResource(url);
     const stopLoadeddata = onLoadeddata(() => {
       if (getDuration() < Math.floor(curPlayInfo.value._interval / 1000)) {
+        console.log('歌曲资源时长太短，请求其他资源');
         setStop();
 
         if (isUrl) {

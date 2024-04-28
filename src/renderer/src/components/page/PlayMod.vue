@@ -10,7 +10,6 @@ import {
   onTimeupdate,
   getCurrentTime,
   setVolume,
-  getMute,
   setMute,
   setLoopPlay,
   isEmpty
@@ -20,7 +19,6 @@ import { getRandomList, removeList } from '@r/utils';
 import eventBus from '@r/plugins/eventBus';
 
 const isVisible = ref<boolean>(false);
-const isMute = ref<boolean>(false);
 const setPopup = ref<string>('volume');
 const position = reactive<SKY.SongList.Position>({
   x: 0,
@@ -28,10 +26,9 @@ const position = reactive<SKY.SongList.Position>({
   width: 0,
   height: 0
 });
-isMute.value = getMute();
 
 const playStore = usePlayStore();
-const { curPlayInfo, statulyric, playProgress, playList, volume, playState } =
+const { curPlayInfo, statulyric, playProgress, playList, volume, playState, isMute } =
   storeToRefs(playStore);
 
 const setProgress = (dragProgress: number) => {

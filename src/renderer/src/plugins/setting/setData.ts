@@ -2,6 +2,7 @@ import pinia from '@r/store';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { useSetStore } from '@r/store/setting';
+import { getMute } from '../player';
 
 const playStore = usePlayStore(pinia);
 const setStore = useSetStore(pinia);
@@ -17,7 +18,8 @@ const setConfig = () => {
     setBasic: setList.value,
     playConfig: {
       volume: volume.value,
-      playState: playState.value
+      playState: playState.value,
+      mute: getMute()
     }
   };
 

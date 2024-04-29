@@ -1,8 +1,17 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
-import { playSong } from '@r/plugins/player/playList';
+import {
+  playSong,
+  playLater,
+  addList,
+  deleteMusic,
+  deleteMusicAll
+} from '@r/plugins/player/playList';
+
+const route = useRoute();
 
 const playStore = usePlayStore();
 const { curPlayInfo } = storeToRefs(playStore);
@@ -16,12 +25,48 @@ const props = defineProps<{
 const curInfo = ref<SKY.MusicListItem>();
 const active = ref<string>('');
 const nowNum = ref<number>(0);
-
 const isVisible = ref<boolean>(false);
 const position = reactive({
   x: 0,
   y: 0
 });
+const popupList: Array<SKY.SongList.PopupListItem> = [
+  {
+    id: 'play',
+    name: '播放',
+    ishow: true
+  },
+  {
+    id: 'nextPlay',
+    name: '稍后播放',
+    ishow: true
+  },
+  {
+    id: 'loveList',
+    name: '添加到我的',
+    ishow: route.name !== 'collect'
+  },
+  {
+    id: 'delete',
+    name: '删除',
+    ishow: route.name === 'collect'
+  },
+  {
+    id: 'deleteAll',
+    name: '清空列表',
+    ishow: route.name === 'collect'
+  }
+];
+
+const setListOpr = (id: string) => {
+  if (id === 'play') playSong(curInfo.value, nowNum.value);
+  if (id === 'nextPlay') playLater(curInfo.value!);
+  if (id === 'loveList') addList(curInfo.value!, id);
+  if (id === 'delete') deleteMusic(nowNum.value);
+  if (id === 'deleteAll') deleteMusicAll();
+
+  isVisible.value = false;
+};
 
 const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
   nowNum.value = index;
@@ -93,7 +138,12 @@ const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
     </div>
   </div>
   <div v-show="isVisible">
-    <ListPopup v-model="isVisible" :position="position" :cur-info="curInfo" :now-num="nowNum" />
+    <ListPopup
+      v-model="isVisible"
+      :position="position"
+      :list="popupList"
+      @set-list-opr="setListOpr"
+    />
   </div>
 </template>
 

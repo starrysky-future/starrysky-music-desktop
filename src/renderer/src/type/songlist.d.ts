@@ -88,5 +88,11 @@ declare namespace SKY {
       id: string;
     }
     type SortList = Array<SortListItem>;
+
+    interface PopupListItem {
+      id: string;
+      name: string;
+      ishow?: boolean;
+    }
   }
 }

@@ -32,7 +32,7 @@ const changeCurPage = (path: string): void => {
 </script>
 
 <template>
-  <div class="nav">
+  <div class="nav noDrag">
     <div class="common_style icon_position logo">
       <div class="common_style_icon icon_WH">
         <Tiptool text="星空">
@@ -158,7 +158,6 @@ const changeCurPage = (path: string): void => {
 .nav {
   display: flex;
   height: 60px;
-  -webkit-app-region: no-drag;
 
   .common_style {
     width: @icon-width;

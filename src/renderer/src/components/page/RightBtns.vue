@@ -1,17 +1,25 @@
 <script lang="ts" setup>
 import { ref, VNodeRef } from 'vue';
 import { saveData } from '@r/plugins/setting/setData';
+import { storeToRefs } from 'pinia';
+import { useAppStore } from '@r/store/app';
+
+const appStore = useAppStore();
+const { showLyricPage } = storeToRefs(appStore);
 
 const hasHover = ref<boolean>(true);
 const minDom = ref<VNodeRef | null>(null);
+
+const setMinHover = () => {
+  hasHover.value = true;
+  minDom.value.removeEventListener('mousemove', setMinHover);
+};
+
 const changeWinState = (operate: string): void => {
   if (operate === 'min') {
     hasHover.value = false;
 
-    minDom.value.addEventListener('mousemove', () => {
-      hasHover.value = true;
-      minDom.value.removeEventListener('mousemove', () => {});
-    });
+    minDom.value.addEventListener('mousemove', setMinHover);
   }
 
   if (operate === 'quit') {
@@ -19,10 +27,28 @@ const changeWinState = (operate: string): void => {
   }
   window.api![operate]();
 };
+
+const hideLyricPage = () => {
+  showLyricPage.value = false;
+};
 </script>
 
 <template>
-  <div class="rightBtns">
+  <div class="rightBtns noDrag">
+    <div v-show="showLyricPage" class="max icon_position" @click="hideLyricPage">
+      <div class="max_icon icon_WH">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 24 24"
+          space="preserve"
+        >
+          <use xlink:href="#icon-hide" />
+        </svg>
+      </div>
+    </div>
     <div
       ref="minDom"
       class="min icon_position"
@@ -79,7 +105,6 @@ const changeWinState = (operate: string): void => {
 .rightBtns {
   display: flex;
   height: 30px;
-  -webkit-app-region: no-drag;
   .min {
     width: @icon-width;
     .min_icon {

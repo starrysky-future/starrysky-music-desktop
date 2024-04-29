@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Icons: typeof import('./src/components/base/Icons.vue')['default']
+    LayoutBottom: typeof import('./src/components/page/LayoutBottom.vue')['default']
     LayoutLeft: typeof import('./src/components/base/LayoutLeft.vue')['default']
     ListPopup: typeof import('./src/components/tools/ListPopup.vue')['default']
     LoadIcon: typeof import('./src/components/base/LoadIcon.vue')['default']
@@ -18,6 +19,7 @@ declare module 'vue' {
     NoData: typeof import('./src/components/tools/NoData.vue')['default']
     Pagination: typeof import('./src/components/tools/Pagination.vue')['default']
     PlayMod: typeof import('./src/components/page/PlayMod.vue')['default']
+    PlayStateMod: typeof import('./src/components/page/PlayStateMod.vue')['default']
     Popup: typeof import('./src/components/base/Popup.vue')['default']
     PositionPopup: typeof import('./src/components/tools/PositionPopup.vue')['default']
     Progress: typeof import('./src/components/base/Progress.vue')['default']
@@ -30,6 +32,7 @@ declare module 'vue' {
     Tabs: typeof import('./src/components/page/Tabs.vue')['default']
     TipPopup: typeof import('./src/components/tools/TipPopup.vue')['default']
     Tiptool: typeof import('./src/components/tools/Tiptool.vue')['default']
+    TransitionPosition: typeof import('./src/components/tools/TransitionPosition.vue')['default']
     YScroll: typeof import('./src/components/tools/y-scroll.vue')['default']
   }
 }

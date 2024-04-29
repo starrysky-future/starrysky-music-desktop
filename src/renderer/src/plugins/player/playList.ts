@@ -27,12 +27,25 @@ export const playSong = debounce(async (info: SKY.MusicListItem, index: number) 
 }, 500);
 
 export const playLater = (info: SKY.MusicListItem) => {
-  insertList(
+  const changePlayId = insertList(
     playList.value[playList.value.playListId].list,
     info,
     'songmid',
-    playList.value.playId
+    playList.value.playId,
+    navName.value === 'collect'
   );
+
+  if (changePlayId) {
+    playList.value.playId -= 1;
+  }
+};
+
+export const deleteMusic = (index: number) => {
+  playList.value[playList.value.playListId].list.splice(index, 1);
+};
+
+export const deleteMusicAll = () => {
+  playList.value[playList.value.playListId].list = [];
 };
 
 export const addList = (info: SKY.MusicListItem, listName: string) => {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { VNodeRef, ref, watch, computed, nextTick, onBeforeUnmount } from 'vue';
+import { VNodeRef, ref, watch, computed, onMounted, nextTick, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@r/store/app';
 
@@ -13,28 +13,31 @@ const APPDOM: HTMLElement = document.getElementById('app')!;
 
 let x;
 let y;
+let stopWatch;
 
-const stopWatch = watch(showTip, (value) => {
-  if (value) {
-    nextTick(() => {
-      tipWidth.value = domTipPopup.value.offsetWidth;
-      tipHeight.value = domTipPopup.value.offsetHeight;
-    });
+onMounted(() => {
+  stopWatch = watch(showTip, (value) => {
+    if (value) {
+      nextTick(() => {
+        tipWidth.value = domTipPopup.value.offsetWidth;
+        tipHeight.value = domTipPopup.value.offsetHeight;
+      });
 
-    x = computed(() => {
-      if (APPDOM?.clientWidth - tipPosition.value.x - 8 - 10 < tipWidth.value) {
-        return tipPosition.value.x - tipWidth.value - 10;
-      }
-      return tipPosition.value.x + 10;
-    });
+      x = computed(() => {
+        if (APPDOM?.clientWidth - tipPosition.value.x - 8 - 10 < tipWidth.value) {
+          return tipPosition.value.x - tipWidth.value - 10;
+        }
+        return tipPosition.value.x + 10;
+      });
 
-    y = computed(() => {
-      if (APPDOM?.clientHeight - tipPosition.value.y - 8 - 6 < tipHeight.value) {
-        return tipPosition.value.y - tipHeight.value - 6;
-      }
-      return tipPosition.value.y + 6;
-    });
-  }
+      y = computed(() => {
+        if (APPDOM?.clientHeight - tipPosition.value.y - 8 - 6 < tipHeight.value) {
+          return tipPosition.value.y - tipHeight.value - 6;
+        }
+        return tipPosition.value.y + 6;
+      });
+    }
+  });
 });
 
 onBeforeUnmount(() => {

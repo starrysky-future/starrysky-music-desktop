@@ -105,7 +105,7 @@ export const unique = (list, data, key: string) => {
   let r = list.length - 1;
 
   while (l <= r) {
-    if (list[l][key] === data[key] || list[r][key] === data[key]) {
+    if (list[l][key] === data[key]) {
       return l;
     }
     if (list[r][key] === data[key]) {
@@ -136,19 +136,27 @@ export const addUnique = (list, data, key: string) => {
 
 /**
  * 数据插入数组
- * @param list
- * @param data
- * @param key
- * @param id
+ * @param list 插入的数组
+ * @param data 插入的数据
+ * @param key 检索数据的key
+ * @param id 当前索引
+ * @param isCollect 是否收藏界面
+ * @returns 是否改变当前索引位置
  */
-export const insertList = (list, data, key: string, id: number) => {
+export const insertList = (list, data, key: string, id: number, isCollect?) => {
+  console.log(id);
+  list.splice(id + 1, 0, data);
   const reply = unique(list, data, key);
 
   if (typeof reply === 'number') {
     list.splice(reply, 1);
+
+    if (isCollect && reply < id) {
+      return true;
+    }
   }
 
-  list.splice(id, 0, data);
+  return false;
 };
 
 /**
@@ -168,8 +176,8 @@ export const getRandomList = (list) => {
 /**
  * 移除列表数据
  * @param list
- * @param key
- * @param id
+ * @param key 检索数据的key
+ * @param id 移除数据的id
  * @returns
  */
 export const removeList = (list, key: string, id: string) => {
@@ -188,6 +196,12 @@ const isObject = (data) => {
   );
 };
 
+/**
+ * 深拷贝
+ * @param data
+ * @param map
+ * @returns
+ */
 export const deepCopy = (data, map = new WeakMap()) => {
   if (!isObject(data)) return data;
   const res = Array.isArray(data) ? [] : {};

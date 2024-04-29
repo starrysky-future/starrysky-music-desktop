@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
+import { useAppStore } from '@r/store/app';
 import { initSet } from '@r/plugins/setting';
+
+const appStore = useAppStore();
+const { showLyricPage } = storeToRefs(appStore);
 
 initSet();
 </script>
@@ -9,19 +14,24 @@ initSet();
       <Nav />
       <RightBtns />
     </div>
-    <div class="mian">
+
+    <div class="mian noDrag">
       <router-view v-slot="{ Component }">
         <keep-alive exclude="songListDetail">
           <component :is="Component" :key="$route.fullPath" />
         </keep-alive>
       </router-view>
     </div>
-    <div class="floor">
-      <PlayMod />
-    </div>
-    <TipPopup />
-  </div>
+    <div class="floor"><LayoutBottom /></div>
 
+    <div>
+      <TipPopup />
+    </div>
+
+    <TransitionPosition>
+      <LyricPage v-show="showLyricPage" />
+    </TransitionPosition>
+  </div>
   <Icons />
 </template>
 
@@ -34,6 +44,8 @@ initSet();
   height: calc(~'100vh - 16px');
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  position: relative;
   .header {
     display: flex;
     justify-content: space-between;
@@ -42,7 +54,6 @@ initSet();
   }
   .mian {
     flex: 1;
-    -webkit-app-region: no-drag;
   }
   .floor {
     border-top: 0.5px solid;

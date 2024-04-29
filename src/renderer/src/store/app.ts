@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useAppStore = defineStore('useAppStore', () => {
+  const showLyricPage = ref<boolean>(false);
   const showTip = ref<boolean>(false);
   const tipText = ref<string>('');
   const tipPosition = ref<SKY.SongList.Position>({
@@ -9,5 +10,5 @@ export const useAppStore = defineStore('useAppStore', () => {
     y: 0
   });
 
-  return { showTip, tipText, tipPosition };
+  return { showTip, tipText, tipPosition, showLyricPage };
 });

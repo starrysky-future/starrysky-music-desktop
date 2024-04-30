@@ -182,17 +182,13 @@ const parseTools = {
         if (ytlrc) {
           const lines = this.parseHeaderInfo(ytlrc);
           if (lines) {
-            // if (lines.length == result.lyricLines.length) {
             info.tlyric = this.fixTimeTag(result.lyric, lines.join('\n'));
-            // } else info.tlyric = lines.join('\n')
           }
         }
         if (yrlrc) {
           const lines = this.parseHeaderInfo(yrlrc);
           if (lines) {
-            // if (lines.length == result.lyricLines.length) {
             info.rlyric = this.fixTimeTag(result.lyric, lines.join('\n'));
-            // } else info.rlyric = lines.join('\n')
           }
         }
 

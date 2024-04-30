@@ -39,7 +39,6 @@ export const usePlayStore = defineStore('usePlayStore', () => {
 
   const statulyric = ref({});
   const volume = ref<number>(1);
-  console.log(getMute());
 
   const isMute = ref<boolean>(getMute());
   const playState = ref<string>('loop');

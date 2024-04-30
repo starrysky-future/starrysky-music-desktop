@@ -19,11 +19,11 @@ const { curPlayInfo, statulyric, playProgress, playList, playState } = storeToRe
 
 const stopTimeupdate = onTimeupdate(() => {
   const currentTime = getCurrentTime();
+  playStore.setProgress(currentTime, playProgress.value.maxPlayTime);
+
   if (currentTime > 0 && statulyric.value[playProgress.value.nowPlayTimeStr]) {
     curPlayInfo.value.statu = statulyric.value[playProgress.value.nowPlayTimeStr];
   }
-
-  playStore.setProgress(currentTime, playProgress.value.maxPlayTime);
 });
 
 const stopEnded = onEnded(() => {

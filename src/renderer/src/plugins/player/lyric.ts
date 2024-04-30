@@ -28,6 +28,7 @@ const parseStatulyric = (lyric: string) => {
   for (let i = 0; i < n; i++) {
     if (lyricArr[i]) {
       const [key, value] = lyricArr[i].split(']');
+      if (!value) continue;
       lyricObj[parseTime(key)] = value;
     }
   }

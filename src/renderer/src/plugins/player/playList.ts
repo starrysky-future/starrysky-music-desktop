@@ -48,9 +48,12 @@ export const deleteMusicAll = () => {
   playList.value[playList.value.playListId].list = [];
 };
 
-export const deleteList = () => {
-  playList.value[playList.value.playListId].list = [];
-  delete playList.value[playList.value.playListId];
+export const deleteList = (id) => {
+  if (id === playList.value.playListId) {
+    playList.value.playListId = 'defaultList';
+  }
+  playList.value[id].list = [];
+  delete playList.value[id];
 };
 
 export const addList = (info: SKY.MusicListItem, listName: string) => {

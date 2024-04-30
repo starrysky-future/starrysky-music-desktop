@@ -137,14 +137,12 @@ const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
       <NoData v-else />
     </div>
   </div>
-  <div v-show="isVisible">
-    <ListPopup
-      v-model="isVisible"
-      :position="position"
-      :list="popupList"
-      @set-list-opr="setListOpr"
-    />
-  </div>
+  <ListPopup
+    v-model="isVisible"
+    :position="position"
+    :list="popupList"
+    @set-list-opr="setListOpr"
+  />
 </template>
 
 <style lang="less" scoped>

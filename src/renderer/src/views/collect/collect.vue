@@ -45,6 +45,7 @@ const setPlayListId = (info) => {
         <LayoutLeft
           :list="labelList"
           :active-id="playList.playListId"
+          has-menu
           @set-active-id="setPlayListId"
         />
       </div>

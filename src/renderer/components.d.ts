@@ -33,6 +33,7 @@ declare module 'vue' {
     TipPopup: typeof import('./src/components/tools/TipPopup.vue')['default']
     Tiptool: typeof import('./src/components/tools/Tiptool.vue')['default']
     TransitionPosition: typeof import('./src/components/tools/TransitionPosition.vue')['default']
+    TransitionScale: typeof import('./src/components/tools/TransitionScale.vue')['default']
     YScroll: typeof import('./src/components/tools/y-scroll.vue')['default']
   }
 }

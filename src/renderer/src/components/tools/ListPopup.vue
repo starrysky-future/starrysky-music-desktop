@@ -32,7 +32,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <Popup v-model="isVisible" :position="{ x: x, y: y }" has-listener>
+  <Popup
+    v-model="isVisible"
+    :position="{ x: x, y: y }"
+    transition-name="TransitionScale"
+    has-listener
+  >
     <div ref="domListPopup" class="list_popup">
       <div
         v-for="item in props.list"

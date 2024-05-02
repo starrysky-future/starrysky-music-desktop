@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, onBeforeUnmount } from 'vue';
+import { onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue';
 
 const props = defineProps<{
   position: SKY.SongList.Position;
@@ -7,10 +7,21 @@ const props = defineProps<{
   hasArrow?: boolean;
   arrowInfo?: SKY.Play.ArrowInfo;
   hasListener?: boolean;
+  transitionName?: string;
 }>();
+
+const transitionConfig = {
+  TransitionScale: defineAsyncComponent(() => import('@r/components/tools/TransitionScale.vue'))
+};
 
 let arrow_size;
 let arrow_position;
+let transitionCom;
+
+if (props.transitionName) {
+  transitionCom = transitionConfig[props.transitionName];
+}
+
 if (props.hasArrow) {
   arrow_size = props.arrowInfo?.arrowSize ? `${props.arrowInfo.arrowSize}px` : '10px';
 
@@ -47,15 +58,17 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="#app">
-    <div
-      v-show="isVisible"
-      class="popup"
-      :style="{ left: props.position.x + 'px', top: props.position.y + 'px' }"
-      @click.stop
-    >
-      <div v-if="hasArrow" class="popup_arrow" :class="arrow_position"></div>
-      <slot></slot>
-    </div>
+    <component :is="transitionCom || 'div'">
+      <div
+        v-show="isVisible"
+        class="popup"
+        :style="{ left: props.position.x + 'px', top: props.position.y + 'px' }"
+        @click.stop
+      >
+        <div v-if="hasArrow" class="popup_arrow" :class="arrow_position"></div>
+        <slot></slot>
+      </div>
+    </component>
   </Teleport>
 </template>
 

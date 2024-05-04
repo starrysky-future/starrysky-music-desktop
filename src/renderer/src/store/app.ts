@@ -12,3 +12,15 @@ export const useAppStore = defineStore('useAppStore', () => {
 
   return { showTip, tipText, tipPosition, showLyricPage };
 });
+
+export const useListpopupStore = defineStore('useListpopupStore', () => {
+  const showListpopup = ref<boolean>(false);
+  const listpopupPosition = ref<SKY.SongList.Position>({
+    x: 0,
+    y: 0
+  });
+  const listpopupData = ref<Array<SKY.SongList.PopupListItem>>([]);
+  const listpopupOpr = ref<(id: string) => void>(() => {});
+
+  return { showListpopup, listpopupPosition, listpopupData, listpopupOpr };
+});

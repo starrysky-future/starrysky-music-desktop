@@ -11,7 +11,6 @@ const labelList = computed<Array<SKY.Play.PlayListItem>>(() => {
   const showList: Array<SKY.Play.PlayListItem> = [];
   showList.push(playList.value.defaultList);
   showList.push(playList.value.loveList);
-  playList.value.playListId;
 
   Object.entries(playList.value).map((item) => {
     const [key, list] = item;

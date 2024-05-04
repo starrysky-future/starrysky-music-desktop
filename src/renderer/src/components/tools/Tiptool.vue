@@ -41,9 +41,9 @@ const mouseleave = () => {
 </script>
 
 <template>
-  <div class="singleTextHide" @mouseenter="mouseenter" @mouseleave="mouseleave">
+  <span class="singleTextHide" @mouseenter="mouseenter" @mouseleave="mouseleave">
     <slot></slot>
-  </div>
+  </span>
 </template>
 
 <style lang="less" scoped></style>

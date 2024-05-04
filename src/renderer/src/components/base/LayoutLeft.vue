@@ -1,6 +1,12 @@
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue';
+import { ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
 import { deleteList } from '@r/plugins/player/playList';
+import { useListpopupStore } from '@r/store/app';
+
+const listpopupStore = useListpopupStore();
+const { showListpopup, listpopupPosition, listpopupData, listpopupOpr } =
+  storeToRefs(listpopupStore);
 
 const props = defineProps<{
   list: SKY.LeaderBoard.LayoutList;
@@ -8,12 +14,7 @@ const props = defineProps<{
   hasMenu?: boolean;
 }>();
 
-const isVisible = ref<boolean>(false);
 const labelId = ref<string>('');
-const position = reactive({
-  x: 0,
-  y: 0
-});
 
 const popupList = computed(() => {
   return [
@@ -25,21 +26,23 @@ const popupList = computed(() => {
   ];
 });
 
+const setListOpr = (id: string) => {
+  if (id === 'deleteList') deleteList(labelId.value);
+
+  showListpopup.value = false;
+};
+
 const emits = defineEmits(['setActiveId']);
 
 const getMenu = (id: string, $event) => {
   if (!props.hasMenu) return;
   labelId.value = id;
 
-  isVisible.value = true;
-  position.x = $event.clientX;
-  position.y = $event.clientY;
-};
-
-const setListOpr = (id: string) => {
-  if (id === 'deleteList') deleteList(labelId.value);
-
-  isVisible.value = false;
+  listpopupData.value = popupList.value;
+  listpopupOpr.value = setListOpr;
+  showListpopup.value = true;
+  listpopupPosition.value.x = $event.clientX;
+  listpopupPosition.value.y = $event.clientY;
 };
 </script>
 
@@ -57,15 +60,6 @@ const setListOpr = (id: string) => {
         </div>
       </Tiptool>
     </template>
-  </div>
-
-  <div v-if="hasMenu">
-    <ListPopup
-      v-model="isVisible"
-      :position="position"
-      :list="popupList"
-      @set-list-opr="setListOpr"
-    />
   </div>
 </template>
 

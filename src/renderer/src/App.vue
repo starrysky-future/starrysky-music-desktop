@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { useAppStore } from '@r/store/app';
+import { useAppStore, useListpopupStore } from '@r/store/app';
 import { initSet } from '@r/plugins/setting';
 
 const appStore = useAppStore();
+const listpopupStore = useListpopupStore();
 const { showLyricPage } = storeToRefs(appStore);
+const { showListpopup, listpopupPosition, listpopupData, listpopupOpr } =
+  storeToRefs(listpopupStore);
 
 initSet();
 </script>
@@ -26,6 +29,12 @@ initSet();
 
     <div>
       <TipPopup />
+      <ListPopup
+        v-model="showListpopup"
+        :position="listpopupPosition"
+        :list="listpopupData"
+        @set-list-opr="listpopupOpr"
+      />
     </div>
 
     <TransitionPosition>

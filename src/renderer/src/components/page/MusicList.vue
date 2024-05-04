@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref, watch, onBeforeUnmount } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
@@ -10,11 +10,16 @@ import {
   deleteMusic,
   deleteMusicAll
 } from '@r/plugins/player/playList';
+import { useListpopupStore } from '@r/store/app';
 
 const route = useRoute();
 
 const playStore = usePlayStore();
 const { curPlayInfo } = storeToRefs(playStore);
+
+const listpopupStore = useListpopupStore();
+const { showListpopup, listpopupPosition, listpopupData, listpopupOpr } =
+  storeToRefs(listpopupStore);
 
 const props = defineProps<{
   list: Array<SKY.MusicListItem> | undefined;
@@ -25,11 +30,6 @@ const props = defineProps<{
 const curInfo = ref<SKY.MusicListItem>();
 const active = ref<string>('');
 const nowNum = ref<number>(0);
-const isVisible = ref<boolean>(false);
-const position = reactive({
-  x: 0,
-  y: 0
-});
 const popupList: Array<SKY.SongList.PopupListItem> = [
   {
     id: 'play',
@@ -65,17 +65,30 @@ const setListOpr = (id: string) => {
   if (id === 'delete') deleteMusic(nowNum.value);
   if (id === 'deleteAll') deleteMusicAll();
 
-  isVisible.value = false;
+  showListpopup.value = false;
 };
 
 const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
   nowNum.value = index;
   active.value = songInfo.songmid;
   curInfo.value = songInfo;
-  isVisible.value = true;
-  position.x = $event.clientX;
-  position.y = $event.clientY;
+
+  listpopupData.value = popupList;
+  listpopupOpr.value = setListOpr;
+  showListpopup.value = true;
+  listpopupPosition.value.x = $event.clientX;
+  listpopupPosition.value.y = $event.clientY;
 };
+
+const stopActive = watch(showListpopup, (val) => {
+  if (!val && active.value) {
+    active.value = '';
+  }
+});
+
+onBeforeUnmount(() => {
+  stopActive();
+});
 </script>
 
 <template>
@@ -93,7 +106,7 @@ const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
           v-for="(item, index) in props.list"
           :key="item.songmid"
           class="music_item"
-          :class="{ active: active === item.songmid && isVisible }"
+          :class="{ active: active === item.songmid && showListpopup }"
           :data-song-info="JSON.stringify(item)"
           @dblclick="playSong(item, index)"
           @click.right="getMenu(item, index, $event)"
@@ -116,19 +129,25 @@ const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
             </template>
           </div>
           <div class="w_30 pd_right singleTextHide">
-            <Tiptool :text="item.name">
-              <span class="select" @click.stop>{{ item.name }}</span>
-            </Tiptool>
+            <span class="select" @click.stop>
+              <Tiptool :text="item.name">
+                {{ item.name }}
+              </Tiptool>
+            </span>
           </div>
           <div class="w_20 pd_right singleTextHide">
-            <Tiptool :text="item.singer">
-              <span class="select" @click.stop>{{ item.singer }}</span>
-            </Tiptool>
+            <span class="select" @click.stop>
+              <Tiptool :text="item.singer">
+                {{ item.singer }}
+              </Tiptool>
+            </span>
           </div>
           <div class="w_35 pd_right singleTextHide">
-            <Tiptool :text="item.albumName">
-              <span class="select" @click.stop>{{ item.albumName }}</span>
-            </Tiptool>
+            <span class="select" @click.stop>
+              <Tiptool :text="item.albumName">
+                {{ item.albumName }}
+              </Tiptool>
+            </span>
           </div>
           <div class="w_10">{{ item.interval }}</div>
         </div>
@@ -137,12 +156,6 @@ const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
       <NoData v-else />
     </div>
   </div>
-  <ListPopup
-    v-model="isVisible"
-    :position="position"
-    :list="popupList"
-    @set-list-opr="setListOpr"
-  />
 </template>
 
 <style lang="less" scoped>

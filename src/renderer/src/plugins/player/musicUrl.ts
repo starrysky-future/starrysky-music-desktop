@@ -49,22 +49,17 @@ const getOtherSourceUrl = async (info, infoList, tryNum) => {
     console.log('其他源无资源下一首');
     curPlayInfo.value.statu = '歌曲资源不存在，切换下一首';
     eventBus.emit('nextPlay');
-    return '';
+    return;
   }
 
   let url;
   try {
     url = await getUrl(info);
   } catch (error) {
-    url = await getOtherSourceUrl(infoList[tryNum], infoList, tryNum + 1);
+    await getOtherSourceUrl(infoList[tryNum], infoList, tryNum + 1);
   }
 
-  if (url) {
-    setMusicUrl(url, info, true, infoList, tryNum);
-    return;
-  }
-
-  return url;
+  setMusicUrl(url, info, true, infoList, tryNum);
 };
 
 const getOtherSourceList = async (sourceid) => {
@@ -82,9 +77,13 @@ const getOtherSourceList = async (sourceid) => {
 const setMusicUrl = (url, info, isUrl, infoList?, tryNum?) => {
   if (url) {
     setResource(url);
-    const stopLoadeddata = onLoadeddata(() => {
-      if (getDuration() < Math.floor(curPlayInfo.value._interval / 1000)) {
-        console.log('歌曲资源时长太短，请求其他资源');
+    const stopLoadeddata = onLoadeddata(async () => {
+      if (getDuration() < Math.floor(info._interval / 1000)) {
+        console.log(
+          '歌曲资源时长太短，请求其他资源',
+          getDuration(),
+          Math.floor(info._interval / 1000)
+        );
         setStop();
 
         if (isUrl) {

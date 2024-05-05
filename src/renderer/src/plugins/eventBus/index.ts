@@ -3,9 +3,19 @@ class EventEmitter {
   constructor() {
     this.cache = {};
   }
+  only(name, fn) {
+    // 注册全局唯一事件
+    if (this.cache[name]) return;
+    this.cache[name] = [fn];
+  }
   on(name, fn) {
     if (this.cache[name]) {
-      this.cache[name].push(fn);
+      const tasks = this.cache[name];
+      const index = tasks.findIndex((f) => f === fn || f.callback === fn);
+      // 防止同一事件多次注册
+      if (index < 0) {
+        this.cache[name].push(fn);
+      }
     } else {
       this.cache[name] = [fn];
     }

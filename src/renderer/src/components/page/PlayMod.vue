@@ -45,7 +45,6 @@ const pause = () => {
 };
 
 const prePlay = () => {
-  pause();
   const curList = playList.value[playList.value.playListId].list;
   if (curList.length === 0) return;
   const nextId =
@@ -64,8 +63,6 @@ const prePlay = () => {
 };
 
 const nextPlay = () => {
-  pause();
-
   const curList = playList.value[playList.value.playListId].list;
 
   if (curList.length === 0) return;
@@ -89,11 +86,14 @@ const randomList = computed(() => {
   return getRandomList([...playList.value[playList.value.playListId].list]);
 });
 
-eventBus.on('nextPlay', nextPlay);
+eventBus.only('nextPlay', nextPlay);
+eventBus.only('setPause', pause);
 
 onBeforeUnmount(() => {
   stopTimeupdate();
   stopEnded();
+  eventBus.off('nextPlay', nextPlay);
+  eventBus.off('setPause', pause);
 });
 </script>
 

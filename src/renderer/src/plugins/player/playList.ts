@@ -2,11 +2,11 @@ import pinia from '@r/store';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { debounce, addUnique, insertList } from '@r/utils';
-import { setStop } from '@r/plugins/player';
 import { useNavStore } from '@r/store/nav';
 import { getLyric } from './lyric';
 import { getPic } from './pic';
 import { getMusicUrl } from './musicUrl';
+import eventBus from '@r/plugins/eventBus';
 
 const playStore = usePlayStore(pinia);
 const navStore = useNavStore(pinia);
@@ -61,7 +61,7 @@ export const addList = (info: SKY.MusicListItem, listName: string) => {
 };
 
 export const initPlayInfo = async (info: SKY.MusicListItem) => {
-  setStop();
+  eventBus.emit('setPause');
 
   playStore.setMaxplayTime(info._interval / 1000);
   curPlayInfo.value = { ...info, isPlay: curPlayInfo.value.isPlay, statu: curPlayInfo.value.statu };

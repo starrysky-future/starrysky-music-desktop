@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: starrysky-music
+productName: starrysky music
 directories:
   buildResources: build
 files:
@@ -13,11 +13,14 @@ asarUnpack:
   - resources/**
 win:
   executableName: starrysky-music
+  icon: resources/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  oneClick: false
+  allowToChangeInstallationDirectory: true
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
@@ -26,6 +29,7 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
+  icon: resources/icon.icns
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:
@@ -35,6 +39,7 @@ linux:
     - deb
   maintainer: electronjs.org
   category: Utility
+  icon: resources/icon.png
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false

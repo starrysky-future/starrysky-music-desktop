@@ -20,7 +20,7 @@ export const createApp = () => {
       maximizable: false,
       transparent: true,
       titleBarStyle: 'hidden',
-      ...(process.platform === 'linux' ? { icon } : {}),
+      icon,
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
         sandbox: false,

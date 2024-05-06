@@ -7,7 +7,7 @@ import { searchMusicAll } from '@r/apis/search';
 import eventBus from '@r/plugins/eventBus';
 
 const playStore = usePlayStore(pinia);
-const { curPlayInfo, statulyric } = storeToRefs(playStore);
+const { curPlayInfo, statulyric, playList } = storeToRefs(playStore);
 
 export const getMusicUrl = async (info) => {
   try {
@@ -38,17 +38,13 @@ const getOtherSource = async (info) => {
   if (info.otherSource.length > 0) {
     getOtherSourceUrl(info.otherSource[0], info.otherSource, 0);
   } else {
-    console.log('无其他源下一首');
-    curPlayInfo.value.statu = '歌曲资源不存在，切换下一首';
-    eventBus.emit('nextPlay');
+    isNextPlay();
   }
 };
 
 const getOtherSourceUrl = async (info, infoList, tryNum) => {
   if (tryNum >= infoList.length) {
-    console.log('其他源无资源下一首');
-    curPlayInfo.value.statu = '歌曲资源不存在，切换下一首';
-    eventBus.emit('nextPlay');
+    isNextPlay();
     return;
   }
 
@@ -79,11 +75,6 @@ const setMusicUrl = (url, info, isUrl, infoList?, tryNum?) => {
     setResource(url);
     const stopLoadeddata = onLoadeddata(async () => {
       if (getDuration() < Math.floor(info._interval / 1000)) {
-        console.log(
-          '歌曲资源时长太短，请求其他资源',
-          getDuration(),
-          Math.floor(info._interval / 1000)
-        );
         setStop();
 
         if (isUrl) {
@@ -110,4 +101,14 @@ const match = (searchName, repName) => {
   }
 
   return searchName === repName;
+};
+
+const isNextPlay = () => {
+  if (playList.value[playList.value.playListId].list.length === 1) {
+    curPlayInfo.value.statu = '歌曲资源不存在';
+    eventBus.emit('setPause');
+  } else {
+    curPlayInfo.value.statu = '歌曲资源不存在，切换下一首';
+    eventBus.emit('nextPlay');
+  }
 };

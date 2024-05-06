@@ -1,6 +1,6 @@
 # starrysky-music
 
-An Electron application with Vue and TypeScript
+一个音乐软件
 
 ## Recommended IDE Setup
 

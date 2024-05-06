@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: starrysky music
+productName: starrysky-music
 directories:
   buildResources: build
 files:

@@ -18,7 +18,7 @@ export const searchMusicAll = async (searchInfo, pageSize, excludeId?) => {
   Object.entries(searchSources).map(async (item) => {
     const [key, api] = item;
 
-    if (key === excludeId) return;
+    if (excludeId.indexOf(key) >= 0) return;
     reqList.push(api.searchMusic(searchInfo, pageSize));
   });
 

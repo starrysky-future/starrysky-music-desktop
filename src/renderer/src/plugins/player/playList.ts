@@ -56,7 +56,7 @@ export const deleteList = (id) => {
   delete playList.value[id];
 };
 
-export const addList = (info: SKY.MusicListItem, listName: string) => {
+export const addList = async (info: SKY.MusicListItem, listName: string) => {
   addUnique(playList.value[listName].list, info, 'songmid');
 };
 
@@ -67,6 +67,6 @@ export const initPlayInfo = async (info: SKY.MusicListItem) => {
   curPlayInfo.value = { ...info, isPlay: curPlayInfo.value.isPlay, statu: curPlayInfo.value.statu };
 
   getPic(info);
+  await getMusicUrl(info); // 先获取info.otherSource
   getLyric(info);
-  getMusicUrl(info);
 };

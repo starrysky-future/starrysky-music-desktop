@@ -3,6 +3,7 @@ import { apis } from '../api-source';
 import { lbConfig, getLeaderBoardList } from './leaderBoard';
 import { searchMusic, searchSongList } from './search';
 import { getPic } from './musicDetail';
+import { getLyric } from './lyric';
 
 const tx = {
   config,
@@ -11,6 +12,7 @@ const tx = {
   getMusicUrl(songInfo, type) {
     return apis('tx').getMusicUrl(songInfo, type);
   },
+  getLyric,
   getSongList,
   getSongListDetail,
 

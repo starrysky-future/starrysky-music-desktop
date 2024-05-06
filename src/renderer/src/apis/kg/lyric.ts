@@ -78,7 +78,7 @@ const parseLyric = (str) => {
     }
   }
   let i = 0;
-  let lxlyric = str.replace(/\[((\d+),\d+)\].*/g, (str) => {
+  let pagelyric = str.replace(/\[((\d+),\d+)\].*/g, (str) => {
     const result = str.match(/\[((\d+),\d+)\].*/);
     let time = parseInt(result[2]);
     const ms = time % 1000;
@@ -96,15 +96,15 @@ const parseLyric = (str) => {
   });
   rlyric = rlyric ? rlyric.join('\n') : '';
   tlyric = tlyric ? tlyric.join('\n') : '';
-  lxlyric = lxlyric.replace(/<(\d+,\d+),\d+>/g, '<$1>');
-  lxlyric = decodeName(lxlyric);
-  const lyric = lxlyric.replace(/<\d+,\d+>/g, '');
+  pagelyric = pagelyric.replace(/<(\d+,\d+),\d+>/g, '<$1>');
+  pagelyric = decodeName(pagelyric);
+  const lyric = pagelyric.replace(/<\d+,\d+>/g, '');
   rlyric = decodeName(rlyric);
   tlyric = decodeName(tlyric);
   return {
     lyric,
     tlyric,
     rlyric,
-    lxlyric
+    pagelyric
   };
 };

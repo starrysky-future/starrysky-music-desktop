@@ -15,7 +15,7 @@ export const getMusicUrl = async (info) => {
     setMusicUrl(url, info, false);
   } catch (error) {
     curPlayInfo.value.statu = '歌曲切换音源';
-    getOtherSource(info);
+    await getOtherSource(info);
   }
 };
 
@@ -29,14 +29,14 @@ const getUrl = async (info) => {
   return url;
 };
 
-const getOtherSource = async (info, tryNum = 0) => {
-  if (!info.otherSource || info.otherSource.length === 0) {
-    info.otherSource = await getOtherSourceList(curPlayInfo.value.source);
+const getOtherSource = async (info) => {
+  if (!info.otherSource) {
+    info.otherSource = await getOtherSourceList([curPlayInfo.value.source]);
   }
   console.log('info.otherSource', info.otherSource);
 
   if (info.otherSource.length > 0) {
-    getOtherSourceUrl(info.otherSource[tryNum], info.otherSource, tryNum + 1);
+    getOtherSourceUrl(info.otherSource[0], info.otherSource, 0);
   } else {
     console.log('无其他源下一首');
     curPlayInfo.value.statu = '歌曲资源不存在，切换下一首';
@@ -45,7 +45,7 @@ const getOtherSource = async (info, tryNum = 0) => {
 };
 
 const getOtherSourceUrl = async (info, infoList, tryNum) => {
-  if (tryNum > infoList.length) {
+  if (tryNum >= infoList.length) {
     console.log('其他源无资源下一首');
     curPlayInfo.value.statu = '歌曲资源不存在，切换下一首';
     eventBus.emit('nextPlay');
@@ -56,13 +56,13 @@ const getOtherSourceUrl = async (info, infoList, tryNum) => {
   try {
     url = await getUrl(info);
   } catch (error) {
-    await getOtherSourceUrl(infoList[tryNum], infoList, tryNum + 1);
+    await getOtherSourceUrl(infoList[tryNum + 1], infoList, tryNum + 1);
   }
 
   setMusicUrl(url, info, true, infoList, tryNum);
 };
 
-const getOtherSourceList = async (sourceid) => {
+export const getOtherSourceList = async (sourceid) => {
   const searchInfo = curPlayInfo.value.name + ' ' + curPlayInfo.value.singer;
   const allList = await searchMusicAll(searchInfo, 1, sourceid);
   const set = new Set();
@@ -87,7 +87,7 @@ const setMusicUrl = (url, info, isUrl, infoList?, tryNum?) => {
         setStop();
 
         if (isUrl) {
-          getOtherSourceUrl(infoList[tryNum], infoList, tryNum + 1);
+          getOtherSourceUrl(infoList[tryNum + 1], infoList, tryNum + 1);
         } else {
           getOtherSource(info);
         }

@@ -10,6 +10,7 @@ declare module 'vue' {
     Icons: typeof import('./src/components/base/Icons.vue')['default']
     LayoutBottom: typeof import('./src/components/page/LayoutBottom.vue')['default']
     LayoutLeft: typeof import('./src/components/base/LayoutLeft.vue')['default']
+    ListAddModal: typeof import('./src/components/operate/ListAddModal.vue')['default']
     ListPopup: typeof import('./src/components/tools/ListPopup.vue')['default']
     LoadIcon: typeof import('./src/components/base/LoadIcon.vue')['default']
     Loading: typeof import('./src/components/tools/Loading.vue')['default']
@@ -17,6 +18,7 @@ declare module 'vue' {
     MusicList: typeof import('./src/components/page/MusicList.vue')['default']
     Nav: typeof import('./src/components/page/Nav.vue')['default']
     NoData: typeof import('./src/components/tools/NoData.vue')['default']
+    OperateModal: typeof import('./src/components/tools/OperateModal.vue')['default']
     Pagination: typeof import('./src/components/tools/Pagination.vue')['default']
     PlayMod: typeof import('./src/components/page/PlayMod.vue')['default']
     PlayStateMod: typeof import('./src/components/page/PlayStateMod.vue')['default']
@@ -32,8 +34,9 @@ declare module 'vue' {
     Tabs: typeof import('./src/components/page/Tabs.vue')['default']
     TipPopup: typeof import('./src/components/tools/TipPopup.vue')['default']
     Tiptool: typeof import('./src/components/tools/Tiptool.vue')['default']
-    TransitionPosition: typeof import('./src/components/tools/TransitionPosition.vue')['default']
-    TransitionScale: typeof import('./src/components/tools/TransitionScale.vue')['default']
+    TransitionOpacity: typeof import('./src/components/transition/TransitionOpacity.vue')['default']
+    TransitionPosition: typeof import('./src/components/transition/TransitionPosition.vue')['default']
+    TransitionScale: typeof import('./src/components/transition/TransitionScale.vue')['default']
     YScroll: typeof import('./src/components/tools/y-scroll.vue')['default']
   }
 }

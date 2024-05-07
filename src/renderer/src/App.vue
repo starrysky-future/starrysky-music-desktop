@@ -1,15 +1,21 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAppStore, useListpopupStore } from '@r/store/app';
 import { initSet } from '@r/plugins/setting';
 
 const appStore = useAppStore();
+const { showLyricPage, modalName, isModal } = storeToRefs(appStore);
+
 const listpopupStore = useListpopupStore();
-const { showLyricPage } = storeToRefs(appStore);
 const { showListpopup, listpopupPosition, listpopupData, listpopupOpr } =
   storeToRefs(listpopupStore);
 
 initSet();
+
+const modalConfig = {
+  ListAddModal: defineAsyncComponent(() => import('@r/components/operate/ListAddModal.vue'))
+};
 </script>
 <template>
   <div class="home">
@@ -35,10 +41,18 @@ initSet();
         :list="listpopupData"
         @set-list-opr="listpopupOpr"
       />
+
+      <div class="operate_modal">
+        <TransitionScale>
+          <OperateModal v-if="isModal">
+            <component :is="modalConfig[modalName]"></component>
+          </OperateModal>
+        </TransitionScale>
+      </div>
     </div>
 
     <TransitionPosition>
-      <LyricPage v-show="showLyricPage" />
+      <LyricPage v-if="showLyricPage" />
     </TransitionPosition>
   </div>
   <Icons />
@@ -68,6 +82,13 @@ initSet();
     border-top: 0.5px solid;
     border-color: var(--color-primary-light-900);
     height: 70px;
+  }
+
+  .operate_modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 </style>

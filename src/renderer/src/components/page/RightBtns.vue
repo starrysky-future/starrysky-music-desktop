@@ -36,18 +36,20 @@ const hideLyricPage = () => {
 <template>
   <div class="rightBtns noDrag">
     <div v-show="showLyricPage" class="max icon_position" @click="hideLyricPage">
-      <div class="max_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 24 24"
-          space="preserve"
-        >
-          <use xlink:href="#icon-hide" />
-        </svg>
-      </div>
+      <Tiptool text="关闭歌词页">
+        <div class="max_icon icon_WH">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
+            <use xlink:href="#icon-hide" />
+          </svg>
+        </div>
+      </Tiptool>
     </div>
     <div
       ref="minDom"
@@ -55,18 +57,20 @@ const hideLyricPage = () => {
       :class="{ minHover: hasHover }"
       @click="changeWinState('min')"
     >
-      <div class="min_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 24 24"
-          space="preserve"
-        >
-          <use xlink:href="#icon-min" />
-        </svg>
-      </div>
+      <Tiptool text="最小化">
+        <div class="min_icon icon_WH">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
+            <use xlink:href="#icon-min" />
+          </svg>
+        </div>
+      </Tiptool>
     </div>
     <!-- <div @click="changeWinState('max')" class="max icon_position">
       <div class="max_icon icon_WH">
@@ -83,18 +87,20 @@ const hideLyricPage = () => {
       </div>
     </div> -->
     <div class="close icon_position" @click="changeWinState('quit')">
-      <div class="close_icon icon_WH">
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xlink="http://www.w3.org/1999/xlink"
-          height="100%"
-          viewBox="0 0 24 24"
-          space="preserve"
-        >
-          <use xlink:href="#icon-close" />
-        </svg>
-      </div>
+      <Tiptool text="关闭">
+        <div class="close_icon icon_WH">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
+            <use xlink:href="#icon-close" />
+          </svg>
+        </div>
+      </Tiptool>
     </div>
   </div>
 </template>

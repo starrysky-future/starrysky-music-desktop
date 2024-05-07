@@ -24,7 +24,9 @@ module.exports = {
         'bottom',
         'right',
         'border-radius',
-        'gap'
+        'gap',
+        'border',
+        'border-*'
       ],
       selectorBlackList: ['html', 'ignore-to-rem'],
       replace: true,

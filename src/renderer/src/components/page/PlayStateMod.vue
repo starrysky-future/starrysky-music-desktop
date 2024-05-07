@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { setVolume, setMute, setLoopPlay } from '@r/plugins/player';
 import { addList } from '@r/plugins/player/playList';
-import { removeList } from '@r/utils';
 
 const isVisible = ref<boolean>(false);
 const setPopup = ref<string>('volume');
@@ -16,16 +15,11 @@ const position = reactive<SKY.SongList.Position>({
 });
 
 const playStore = usePlayStore();
-const { curPlayInfo, playProgress, playList, volume, playState, isMute } = storeToRefs(playStore);
+const { curPlayInfo, playProgress, volume, playState, isMute } = storeToRefs(playStore);
 
 const setCollect = () => {
   if (!curPlayInfo.value.songmid) return;
-
-  if (isCollect.value) {
-    removeList(playList.value.loveList.list, 'songmid', curPlayInfo.value.songmid);
-  } else {
-    addList(curPlayInfo.value, 'loveList');
-  }
+  addList(curPlayInfo.value);
 };
 
 const setPlayState = (mode: string) => {
@@ -98,12 +92,6 @@ const playStateText = computed(() => {
     return '随机播放';
   }
 });
-
-const isCollect = computed(() => {
-  if (!curPlayInfo.value.songmid) return false;
-  const loveList = playList.value.loveList.list;
-  return loveList.findIndex((item) => item.songmid === curPlayInfo.value.songmid) >= 0;
-});
 </script>
 
 <template>
@@ -112,7 +100,7 @@ const isCollect = computed(() => {
       {{ playProgress.nowPlayTimeStr }} / {{ playProgress.maxPlayTimeStr }}
     </div>
     <div class="icon_common mgR" @click="setCollect">
-      <Tiptool text="收藏到我的列表">
+      <Tiptool text="收藏到...">
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +109,7 @@ const isCollect = computed(() => {
           viewBox="0 0 36 36"
           space="preserve"
         >
-          <use :xlink:href="`#icon-play-${isCollect ? 'collect' : 'noCollect'}`" />
+          <use xlink:href="#icon-play-collect" />
         </svg>
       </Tiptool>
     </div>
@@ -155,7 +143,13 @@ const isCollect = computed(() => {
     </div>
   </div>
   <div v-show="isVisible">
-    <PositionPopup v-model="isVisible" direction="top" :has-arrow="true" :position="position">
+    <PositionPopup
+      v-model="isVisible"
+      direction="top"
+      :has-arrow="true"
+      :position="position"
+      transition-name="TransitionOpacity"
+    >
       <div v-if="setPopup === 'volume'" class="volume">
         <div class="volume_info">
           <div>{{ Math.floor(volume * 100) }}%</div>

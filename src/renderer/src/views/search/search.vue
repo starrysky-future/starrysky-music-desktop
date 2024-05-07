@@ -77,7 +77,7 @@ const setSort = (id: string) => {
   searchPageSize.value = 1;
 };
 const setSearchValue = (val: string) => {
-  if (!val) {
+  if (!val || val !== searchValue.value) {
     resetData();
   }
   searchValue.value = val;
@@ -142,7 +142,7 @@ const getMusic = async () => {
 };
 
 const stopWatch = watch(
-  [searchValue, searchSortId, searchPageSize, searchSourceId],
+  [searchValue, searchSortId, searchSourceId, searchPageSize],
   ([val, sortVal]) => {
     if (!val) return;
     if (sortVal === 'searchSongList') {

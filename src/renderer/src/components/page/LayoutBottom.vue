@@ -28,14 +28,16 @@ const goLyricPage = () => {
   <div class="layout_bottom noDrag">
     <div class="main_left">
       <div @click="goLyricPage">
-        <img v-if="curPlayInfo.img" class="img" :src="curPlayInfo.img" />
-        <div v-else class="img no_img">SKY</div>
+        <Tiptool text="点击去往歌词页">
+          <img v-if="curPlayInfo.img" class="img" :src="curPlayInfo.img" />
+          <div v-else class="img no_img">SKY</div>
+        </Tiptool>
       </div>
       <div class="info singleTextHide">
         <div class="name singleTextHide">
           {{ curPlayInfo.name }} <i v-show="curPlayInfo.singer">-</i>{{ curPlayInfo.singer }}
         </div>
-        <div class="singleTextHide">{{ curPlayInfo.statu }}</div>
+        <div class="statu singleTextHide">{{ curPlayInfo.statu }}</div>
       </div>
     </div>
     <PlayMod />
@@ -86,9 +88,13 @@ const goLyricPage = () => {
       flex-direction: column;
       justify-content: center;
       .name {
+        height: 20px;
         font-size: 12px;
         padding-bottom: 4px;
         color: var(--color-font-label);
+      }
+      .statu {
+        height: 20px;
       }
     }
   }

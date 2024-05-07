@@ -221,3 +221,14 @@ export const deepCopy = (data, map = new WeakMap()) => {
 
   return res;
 };
+
+/**
+ * 生成一个16位的随机数
+ * @returns
+ */
+export const generateRandom16 = () => {
+  const maxNumber = 10000000000000000; // 十六位的最大数
+  const minNumber = 1000000000000000; // 十六位的最小数
+  const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber)) + minNumber;
+  return randomNumber.toString();
+};

@@ -2,6 +2,7 @@ declare namespace SKY {
   namespace Play {
     interface PlayListItem {
       id: string;
+      sort: number;
       name: string;
       list: Array<SKY.MusicListItem>;
     }

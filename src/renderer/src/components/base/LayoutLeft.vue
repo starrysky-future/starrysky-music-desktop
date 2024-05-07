@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
-import { deleteList } from '@r/plugins/player/playList';
+import { deleteList, newList } from '@r/plugins/player/playList';
 import { useListpopupStore } from '@r/store/app';
 
 const listpopupStore = useListpopupStore();
@@ -19,6 +19,11 @@ const labelId = ref<string>('');
 const popupList = computed(() => {
   return [
     {
+      id: 'newList',
+      name: '新列表',
+      ishow: true
+    },
+    {
       id: 'deleteList',
       name: '删除列表',
       ishow: labelId.value !== 'defaultList' && labelId.value !== 'loveList'
@@ -28,6 +33,7 @@ const popupList = computed(() => {
 
 const setListOpr = (id: string) => {
   if (id === 'deleteList') deleteList(labelId.value);
+  if (id === 'newList') newList();
 
   showListpopup.value = false;
 };

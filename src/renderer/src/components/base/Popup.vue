@@ -11,16 +11,19 @@ const props = defineProps<{
 }>();
 
 const transitionConfig = {
-  TransitionScale: defineAsyncComponent(() => import('@r/components/tools/TransitionScale.vue'))
+  TransitionScale: defineAsyncComponent(
+    () => import('@r/components/transition/TransitionScale.vue')
+  ),
+  TransitionOpacity: defineAsyncComponent(
+    () => import('@r/components/transition/TransitionOpacity.vue')
+  ),
+  TransitionPosition: defineAsyncComponent(
+    () => import('@r/components/transition/TransitionPosition.vue')
+  )
 };
 
 let arrow_size;
 let arrow_position;
-let transitionCom;
-
-if (props.transitionName) {
-  transitionCom = transitionConfig[props.transitionName];
-}
 
 if (props.hasArrow) {
   arrow_size = props.arrowInfo?.arrowSize ? `${props.arrowInfo.arrowSize}px` : '10px';
@@ -58,7 +61,7 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="#app">
-    <component :is="transitionCom || 'div'">
+    <component :is="(props.transitionName && transitionConfig[props.transitionName]) || 'div'">
       <div
         v-show="isVisible"
         class="popup"

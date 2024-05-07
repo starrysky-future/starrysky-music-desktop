@@ -35,7 +35,7 @@ onMounted(() => {
   <Popup
     v-model="isVisible"
     :position="{ x: x, y: y }"
-    transition-name="TransitionScale"
+    transition-name="TransitionOpacity"
     has-listener
   >
     <div ref="domListPopup" class="list_popup">

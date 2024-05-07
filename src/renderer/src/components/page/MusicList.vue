@@ -42,8 +42,8 @@ const popupList: Array<SKY.SongList.PopupListItem> = [
     ishow: true
   },
   {
-    id: 'loveList',
-    name: '添加到我的',
+    id: 'addList',
+    name: '收藏到...',
     ishow: route.name !== 'collect'
   },
   {
@@ -61,7 +61,7 @@ const popupList: Array<SKY.SongList.PopupListItem> = [
 const setListOpr = (id: string) => {
   if (id === 'play') playSong(curInfo.value, nowNum.value);
   if (id === 'nextPlay') playLater(curInfo.value!);
-  if (id === 'loveList') addList(curInfo.value!, id);
+  if (id === 'addList') addList(curInfo.value!);
   if (id === 'delete') deleteMusic(nowNum.value);
   if (id === 'deleteAll') deleteMusicAll();
 

@@ -7,11 +7,16 @@ import { getLyric } from './lyric';
 import { getPic } from './pic';
 import { getMusicUrl } from './musicUrl';
 import eventBus from '@r/plugins/eventBus';
+import { useAppStore } from '@r/store/app';
 
 const playStore = usePlayStore(pinia);
-const navStore = useNavStore(pinia);
 const { curPlayInfo, playList } = storeToRefs(playStore);
+
+const navStore = useNavStore(pinia);
 const { navName } = storeToRefs(navStore);
+
+const appStore = useAppStore();
+const { modalName, modalTitle, isModal, addInfo } = storeToRefs(appStore);
 
 export const playSong = debounce(async (info: SKY.MusicListItem, index: number) => {
   if (navName.value !== 'collect') {
@@ -48,7 +53,7 @@ export const deleteMusicAll = () => {
   playList.value[playList.value.playListId].list = [];
 };
 
-export const deleteList = (id) => {
+export const deleteList = (id: string) => {
   if (id === playList.value.playListId) {
     playList.value.playListId = 'defaultList';
   }
@@ -56,8 +61,17 @@ export const deleteList = (id) => {
   delete playList.value[id];
 };
 
-export const addList = async (info: SKY.MusicListItem, listName: string) => {
-  addUnique(playList.value[listName].list, info, 'songmid');
+export const newList = () => {
+  modalName.value = 'ListAddModal';
+  modalTitle.value = '新增列表';
+  isModal.value = true;
+};
+
+export const addList = async (info: SKY.MusicListItem) => {
+  modalName.value = 'ListAddModal';
+  modalTitle.value = '收藏到列表';
+  addInfo.value = info;
+  isModal.value = true;
 };
 
 export const initPlayInfo = async (info: SKY.MusicListItem) => {

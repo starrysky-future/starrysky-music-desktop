@@ -28,6 +28,7 @@ const setBlur = () => {
       v-model="value"
       class="search_input_val"
       :placeholder="props.placeholder"
+      @keyup.enter="emits('setValue', value)"
       @focus="setFocus"
       @blur="setBlur"
     />

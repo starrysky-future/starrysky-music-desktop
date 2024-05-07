@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 export const useAppStore = defineStore('useAppStore', () => {
   const showLyricPage = ref<boolean>(false);
+
   const showTip = ref<boolean>(false);
   const tipText = ref<string>('');
   const tipPosition = ref<SKY.SongList.Position>({
@@ -10,7 +11,12 @@ export const useAppStore = defineStore('useAppStore', () => {
     y: 0
   });
 
-  return { showTip, tipText, tipPosition, showLyricPage };
+  const modalName = ref<string>('');
+  const modalTitle = ref<string>('');
+  const isModal = ref<boolean>(false);
+  const addInfo = ref<SKY.MusicListItem>();
+
+  return { showTip, tipText, tipPosition, showLyricPage, modalName, isModal, modalTitle, addInfo };
 });
 
 export const useListpopupStore = defineStore('useListpopupStore', () => {

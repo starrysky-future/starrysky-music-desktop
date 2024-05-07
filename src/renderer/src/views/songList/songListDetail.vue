@@ -36,7 +36,6 @@ let listKey;
 let pageKey;
 
 if (pageName === 'search') {
-  console.log('search');
   detailSourceId = searchSourceId.value;
   detailList = searchMusicList.value;
   listKey = searchCurListId.value;
@@ -44,7 +43,6 @@ if (pageName === 'search') {
 
   keepSearchDetail.value = 'search';
 } else if (pageName === 'songList') {
-  console.log('songList');
   detailSourceId = sourceId.value;
   detailList = musicList.value;
   listKey = curListId.value;
@@ -88,10 +86,12 @@ const setPlay = () => {
 };
 
 const setCollect = () => {
-  if (noData.value) return;
+  if (noData.value || playList.value[pageKey]) return;
+  const listSort = Object.keys(playList.value).length - 2;
   const collectList = {
     id: pageKey,
     name: detailList[listKey].list[pageKey].info.name,
+    sort: listSort,
     list: detailList[listKey].list[pageKey].list
   };
   playList.value[pageKey] = collectList;

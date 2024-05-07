@@ -9,16 +9,15 @@ const { playList } = storeToRefs(playStore);
 const labelList = computed<Array<SKY.Play.PlayListItem>>(() => {
   if (!playList.value) return [];
   const showList: Array<SKY.Play.PlayListItem> = [];
-  showList.push(playList.value.defaultList);
-  showList.push(playList.value.loveList);
 
   Object.entries(playList.value).map((item) => {
     const [key, list] = item;
 
-    if (key !== 'playId' && key !== 'playListId' && key !== 'defaultList' && key !== 'loveList') {
+    if (key !== 'playId' && key !== 'playListId') {
       showList.push(list as SKY.Play.PlayListItem);
     }
   });
+  showList.sort((a, b) => a.sort - b.sort);
 
   return showList;
 });

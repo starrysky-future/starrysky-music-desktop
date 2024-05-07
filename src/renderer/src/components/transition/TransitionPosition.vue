@@ -1,29 +1,28 @@
 <script lang="ts" setup></script>
 
 <template>
-  <Transition name="fadePosition">
+  <Transition name="TransitionPosition">
     <slot></slot>
   </Transition>
 </template>
 
 <style lang="less" scoped>
-.fadePosition-enter-from {
+.TransitionPosition-enter-from {
   transform: translateX(100%);
 }
-.fadePosition-enter-to {
+.TransitionPosition-enter-to {
   transform: translateX(0);
 }
-.fadePosition-enter-active {
-  transition: transform 0.5s ease;
-}
 
-.fadePosition-leave-from {
+.TransitionPosition-leave-from {
   transform: translateY(0);
 }
-.fadePosition-leave-to {
+.TransitionPosition-leave-to {
   transform: translateY(100%);
 }
-.fadePosition-leave-active {
+
+.TransitionPosition-enter-active,
+.TransitionPosition-leave-active {
   transition: transform 0.5s ease;
 }
 </style>

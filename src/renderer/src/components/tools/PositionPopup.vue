@@ -5,6 +5,7 @@ const props = defineProps<{
   direction: string;
   arrowInfo?: SKY.Play.ArrowInfo;
   hasArrow?: boolean;
+  transitionName?: string;
 }>();
 
 const isVisible = defineModel<boolean>();
@@ -17,8 +18,8 @@ let y;
 
 onMounted(() => {
   nextTick(() => {
-    popupWidth.value = domPositionPopup.value.clientWidth;
-    popupHeight.value = domPositionPopup.value.clientHeight;
+    popupWidth.value = domPositionPopup.value?.clientWidth;
+    popupHeight.value = domPositionPopup.value?.clientHeight;
   });
 
   x = computed(() => {
@@ -56,6 +57,7 @@ onUpdated(() => {
     :has-arrow="props.hasArrow"
     :arrow-info="props.arrowInfo"
     :direction="props.direction"
+    :transition-name="props.transitionName"
     has-listener
   >
     <div ref="domPositionPopup">

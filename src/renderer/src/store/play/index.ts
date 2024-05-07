@@ -27,11 +27,13 @@ export const usePlayStore = defineStore('usePlayStore', () => {
     playListId: 'defaultList',
     defaultList: {
       id: 'defaultList',
+      sort: 0,
       name: '试听列表',
       list: []
     },
     loveList: {
       id: 'loveList',
+      sort: 1,
       name: '我的列表',
       list: []
     }

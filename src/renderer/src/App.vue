@@ -1,13 +1,22 @@
 <script setup lang="ts">
+import { onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useAppStore } from '@r/store/app';
+import { useAppStore, usePlayEvent } from '@r/store/app';
 import { initSet } from '@r/plugins/setting';
 import { modalConfig } from '@r/plugins';
 
 const appStore = useAppStore();
 const { showLyricPage, modalName, isModal } = storeToRefs(appStore);
 
+const playEvent = usePlayEvent();
+const { stopTimeupdate, stopEnded } = storeToRefs(playEvent);
+
 initSet();
+
+onBeforeUnmount(() => {
+  stopTimeupdate.value && stopTimeupdate.value();
+  stopEnded.value && stopEnded.value();
+});
 </script>
 <template>
   <div class="home">

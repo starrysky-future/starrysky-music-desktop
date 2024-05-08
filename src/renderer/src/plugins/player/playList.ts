@@ -7,16 +7,23 @@ import { getLyric } from './lyric';
 import { getPic } from './pic';
 import { getMusicUrl } from './musicUrl';
 import eventBus from '@r/plugins/eventBus';
-import { useAppStore } from '@r/store/app';
+import { useAppStore, usePlayEvent } from '@r/store/app';
+import { watch } from 'vue';
+import { onEnded, onTimeupdate, getCurrentTime } from '@r/plugins/player/audio';
 
 const playStore = usePlayStore(pinia);
-const { curPlayInfo, playList } = storeToRefs(playStore);
+const { curPlayInfo, playList, playProgress, statulyric, playState } = storeToRefs(playStore);
 
 const navStore = useNavStore(pinia);
 const { navName } = storeToRefs(navStore);
 
 const appStore = useAppStore();
 const { modalName, modalTitle, isModal, addInfo } = storeToRefs(appStore);
+
+const playEvent = usePlayEvent();
+const { stopTimeupdate, stopEnded } = storeToRefs(playEvent);
+
+let saveInfo;
 
 export const playSong = debounce(async (info: SKY.MusicListItem, index: number) => {
   if (navName.value !== 'collect') {
@@ -74,13 +81,45 @@ export const addList = async (info: SKY.MusicListItem) => {
   isModal.value = true;
 };
 
-export const initPlayInfo = async (info: SKY.MusicListItem) => {
+export const initPlayInfo = (info: SKY.MusicListItem) => {
   eventBus.emit('setPause');
 
   playStore.setMaxplayTime(info._interval / 1000);
   curPlayInfo.value = { ...info, isPlay: curPlayInfo.value.isPlay, statu: curPlayInfo.value.statu };
+  console.log('info', info);
 
+  saveInfo = info;
   getPic(info);
-  await getMusicUrl(info); // 先获取info.otherSource
-  getLyric(info);
+  getMusicUrl(info); // 先获取info.otherSource
 };
+
+// 播放事件
+watch(
+  () => curPlayInfo.value.isPlay,
+  (value, oldValue) => {
+    if (value === oldValue) return;
+
+    if (value) {
+      // 歌曲请求成功后请求歌词
+      saveInfo && getLyric(saveInfo);
+    }
+
+    if (!stopTimeupdate.value) {
+      stopTimeupdate.value = onTimeupdate(() => {
+        const currentTime = getCurrentTime();
+        playStore.setProgress(currentTime, playProgress.value.maxPlayTime);
+
+        if (currentTime > 0 && statulyric.value[playProgress.value.nowPlayTimeStr]) {
+          curPlayInfo.value.statu = statulyric.value[playProgress.value.nowPlayTimeStr];
+        }
+      });
+    }
+
+    if (!stopEnded.value) {
+      stopEnded.value = onEnded(() => {
+        if (playState.value === 'loopOnce') return;
+        eventBus.emit('nextPlay');
+      });
+    }
+  }
+);

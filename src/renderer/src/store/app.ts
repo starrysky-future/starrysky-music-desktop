@@ -41,3 +41,10 @@ export const useListpopupStore = defineStore('useListpopupStore', () => {
     listpopupTransition
   };
 });
+
+export const usePlayEvent = defineStore('usePlayEvent', () => {
+  const stopTimeupdate = ref<(() => void) | null>(null);
+  const stopEnded = ref<(() => void) | null>(null);
+
+  return { stopTimeupdate, stopEnded };
+});

@@ -1,5 +1,5 @@
 import { storeToRefs } from 'pinia';
-import { setMediaDeviceId } from './index';
+import { setMediaDeviceId } from './audio';
 import { usePlayStore } from '@r/store/setting/play';
 
 const playStore = usePlayStore();

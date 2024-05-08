@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { useSetStore } from '@r/store/setting';
 import applyThemeColor from '@r/utils/theme/index.js';
-import { setMute } from '../player';
+import { setMute } from '../player/audio';
 
 const playStore = usePlayStore(pinia);
 const setStore = useSetStore(pinia);

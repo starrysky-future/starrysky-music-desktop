@@ -2,7 +2,7 @@ import pinia from '@r/store';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { useSetStore } from '@r/store/setting';
-import { getMute } from '../player';
+import { getMute } from '../player/audio';
 
 const playStore = usePlayStore(pinia);
 const setStore = useSetStore(pinia);

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
-import { setCurrentTime } from '@r/plugins/player';
+import { setCurrentTime } from '@r/plugins/player/audio';
 import { useAppStore } from '@r/store/app';
 
 const playStore = usePlayStore();
@@ -103,3 +103,4 @@ const goLyricPage = () => {
   }
 }
 </style>
+@r/plugins/player/auido

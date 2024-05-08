@@ -5,7 +5,7 @@ import { usePlayStore } from '@r/store/play';
 import { getOtherSourceList } from './musicUrl';
 
 const playStore = usePlayStore(pinia);
-const { curPlayInfo, statulyric } = storeToRefs(playStore);
+const { statulyric } = storeToRefs(playStore);
 
 // 暂无歌词源
 const lyricSources: Array<string> = ['tx', 'kw'];
@@ -20,15 +20,13 @@ export const getLyric = async (info) => {
   try {
     statulyric.value = {};
     let resLyric;
-    if (lyricSources.indexOf(curPlayInfo.value.source) >= 0) {
-      if (!info.otherSource) {
-        info.otherSource = await getOtherSourceList(lyricSources);
-      }
-      if (info.otherSource.length > 0) {
-        resLyric = await getOtherlyric(info.otherSource[0], info.otherSource, 0);
+    if (lyricSources.indexOf(info.source) >= 0) {
+      const lyricOtherSource = await getOtherSourceList(lyricSources);
+      if (lyricOtherSource.length > 0) {
+        resLyric = await getOtherlyric(lyricOtherSource[0], lyricOtherSource, 0);
       }
     } else {
-      resLyric = await sources[curPlayInfo.value.source].getLyric(curPlayInfo.value);
+      resLyric = await sources[info.source].getLyric(info);
     }
 
     if (!resLyric && !resLyric.lyric) throw new Error('暂无歌词');

@@ -1,5 +1,5 @@
 import sources from '@r/apis';
-import { setResource, onLoadeddata, getDuration, setStop } from '@r/plugins/player';
+import { setResource, onLoadeddata, getDuration, setStop } from '@r/plugins/player/audio';
 import pinia from '@r/store';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
@@ -15,7 +15,7 @@ export const getMusicUrl = async (info) => {
     setMusicUrl(url, info, false);
   } catch (error) {
     curPlayInfo.value.statu = '歌曲切换音源';
-    await getOtherSource(info);
+    getOtherSource(info);
   }
 };
 

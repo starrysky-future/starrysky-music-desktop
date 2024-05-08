@@ -2,34 +2,13 @@
 import { onBeforeUnmount, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
-import {
-  setPlay,
-  setPause,
-  onEnded,
-  onTimeupdate,
-  getCurrentTime,
-  isEmpty
-} from '@r/plugins/player';
+import { setPlay, setPause, isEmpty } from '@r/plugins/player/audio';
 import { initPlayInfo } from '@r/plugins/player/playList';
 import { getRandomList } from '@r/utils';
 import eventBus from '@r/plugins/eventBus';
 
 const playStore = usePlayStore();
-const { curPlayInfo, statulyric, playProgress, playList, playState } = storeToRefs(playStore);
-
-const stopTimeupdate = onTimeupdate(() => {
-  const currentTime = getCurrentTime();
-  playStore.setProgress(currentTime, playProgress.value.maxPlayTime);
-
-  if (currentTime > 0 && statulyric.value[playProgress.value.nowPlayTimeStr]) {
-    curPlayInfo.value.statu = statulyric.value[playProgress.value.nowPlayTimeStr];
-  }
-});
-
-const stopEnded = onEnded(() => {
-  if (playState.value === 'loopOnce') return;
-  nextPlay();
-});
+const { curPlayInfo, playList, playState } = storeToRefs(playStore);
 
 const play = () => {
   if (isEmpty()) {
@@ -90,8 +69,6 @@ eventBus.only('nextPlay', nextPlay);
 eventBus.only('setPause', pause);
 
 onBeforeUnmount(() => {
-  stopTimeupdate();
-  stopEnded();
   eventBus.off('nextPlay', nextPlay);
   eventBus.off('setPause', pause);
 });

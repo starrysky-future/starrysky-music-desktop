@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
-import { setVolume, setMute, setLoopPlay } from '@r/plugins/player';
+import { setVolume, setMute, setLoopPlay } from '@r/plugins/player/audio';
 import { addList } from '@r/plugins/player/playList';
 
 const isVisible = ref<boolean>(false);

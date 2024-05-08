@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, reactive } from 'vue';
 import { formatPlayTime } from '@r/utils';
-import { getMute } from '@r/plugins/player';
+import { getMute } from '@r/plugins/player/audio';
 
 export const usePlayStore = defineStore('usePlayStore', () => {
   const curPlayInfo = ref<SKY.Play.CurPlayInfo>({

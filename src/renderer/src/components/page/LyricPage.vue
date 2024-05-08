@@ -2,7 +2,7 @@
 import { ref, VNodeRef, computed, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
-import { setCurrentTime } from '@r/plugins/player';
+import { setCurrentTime } from '@r/plugins/player/audio';
 
 const playStore = usePlayStore();
 const { curPlayInfo, playProgress, statulyric } = storeToRefs(playStore);

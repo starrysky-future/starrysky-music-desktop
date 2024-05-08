@@ -18,8 +18,14 @@ const playStore = usePlayStore();
 const { curPlayInfo } = storeToRefs(playStore);
 
 const listpopupStore = useListpopupStore();
-const { showListpopup, listpopupPosition, listpopupData, listpopupOpr } =
-  storeToRefs(listpopupStore);
+const {
+  showListpopup,
+  listpopupPosition,
+  listpopupData,
+  listpopupOpr,
+  listpopupActiveId,
+  listpopupTransition
+} = storeToRefs(listpopupStore);
 
 const props = defineProps<{
   list: Array<SKY.MusicListItem> | undefined;
@@ -34,36 +40,36 @@ const popupList: Array<SKY.SongList.PopupListItem> = [
   {
     id: 'play',
     name: '播放',
-    ishow: true
+    show: true
   },
   {
     id: 'nextPlay',
     name: '稍后播放',
-    ishow: true
+    show: true
   },
   {
     id: 'addList',
     name: '收藏到...',
-    ishow: route.name !== 'collect'
+    show: route.name !== 'collect'
   },
   {
     id: 'delete',
     name: '删除',
-    ishow: route.name === 'collect'
+    show: route.name === 'collect'
   },
   {
     id: 'deleteAll',
     name: '清空列表',
-    ishow: route.name === 'collect'
+    show: route.name === 'collect'
   }
 ];
 
-const setListOpr = (id: string) => {
-  if (id === 'play') playSong(curInfo.value, nowNum.value);
-  if (id === 'nextPlay') playLater(curInfo.value!);
-  if (id === 'addList') addList(curInfo.value!);
-  if (id === 'delete') deleteMusic(nowNum.value);
-  if (id === 'deleteAll') deleteMusicAll();
+const setListOpr = (item: SKY.SongList.PopupListItem) => {
+  if (item.id === 'play') playSong(curInfo.value, nowNum.value);
+  if (item.id === 'nextPlay') playLater(curInfo.value!);
+  if (item.id === 'addList') addList(curInfo.value!);
+  if (item.id === 'delete') deleteMusic(nowNum.value);
+  if (item.id === 'deleteAll') deleteMusicAll();
 
   showListpopup.value = false;
 };
@@ -78,6 +84,9 @@ const getMenu = (songInfo: SKY.MusicListItem, index, $event) => {
   showListpopup.value = true;
   listpopupPosition.value.x = $event.clientX;
   listpopupPosition.value.y = $event.clientY;
+  listpopupPosition.value.width = 80;
+  listpopupActiveId.value = '';
+  listpopupTransition.value = 'TransitionOpacity';
 };
 
 const stopActive = watch(showListpopup, (val) => {

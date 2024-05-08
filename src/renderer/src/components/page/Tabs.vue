@@ -23,6 +23,7 @@ const setSearchValue = (val: string) => {
     <div class="sources">
       <div
         v-for="item in sources.sources"
+        v-show="item.show"
         :key="item.id"
         class="sourcesItlem"
         :class="{ active: item.id === props.activeSourceId }"

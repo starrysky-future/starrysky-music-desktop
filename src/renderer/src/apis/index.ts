@@ -8,23 +8,28 @@ const sources = {
   sources: [
     {
       name: '网易音乐',
-      id: 'wy'
+      id: 'wy',
+      show: true
     },
     {
       name: '企鹅音乐',
-      id: 'tx'
+      id: 'tx',
+      show: true
     },
     {
       name: '酷狗音乐',
-      id: 'kg'
+      id: 'kg',
+      show: true
     },
     {
       name: '咪咕音乐',
-      id: 'mg'
+      id: 'mg',
+      show: true
     },
     {
       name: '酷我音乐',
-      id: 'kw'
+      id: 'kw',
+      show: true
     }
   ],
   kg,

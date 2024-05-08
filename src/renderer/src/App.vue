@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useAppStore, useListpopupStore } from '@r/store/app';
+import { useAppStore } from '@r/store/app';
 import { initSet } from '@r/plugins/setting';
+import { modalConfig } from '@r/plugins';
 
 const appStore = useAppStore();
 const { showLyricPage, modalName, isModal } = storeToRefs(appStore);
 
-const listpopupStore = useListpopupStore();
-const { showListpopup, listpopupPosition, listpopupData, listpopupOpr } =
-  storeToRefs(listpopupStore);
-
 initSet();
-
-const modalConfig = {
-  ListAddModal: defineAsyncComponent(() => import('@r/components/operate/ListAddModal.vue'))
-};
 </script>
 <template>
   <div class="home">
@@ -35,12 +27,7 @@ const modalConfig = {
 
     <div>
       <TipPopup />
-      <ListPopup
-        v-model="showListpopup"
-        :position="listpopupPosition"
-        :list="listpopupData"
-        @set-list-opr="listpopupOpr"
-      />
+      <ListPopup />
 
       <div class="operate_modal">
         <TransitionScale>

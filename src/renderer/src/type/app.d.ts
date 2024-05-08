@@ -23,4 +23,9 @@ declare namespace SKY {
     _types: object;
     typeUrl: object;
   }
+
+  interface WH {
+    width: number;
+    height: number;
+  }
 }

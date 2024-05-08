@@ -5,8 +5,14 @@ import { deleteList, newList } from '@r/plugins/player/playList';
 import { useListpopupStore } from '@r/store/app';
 
 const listpopupStore = useListpopupStore();
-const { showListpopup, listpopupPosition, listpopupData, listpopupOpr } =
-  storeToRefs(listpopupStore);
+const {
+  showListpopup,
+  listpopupPosition,
+  listpopupData,
+  listpopupOpr,
+  listpopupActiveId,
+  listpopupTransition
+} = storeToRefs(listpopupStore);
 
 const props = defineProps<{
   list: SKY.LeaderBoard.LayoutList;
@@ -16,24 +22,24 @@ const props = defineProps<{
 
 const labelId = ref<string>('');
 
-const popupList = computed(() => {
+const popupList = computed((): Array<SKY.SongList.PopupListItem> => {
   return [
     {
       id: 'newList',
       name: '新列表',
-      ishow: true
+      show: true
     },
     {
       id: 'deleteList',
       name: '删除列表',
-      ishow: labelId.value !== 'defaultList' && labelId.value !== 'loveList'
+      show: labelId.value !== 'defaultList' && labelId.value !== 'loveList'
     }
   ];
 });
 
-const setListOpr = (id: string) => {
-  if (id === 'deleteList') deleteList(labelId.value);
-  if (id === 'newList') newList();
+const setListOpr = (item: SKY.SongList.PopupListItem) => {
+  if (item.id === 'deleteList') deleteList(labelId.value);
+  if (item.id === 'newList') newList();
 
   showListpopup.value = false;
 };
@@ -49,6 +55,9 @@ const getMenu = (id: string, $event) => {
   showListpopup.value = true;
   listpopupPosition.value.x = $event.clientX;
   listpopupPosition.value.y = $event.clientY;
+  listpopupPosition.value.width = 80;
+  listpopupActiveId.value = '';
+  listpopupTransition.value = 'TransitionOpacity';
 };
 </script>
 
@@ -77,7 +86,7 @@ const getMenu = (id: string, $event) => {
     cursor: pointer;
     height: 40px;
     line-height: 40px;
-    font-size: 13px;
+    font-size: 12px;
     padding: 0 8px;
     &:hover {
       color: var(--color-primary);

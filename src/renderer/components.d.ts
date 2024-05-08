@@ -34,6 +34,7 @@ declare module 'vue' {
     Tabs: typeof import('./src/components/page/Tabs.vue')['default']
     TipPopup: typeof import('./src/components/tools/TipPopup.vue')['default']
     Tiptool: typeof import('./src/components/tools/Tiptool.vue')['default']
+    TransitionHeight: typeof import('./src/components/transition/TransitionHeight.vue')['default']
     TransitionOpacity: typeof import('./src/components/transition/TransitionOpacity.vue')['default']
     TransitionPosition: typeof import('./src/components/transition/TransitionPosition.vue')['default']
     TransitionScale: typeof import('./src/components/transition/TransitionScale.vue')['default']

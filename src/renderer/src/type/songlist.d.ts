@@ -92,7 +92,7 @@ declare namespace SKY {
     interface PopupListItem {
       id: string;
       name: string;
-      ishow?: boolean;
+      show?: boolean;
     }
   }
 }

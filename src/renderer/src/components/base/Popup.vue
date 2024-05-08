@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue';
+import { onMounted, onBeforeUnmount } from 'vue';
+import { transitionConfig } from '@r/plugins';
 
 const props = defineProps<{
   position: SKY.SongList.Position;
@@ -8,44 +9,36 @@ const props = defineProps<{
   arrowInfo?: SKY.Play.ArrowInfo;
   hasListener?: boolean;
   transitionName?: string;
+  transitionWH?: SKY.WH;
 }>();
-
-const transitionConfig = {
-  TransitionScale: defineAsyncComponent(
-    () => import('@r/components/transition/TransitionScale.vue')
-  ),
-  TransitionOpacity: defineAsyncComponent(
-    () => import('@r/components/transition/TransitionOpacity.vue')
-  ),
-  TransitionPosition: defineAsyncComponent(
-    () => import('@r/components/transition/TransitionPosition.vue')
-  )
-};
 
 let arrow_size;
 let arrow_position;
-
-if (props.hasArrow) {
-  arrow_size = props.arrowInfo?.arrowSize ? `${props.arrowInfo.arrowSize}px` : '10px';
-
-  if (props.arrowInfo?.arrowPosition) {
-    arrow_position = `popup_arrow_${props.arrowInfo.arrowPosition}_mid`;
-  } else if (props.direction) {
-    const getDirection = {
-      top: 'bottom',
-      bottom: 'top',
-      left: 'right',
-      right: 'left'
-    };
-    arrow_position = `popup_arrow_${getDirection[props.direction]}_mid`;
-  }
-}
-
 const isVisible = defineModel<boolean>();
+
+const setArrow = () => {
+  if (props.hasArrow) {
+    arrow_size = props.arrowInfo?.arrowSize ? `${props.arrowInfo.arrowSize}px` : '10px';
+
+    if (props.arrowInfo?.arrowPosition) {
+      arrow_position = `popup_arrow_${props.arrowInfo.arrowPosition}_mid`;
+    } else if (props.direction) {
+      const getDirection = {
+        top: 'bottom',
+        bottom: 'top',
+        left: 'right',
+        right: 'left'
+      };
+      arrow_position = `popup_arrow_${getDirection[props.direction]}_mid`;
+    }
+  }
+};
 
 const setVisible = () => {
   isVisible.value = false;
 };
+
+setArrow();
 
 onMounted(() => {
   if (props.hasListener) {
@@ -61,7 +54,10 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="#app">
-    <component :is="(props.transitionName && transitionConfig[props.transitionName]) || 'div'">
+    <component
+      :is="(props.transitionName && transitionConfig[props.transitionName]) || 'div'"
+      :transition-w-h="transitionWH"
+    >
       <div
         v-show="isVisible"
         class="popup"

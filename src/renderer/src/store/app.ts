@@ -21,12 +21,23 @@ export const useAppStore = defineStore('useAppStore', () => {
 
 export const useListpopupStore = defineStore('useListpopupStore', () => {
   const showListpopup = ref<boolean>(false);
+  const listpopupActiveId = ref<string>('');
   const listpopupPosition = ref<SKY.SongList.Position>({
     x: 0,
-    y: 0
+    y: 0,
+    width: 80,
+    height: 30
   });
   const listpopupData = ref<Array<SKY.SongList.PopupListItem>>([]);
-  const listpopupOpr = ref<(id: string) => void>(() => {});
+  const listpopupOpr = ref<(item) => void>(() => {});
+  const listpopupTransition = ref<string>('TransitionOpacity');
 
-  return { showListpopup, listpopupPosition, listpopupData, listpopupOpr };
+  return {
+    showListpopup,
+    listpopupPosition,
+    listpopupData,
+    listpopupOpr,
+    listpopupActiveId,
+    listpopupTransition
+  };
 });

@@ -1,7 +1,7 @@
-import { setAudio } from '../player';
+import { createAudio } from '../player/audio';
 import { initData } from './getData';
 
 export const initSet = async () => {
-  setAudio();
+  createAudio();
   initData();
 };

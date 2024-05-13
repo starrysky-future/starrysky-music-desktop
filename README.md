@@ -1,6 +1,7 @@
 # starrysky-music
 
 一个音乐软件
+参考于：https://github.com/lyswhut/lx-music-desktop
 
 ### Install
 

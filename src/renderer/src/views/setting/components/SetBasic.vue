@@ -16,7 +16,7 @@ const setTheme = (themeId: string) => {
 <template>
   <div class="set_basic">
     <SetTitle> 基本设置 </SetTitle>
-    <div class="common_style">
+    <div class="common_card">
       <div>主题颜色</div>
       <div class="theme">
         <template v-for="item in theme" :key="item.id">
@@ -75,7 +75,7 @@ const setTheme = (themeId: string) => {
     }
   }
 
-  .common_style {
+  .common_card {
     padding-top: 10px;
     font-size: 12px;
   }

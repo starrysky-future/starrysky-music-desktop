@@ -1,5 +1,4 @@
 import { storeToRefs } from 'pinia';
-import apiSourceInfo from './api-source-info';
 import { useSetStore } from '@r/store/setting';
 import pinia from '@r/store';
 
@@ -9,6 +8,12 @@ import api_test_kw from './kw/api-test';
 import api_test_mg from './mg/api-test';
 import api_test_wy from './wy/api-test';
 
+import api_tx_local from './tx/api-local';
+import api_kg_local from './kg/api-local';
+import api_kw_local from './kw/api-local';
+import api_mg_local from './mg/api-local';
+import api_wy_local from './wy/api-local';
+
 const setStore = useSetStore(pinia);
 const { setList } = storeToRefs(setStore);
 
@@ -17,20 +22,15 @@ const allApi = {
   test_kg: api_test_kg,
   test_kw: api_test_kw,
   test_mg: api_test_mg,
-  test_wy: api_test_wy
+  test_wy: api_test_wy,
+  local_tx: api_tx_local,
+  local_kg: api_kg_local,
+  local_kw: api_kw_local,
+  local_mg: api_mg_local,
+  local_wy: api_wy_local
 };
 
-const apiList = {};
-const supportQuality = {};
-
-for (const api of apiSourceInfo) {
-  supportQuality[api.id] = api.supportQualitys;
-  for (const source of Object.keys(api.supportQualitys)) {
-    apiList[`${api.id}_api_${source}`] = allApi[`${api.id}_${source}`];
-  }
-}
-
-const getAPI = (source) => apiList[`${setList.value.apiSource}_api_${source}`];
+const getAPI = (source) => allApi[`${setList.value.apiSource}_${source}`];
 
 const apis = (source) => {
   const api = getAPI(source);
@@ -38,4 +38,4 @@ const apis = (source) => {
   throw new Error('Api is not found');
 };
 
-export { apis, supportQuality };
+export { apis };

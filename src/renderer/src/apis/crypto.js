@@ -1,4 +1,3 @@
-import { Buffer } from 'Buffer';
 import {
   createCipheriv,
   createDecipheriv,

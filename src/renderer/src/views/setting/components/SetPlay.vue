@@ -4,6 +4,7 @@ import { useSetStore } from '@r/store/setting';
 
 const setStore = useSetStore();
 const { setList } = storeToRefs(setStore);
+console.log(setList);
 
 const setApiSource = (id: string) => {
   setList.value.apiSource = id;

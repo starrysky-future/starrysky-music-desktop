@@ -2,11 +2,6 @@
 import { storeToRefs } from 'pinia';
 import { useSetStore } from '@r/store/setting';
 
-const apiSourceList = [
-  { name: '测试音源', id: 'test' },
-  { name: '本地音源', id: 'local' }
-];
-
 const setStore = useSetStore();
 const { setList } = storeToRefs(setStore);
 
@@ -22,7 +17,7 @@ const setApiSource = (id: string) => {
       <div>音乐源</div>
       <div class="common_card_item">
         <div
-          v-for="item in apiSourceList"
+          v-for="item in setList.apiSourceList"
           :key="item.id"
           class="source_name"
           :class="{ active: setList.apiSource === item.id }"

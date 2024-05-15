@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset';
 import { getAppWH } from './config/config';
 import { setUserDataPath } from './config/data';
 import { setSession } from './config/session';
+import { satrtServerProcess } from './config/backend';
 
 export const createApp = () => {
   function createWindow(): void {
@@ -53,6 +54,7 @@ export const createApp = () => {
 
     createWindow();
     setSession();
+    satrtServerProcess(); // 开启子进程
 
     app.on('activate', function () {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();

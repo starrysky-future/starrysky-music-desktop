@@ -4,7 +4,8 @@ import { ref, defineAsyncComponent } from 'vue';
 export const useSetStore = defineStore('useSetStore', () => {
   const setList = ref({
     themeId: 'blue',
-    apiSource: 'test'
+    apiSource: 'local',
+    apiSourceList: [{ name: '本地音源', id: 'local' }]
   });
 
   return { setList };

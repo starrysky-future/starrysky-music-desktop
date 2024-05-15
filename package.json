@@ -24,6 +24,7 @@
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "axios": "^1.6.8",
+    "electron-log": "^5.1.4",
     "electron-updater": "^6.1.7",
     "less": "^4.2.0",
     "pinia": "^2.1.7",

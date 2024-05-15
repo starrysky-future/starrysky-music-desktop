@@ -1,3 +1,8 @@
+interface Sky {
+  skyDataPath: string;
+  rootDir: string;
+}
+
 declare global {
-  let sky: unknown;
+  let sky: Sky;
 }

@@ -1,13 +1,27 @@
 import { is } from '@electron-toolkit/utils';
 import { spawn } from 'child_process';
 import { join } from 'path';
+import log from 'electron-log';
 
-const exePath = is.dev
-  ? join(__dirname, '../../build/Release/starrysky-music-backend.exe')
-  : join(__dirname, '../build/Release/starrysky-music-backend.exe');
+const getPath = () => {
+  let exePath;
+  if (is.dev) {
+    exePath = join(__dirname, '../../service/starrysky-music-backend.exe');
+  } else {
+    exePath = join(global.sky.rootDir, '../resources/service/starrysky-music-backend.exe');
+  }
+  log.info('exePath', exePath);
+
+  return exePath;
+};
 
 export const satrtServerProcess = () => {
-  const serverProcess = spawn(exePath);
+  let serverProcess;
+  try {
+    serverProcess = spawn(getPath());
+  } catch (error) {
+    log.error(error);
+  }
 
   serverProcess.stdout.on('data', (data) => {
     console.log('backEnd server' + data);

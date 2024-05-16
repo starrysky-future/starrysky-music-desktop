@@ -3,8 +3,7 @@ import { storeToRefs } from 'pinia';
 import { useSetStore } from '@r/store/setting';
 
 const setStore = useSetStore();
-const { setList } = storeToRefs(setStore);
-console.log(setList);
+const { setList, apiSourceList } = storeToRefs(setStore);
 
 const setApiSource = (id: string) => {
   setList.value.apiSource = id;
@@ -18,7 +17,7 @@ const setApiSource = (id: string) => {
       <div>音乐源</div>
       <div class="common_card_item">
         <div
-          v-for="item in setList.apiSourceList"
+          v-for="item in apiSourceList"
           :key="item.id"
           class="source_name"
           :class="{ active: setList.apiSource === item.id }"

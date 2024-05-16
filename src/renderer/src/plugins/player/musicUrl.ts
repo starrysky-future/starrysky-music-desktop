@@ -7,7 +7,7 @@ import { searchMusicAll } from '@r/apis/search';
 import eventBus from '@r/plugins/eventBus';
 
 const playStore = usePlayStore(pinia);
-const { curPlayInfo, statulyric, playList } = storeToRefs(playStore);
+const { curPlayInfo, playList } = storeToRefs(playStore);
 
 export const getMusicUrl = async (info) => {
   try {
@@ -84,8 +84,6 @@ const setMusicUrl = (url, info, isUrl, infoList?, tryNum?) => {
         }
       } else {
         curPlayInfo.value.isPlay = true;
-        // 请求成功歌词显示
-        curPlayInfo.value.statu = statulyric.value['00:00'];
       }
       stopLoadeddata();
     });

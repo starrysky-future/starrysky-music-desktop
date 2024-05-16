@@ -8,6 +8,7 @@ const api_local = {
       resUrl = await http(
         `http://localhost:9981/tx?songmid=${songmid}&strMediaMid=${strMediaMid}&quality=${quality}`
       );
+      if (!resUrl.data) throw new Error('歌曲url请求失败');
     } catch (error) {
       return this.getMusicUrl({ songmid, strMediaMid }, quality, tryNum + 1);
     }

@@ -5,12 +5,14 @@ import { usePlayStore } from '@r/store/play';
 import { getOtherSourceList } from './musicUrl';
 
 const playStore = usePlayStore(pinia);
-const { statulyric } = storeToRefs(playStore);
+const { statulyric, curPlayInfo } = storeToRefs(playStore);
 
 // 暂无歌词源
 const lyricSources: Array<string> = ['tx', 'kw'];
 
 export const getLyric = async (info) => {
+  statulyric.value = {};
+  curPlayInfo.value.statu = '';
   if (hasLyric(info)) {
     parseStatulyric(hasLyric(info));
     return;
@@ -18,7 +20,6 @@ export const getLyric = async (info) => {
 
   // 歌词
   try {
-    statulyric.value = {};
     let resLyric;
     if (lyricSources.indexOf(info.source) >= 0) {
       const lyricOtherSource = await getOtherSourceList(lyricSources);
@@ -78,6 +79,7 @@ const parseStatulyric = (lyric: string) => {
   }
 
   statulyric.value = lyricObj;
+  curPlayInfo.value.statu = statulyric.value['00:00'];
 };
 
 const parseTime = (key: string) => {

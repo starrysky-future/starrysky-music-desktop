@@ -6,8 +6,9 @@ const api_local = {
     let resUrl;
     try {
       resUrl = await http(
-        `http://localhost:9981/tx?hash=${hash}&albumId=${albumId}&quality=${quality}`
+        `http://localhost:9981/kg?hash=${hash}&albumId=${albumId}&quality=${quality}`
       );
+      if (!resUrl.data) throw new Error('歌曲url请求失败');
     } catch (error) {
       return this.getMusicUrl({ hash, albumId }, quality, tryNum + 1);
     }

@@ -5,7 +5,8 @@ const api_local = {
     if (tryNum > 2) throw new Error('歌曲url请求失败');
     let resUrl;
     try {
-      resUrl = await http(`http://localhost:9981/tx?copyrightId=${copyrightId}&quality=${quality}`);
+      resUrl = await http(`http://localhost:9981/mg?copyrightId=${copyrightId}&quality=${quality}`);
+      if (!resUrl.data) throw new Error('歌曲url请求失败');
     } catch (error) {
       return this.getMusicUrl({ copyrightId }, quality, tryNum + 1);
     }

@@ -48,6 +48,8 @@ const setTheme = (themeId: string) => {
 </template>
 
 <style lang="less" scoped>
+@import './common.less';
+
 .set_basic {
   .theme {
     display: flex;
@@ -73,11 +75,6 @@ const setTheme = (themeId: string) => {
         padding-top: 2px;
       }
     }
-  }
-
-  .common_card {
-    padding-top: 10px;
-    font-size: 12px;
   }
 }
 </style>

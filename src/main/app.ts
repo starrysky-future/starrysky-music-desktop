@@ -6,6 +6,7 @@ import { getAppWH } from './config/config';
 import { setUserDataPath } from './config/data';
 import { setSession } from './config/session';
 import { satrtServerProcess } from './config/backend';
+import autoUpdater from './updater';
 
 export const createApp = () => {
   function createWindow(): void {
@@ -44,6 +45,8 @@ export const createApp = () => {
     } else {
       mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
     }
+
+    autoUpdater(mainWindow); // 自动更新
   }
 
   app.whenReady().then(() => {

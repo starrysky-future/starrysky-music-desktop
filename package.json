@@ -1,6 +1,6 @@
 {
   "name": "starrysky-music-desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "一个音乐软件",
   "main": "./out/main/index.js",
   "author": "seven",

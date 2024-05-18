@@ -2,6 +2,11 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useAppStore = defineStore('useAppStore', () => {
+  const appInfo = ref<SKY.AppInfo>({
+    curVersion: '',
+    lastVersion: ''
+  });
+
   const showLyricPage = ref<boolean>(false);
 
   const showTip = ref<boolean>(false);
@@ -11,12 +16,20 @@ export const useAppStore = defineStore('useAppStore', () => {
     y: 0
   });
 
-  const modalName = ref<string>('');
-  const modalTitle = ref<string>('');
-  const isModal = ref<boolean>(false);
-  const addInfo = ref<SKY.MusicListItem>();
+  const modalInfo = ref<SKY.ModalInfo>({
+    modalName: '',
+    modalTitle: '',
+    isModal: false
+  });
 
-  return { showTip, tipText, tipPosition, showLyricPage, modalName, isModal, modalTitle, addInfo };
+  return {
+    showTip,
+    tipText,
+    tipPosition,
+    showLyricPage,
+    modalInfo,
+    appInfo
+  };
 });
 
 export const useListpopupStore = defineStore('useListpopupStore', () => {

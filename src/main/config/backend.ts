@@ -1,7 +1,7 @@
 import { is } from '@electron-toolkit/utils';
 import { spawn } from 'child_process';
 import { join } from 'path';
-import log from 'electron-log';
+import { mainLog } from '../log';
 
 const getPath = () => {
   let exePath;
@@ -10,7 +10,7 @@ const getPath = () => {
   } else {
     exePath = join(global.sky.rootDir, '../resources/service/starrysky-music-backend.exe');
   }
-  log.info('exePath', exePath);
+  mainLog.info('exePath', exePath);
 
   return exePath;
 };
@@ -20,7 +20,7 @@ export const satrtServerProcess = () => {
   try {
     serverProcess = spawn(getPath());
   } catch (error) {
-    log.error(error);
+    mainLog.error(error);
   }
 
   serverProcess.stdout.on('data', (data) => {

@@ -18,8 +18,13 @@ export const setLabelList = [
     com: defineAsyncComponent(() => import('@r/views/setting/components/SetBasic.vue'))
   },
   {
-    id: 'bfsz',
+    id: 'SetPlay',
     name: '播放设置',
     com: defineAsyncComponent(() => import('@r/views/setting/components/SetPlay.vue'))
+  },
+  {
+    id: 'setUpdater',
+    name: '软件更新',
+    com: defineAsyncComponent(() => import('@r/views/setting/components/SetUpdater.vue'))
   }
 ];

@@ -1,7 +1,8 @@
 import { defineAsyncComponent } from 'vue';
 
 export const modalConfig = {
-  ListAddModal: defineAsyncComponent(() => import('@r/components/operate/ListAddModal.vue'))
+  ListAddModal: defineAsyncComponent(() => import('@r/components/operate/ListAddModal.vue')),
+  UpdateModal: defineAsyncComponent(() => import('@r/components/operate/UpdateModal.vue'))
 };
 
 export const transitionConfig = {

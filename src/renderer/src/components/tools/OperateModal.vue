@@ -3,18 +3,18 @@ import { storeToRefs } from 'pinia';
 import { useAppStore } from '@r/store/app';
 
 const appStore = useAppStore();
-const { modalTitle, isModal, addInfo } = storeToRefs(appStore);
+const { modalInfo } = storeToRefs(appStore);
 
 const closeModal = () => {
-  isModal.value = false;
-  addInfo.value = undefined;
+  modalInfo.value.isModal = false;
+  modalInfo.value.addInfo = undefined;
 };
 </script>
 
 <template>
   <div class="operate_popup">
     <div class="header">
-      <div class="title">{{ modalTitle }}</div>
+      <div class="title">{{ modalInfo.modalTitle }}</div>
       <div class="close" @click="closeModal">
         <div class="close_icon">
           <svg
@@ -46,15 +46,12 @@ const closeModal = () => {
   overflow: hidden;
   .header {
     font-size: 14px;
-    border-bottom-width: 0.5px;
-    border-bottom-style: solid;
-    border-bottom-color: var(--color-primary);
+    background-color: var(--color-primary-light-800);
     position: relative;
     .title {
       height: @headerheight;
       line-height: @headerheight;
       text-align: center;
-      color: var(--color-primary);
     }
     .close {
       cursor: pointer;
@@ -77,7 +74,7 @@ const closeModal = () => {
     }
   }
   .main {
-    padding: 14px 0 0 14px;
+    // padding: 14px 0 0 14px;
   }
 }
 </style>

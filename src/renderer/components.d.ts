@@ -38,6 +38,7 @@ declare module 'vue' {
     TransitionOpacity: typeof import('./src/components/transition/TransitionOpacity.vue')['default']
     TransitionPosition: typeof import('./src/components/transition/TransitionPosition.vue')['default']
     TransitionScale: typeof import('./src/components/transition/TransitionScale.vue')['default']
+    UpdateModal: typeof import('./src/components/operate/UpdateModal.vue')['default']
     YScroll: typeof import('./src/components/tools/y-scroll.vue')['default']
   }
 }

@@ -1,17 +1,22 @@
 <script setup lang="ts">
-import { onBeforeUnmount } from 'vue';
+import { onBeforeUnmount, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAppStore, usePlayEvent } from '@r/store/app';
 import { initSet } from '@r/plugins/setting';
 import { modalConfig } from '@r/plugins';
+import { checkForUpdates } from '@r/ipc/updaterIpc';
 
 const appStore = useAppStore();
-const { showLyricPage, modalName, isModal } = storeToRefs(appStore);
+const { showLyricPage, modalInfo } = storeToRefs(appStore);
 
 const playEvent = usePlayEvent();
 const { stopTimeupdate, stopEnded } = storeToRefs(playEvent);
 
 initSet();
+
+onMounted(() => {
+  checkForUpdates();
+});
 
 onBeforeUnmount(() => {
   stopTimeupdate.value && stopTimeupdate.value();
@@ -40,8 +45,8 @@ onBeforeUnmount(() => {
 
       <div class="operate_modal">
         <TransitionScale>
-          <OperateModal v-if="isModal">
-            <component :is="modalConfig[modalName]"></component>
+          <OperateModal v-if="modalInfo.isModal">
+            <component :is="modalConfig[modalInfo.modalName]"></component>
           </OperateModal>
         </TransitionScale>
       </div>

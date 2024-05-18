@@ -1,15 +1,16 @@
-import { ipcMain, app, BrowserWindow, IpcMainEvent } from 'electron';
+import { app, BrowserWindow, IpcMainEvent } from 'electron';
+import { ipcHelper } from '@electron-toolkit/utils';
 export default () => {
   const getWin = (_event: IpcMainEvent): BrowserWindow => {
     return BrowserWindow.fromWebContents(_event.sender)!;
   };
 
-  ipcMain.on('min', (_event: IpcMainEvent) => {
+  ipcHelper.on('min', (_event: IpcMainEvent) => {
     const win = getWin(_event);
     win.minimize();
   });
 
-  ipcMain.on('max', (_event: IpcMainEvent) => {
+  ipcHelper.on('max', (_event: IpcMainEvent) => {
     const win = getWin(_event);
     if (win.isMaximized()) {
       win.unmaximize();
@@ -18,7 +19,7 @@ export default () => {
     }
   });
 
-  ipcMain.on('quit', () => {
+  ipcHelper.on('quit', () => {
     app.quit();
   });
 };

@@ -3,6 +3,7 @@ import { ref, VNodeRef } from 'vue';
 import { saveData } from '@r/plugins/setting/setData';
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@r/store/app';
+import { minIpc, quitIpc } from '@r/ipc/appOprIpc';
 
 const appStore = useAppStore();
 const { showLyricPage } = storeToRefs(appStore);
@@ -18,14 +19,14 @@ const setMinHover = () => {
 const changeWinState = (operate: string): void => {
   if (operate === 'min') {
     hasHover.value = false;
-
     minDom.value.addEventListener('mousemove', setMinHover);
+    minIpc();
   }
 
   if (operate === 'quit') {
     saveData();
+    quitIpc();
   }
-  window.api![operate]();
 };
 
 const hideLyricPage = () => {

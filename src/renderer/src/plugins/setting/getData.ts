@@ -2,16 +2,21 @@ import pinia from '@r/store';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { useSetStore } from '@r/store/setting';
+import { useAppStore } from '@r/store/app';
 import applyThemeColor from '@r/utils/theme/index.js';
 import { setMute } from '../player/audio';
+import { getDataIpc } from '@r/ipc/dataIpc';
+import { getAppInfoIpc, getUpdateInfo } from '@r/ipc/updaterIpc';
 
 const playStore = usePlayStore(pinia);
-const setStore = useSetStore(pinia);
 const { playList, curPlayInfo, volume, isMute, playState } = storeToRefs(playStore);
+const setStore = useSetStore(pinia);
 const { setList } = storeToRefs(setStore);
+const appStore = useAppStore(pinia);
+const { appInfo, modalInfo } = storeToRefs(appStore);
 
 const getData = async (name: string) => {
-  return await window.api.getData(name);
+  return await getDataIpc(name);
 };
 
 const getplayList = async () => {
@@ -47,6 +52,29 @@ const getConfig = async () => {
   applyThemeColor();
 };
 
+const getAppInfo = async () => {
+  const mainAppInfo = await getAppInfoIpc();
+
+  appInfo.value.curVersion = mainAppInfo.version;
+};
+
+const getUpdateInfoListener = (_event, updateInfo: SKY.UpdateInfo) => {
+  console.log('updateInfo', updateInfo);
+  if (updateInfo.updateStatus === 'update-available') {
+    appInfo.value.lastVersion = updateInfo.version!;
+
+    modalInfo.value.modalName = 'UpdateModal';
+    modalInfo.value.modalTitle = '存在新版本';
+    modalInfo.value.isModal = true;
+  } else if (updateInfo.updateStatus === 'update-not-available') {
+    appInfo.value.lastVersion = updateInfo.version!;
+  } else if (updateInfo.updateStatus === 'error') {
+    console.log(333);
+  } else if (updateInfo.updateStatus === 'download-progress') {
+    console.log(111);
+  }
+};
+
 const setPlayConfig = (playConfig) => {
   volume.value = playConfig.volume;
   playState.value = playConfig.playState;
@@ -58,4 +86,6 @@ const setPlayConfig = (playConfig) => {
 export const initData = () => {
   getplayList();
   getConfig();
+  getAppInfo();
+  getUpdateInfo(getUpdateInfoListener);
 };

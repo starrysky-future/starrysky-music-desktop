@@ -25,7 +25,6 @@ try {
   const api_test_kw = await import('./kw/api-test');
   const api_test_mg = await import('./mg/api-test');
   const api_test_wy = await import('./wy/api-test');
-  console.log(api_test_tx.default);
 
   const testApi = {
     test_tx: api_test_tx.default,

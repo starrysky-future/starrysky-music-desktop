@@ -18,7 +18,7 @@ const navStore = useNavStore(pinia);
 const { navName } = storeToRefs(navStore);
 
 const appStore = useAppStore();
-const { modalName, modalTitle, isModal, addInfo } = storeToRefs(appStore);
+const { modalInfo } = storeToRefs(appStore);
 
 const playEvent = usePlayEvent();
 const { stopTimeupdate, stopEnded } = storeToRefs(playEvent);
@@ -69,16 +69,16 @@ export const deleteList = (id: string) => {
 };
 
 export const newList = () => {
-  modalName.value = 'ListAddModal';
-  modalTitle.value = '新增列表';
-  isModal.value = true;
+  modalInfo.value.modalName = 'ListAddModal';
+  modalInfo.value.modalTitle = '新增列表';
+  modalInfo.value.isModal = true;
 };
 
 export const addList = async (info: SKY.MusicListItem) => {
-  modalName.value = 'ListAddModal';
-  modalTitle.value = '收藏到列表';
-  addInfo.value = info;
-  isModal.value = true;
+  modalInfo.value.modalName = 'ListAddModal';
+  modalInfo.value.modalTitle = '收藏到列表';
+  modalInfo.value.addInfo = info;
+  modalInfo.value.isModal = true;
 };
 
 export const initPlayInfo = (info: SKY.MusicListItem) => {

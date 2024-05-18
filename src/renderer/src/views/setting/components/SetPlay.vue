@@ -31,6 +31,8 @@ const setApiSource = (id: string) => {
 </template>
 
 <style lang="less" scoped>
+@import './common.less';
+
 .set_play {
   .source_name {
     cursor: pointer;
@@ -39,14 +41,6 @@ const setApiSource = (id: string) => {
 
   .active {
     color: var(--color-primary);
-  }
-}
-.common_card {
-  padding-top: 10px;
-  font-size: 12px;
-  .common_card_item {
-    display: flex;
-    padding: 10px 0;
   }
 }
 </style>

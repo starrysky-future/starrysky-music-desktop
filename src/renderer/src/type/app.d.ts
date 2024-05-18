@@ -28,4 +28,23 @@ declare namespace SKY {
     width: number;
     height: number;
   }
+
+  interface AppInfo {
+    curVersion: string;
+    lastVersion: string;
+  }
+
+  interface ModalInfo {
+    modalName: string;
+    modalTitle: string;
+    isModal: boolean;
+    addInfo?: MusicListItem;
+  }
+  interface UpdateInfo {
+    updateStatus: string;
+    version?: string;
+    size?: unknown;
+    error?: unknown;
+    progress?: unknown;
+  }
 }

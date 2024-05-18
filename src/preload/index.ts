@@ -1,15 +1,7 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
-const api = {
-  min: (): void => ipcRenderer.send('min'),
-  max: (): void => ipcRenderer.send('max'),
-  quit: (): void => ipcRenderer.send('quit'),
-  setData: (name: string, data: string): void => ipcRenderer.send('setData', name, data),
-  getData: async (name: string) => {
-    return await ipcRenderer.invoke('getData', name);
-  }
-};
+const api = {};
 
 if (process.contextIsolated) {
   try {

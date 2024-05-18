@@ -9,7 +9,7 @@ const playStore = usePlayStore();
 const { playList } = storeToRefs(playStore);
 
 const appStore = useAppStore();
-const { addInfo } = storeToRefs(appStore);
+const { modalInfo } = storeToRefs(appStore);
 
 const showInput = ref<boolean>(false);
 const inputVal = ref<string>('');
@@ -69,20 +69,20 @@ const labelList = computed<Array<SKY.Play.PlayListItem>>(() => {
 });
 
 const hasMusic = (list: Array<SKY.MusicListItem>) => {
-  if (!addInfo.value) return false;
+  if (!modalInfo.value.addInfo) return false;
 
-  return list.find((info) => info.songmid === addInfo.value?.songmid);
+  return list.find((info) => info.songmid === modalInfo.value.addInfo?.songmid);
 };
 
 const addList = (list: Array<SKY.MusicListItem>) => {
   if (hasMusic(list)) return;
-  list.push(addInfo.value as SKY.MusicListItem);
+  list.push(modalInfo.value.addInfo as SKY.MusicListItem);
 };
 </script>
 
 <template>
   <div class="list_add_modal scroll">
-    <template v-if="addInfo">
+    <template v-if="modalInfo.addInfo">
       <div
         v-for="item in labelList"
         :key="item.id"
@@ -130,6 +130,7 @@ const addList = (list: Array<SKY.MusicListItem>) => {
 @inputHeight: 30px;
 
 .list_add_modal {
+  margin: 14px 0 0 14px;
   max-width: (@inputWidth + 14px) * 3 + 6px;
   max-height: (@inputHeight + 14px) * 3;
   display: flex;

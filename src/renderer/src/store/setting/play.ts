@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-export const usePlayStore = defineStore('usePlayStores', () => {
+export const usePlayStore = defineStore('usePlayStore', () => {
   const prevDeviceLabel = ref<string | null>(null);
   const prevDeviceId = ref<string>('default');
 

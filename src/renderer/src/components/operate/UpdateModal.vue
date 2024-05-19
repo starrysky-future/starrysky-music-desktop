@@ -1,10 +1,15 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { useAppStore } from '@r/store/app';
+import { useUpdateStore } from '@r/store/setting/update';
 import { downloadUpdate } from '@r/ipc/updaterIpc';
 
-const appStore = useAppStore();
-const { appInfo, updateProgress } = storeToRefs(appStore);
+const updateStore = useUpdateStore();
+const { appInfo, updateProgress } = storeToRefs(updateStore);
+
+const download = () => {
+  updateProgress.value.hasUpdate = true;
+  downloadUpdate();
+};
 </script>
 
 <template>
@@ -26,15 +31,15 @@ const { appInfo, updateProgress } = storeToRefs(appStore);
         </div>
       </div>
     </div>
-    <div class="main"></div>
-    <div class="floor" @click="downloadUpdate">立即更新</div>
+    <!-- <div class="main"></div> -->
+    <div class="floor" @click="download">立即更新</div>
   </div>
 </template>
 
 <style lang="less" scoped>
 .update_modal {
   width: 600px;
-  height: 400px;
+  // height: 400px;
   display: flex;
   flex-direction: column;
   font-size: 14px;
@@ -51,7 +56,7 @@ const { appInfo, updateProgress } = storeToRefs(appStore);
       flex-direction: column;
       justify-content: center;
       .progress {
-        height: 2px;
+        height: 4px;
       }
       .progress_info {
         padding-top: 4px;

@@ -2,6 +2,7 @@ import pinia from '@r/store';
 import { storeToRefs } from 'pinia';
 import { usePlayStore } from '@r/store/play';
 import { useSetStore } from '@r/store/setting';
+import { useUpdateStore } from '@r/store/setting/update';
 import { useAppStore } from '@r/store/app';
 import applyThemeColor from '@r/utils/theme/index.js';
 import { setMute } from '../player/audio';
@@ -14,7 +15,9 @@ const { playList, curPlayInfo, volume, isMute, playState } = storeToRefs(playSto
 const setStore = useSetStore(pinia);
 const { setList } = storeToRefs(setStore);
 const appStore = useAppStore(pinia);
-const { appInfo, modalInfo, updateProgress } = storeToRefs(appStore);
+const { modalInfo } = storeToRefs(appStore);
+const updateStore = useUpdateStore();
+const { appInfo, updateProgress } = storeToRefs(updateStore);
 
 const getData = async (name: string) => {
   return await getDataIpc(name);

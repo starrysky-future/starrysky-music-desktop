@@ -240,14 +240,14 @@ export const generateRandom16 = () => {
  */
 export const formatSize = (limit) => {
   let size = '';
-  if (limit < 0.1 * 1024) {
-    //小于0.1KB，则转化成B
+  if (limit < 1 * 1024) {
+    //小于1KB，则转化成B
     size = limit.toFixed(2) + 'B';
-  } else if (limit < 0.1 * 1024 * 1024) {
-    //小于0.1MB，则转化成KB
+  } else if (limit < 1 * 1024 * 1024) {
+    //小于1MB，则转化成KB
     size = (limit / 1024).toFixed(2) + 'KB';
-  } else if (limit < 0.1 * 1024 * 1024 * 1024) {
-    //小于0.1GB，则转化成MB
+  } else if (limit < 1 * 1024 * 1024 * 1024) {
+    //小于1GB，则转化成MB
     size = (limit / (1024 * 1024)).toFixed(2) + 'MB';
   } else {
     //其他转化成GB

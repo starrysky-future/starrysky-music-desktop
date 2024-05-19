@@ -50,6 +50,7 @@ declare namespace SKY {
   }
 
   interface UpdateProgress {
+    hasUpdate: boolean;
     percent: number;
     transferred: string;
     bytesPerSecond: string;

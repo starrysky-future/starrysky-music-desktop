@@ -4,7 +4,8 @@ import { ref } from 'vue';
 export const useAppStore = defineStore('useAppStore', () => {
   const appInfo = ref<SKY.AppInfo>({
     curVersion: '',
-    lastVersion: ''
+    lastVersion: '',
+    updateSize: ''
   });
 
   const showLyricPage = ref<boolean>(false);
@@ -22,13 +23,20 @@ export const useAppStore = defineStore('useAppStore', () => {
     isModal: false
   });
 
+  const updateProgress = ref<SKY.UpdateProgress>({
+    percent: 0,
+    transferred: '0M',
+    bytesPerSecond: '0KB/s'
+  });
+
   return {
     showTip,
     tipText,
     tipPosition,
     showLyricPage,
     modalInfo,
-    appInfo
+    appInfo,
+    updateProgress
   };
 });
 

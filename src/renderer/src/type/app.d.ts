@@ -32,6 +32,7 @@ declare namespace SKY {
   interface AppInfo {
     curVersion: string;
     lastVersion: string;
+    updateSize: string;
   }
 
   interface ModalInfo {
@@ -45,6 +46,12 @@ declare namespace SKY {
     version?: string;
     size?: unknown;
     error?: unknown;
-    progress?: unknown;
+    progress?: UpdateProgress;
+  }
+
+  interface UpdateProgress {
+    percent: number;
+    transferred: string;
+    bytesPerSecond: string;
   }
 }

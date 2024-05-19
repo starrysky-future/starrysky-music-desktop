@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount, VNodeRef } from 'vue';
 
 const props = defineProps<{
   progress: number;
+  hidehandleMs?: boolean;
 }>();
 
 const msEvent = {
@@ -64,7 +65,12 @@ onBeforeUnmount(() => {
       class="progress_type progress_next"
       :style="{ transform: `scaleX(${dragProgress || 0})` }"
     ></div>
-    <div ref="domProgress" class="progressMask" @mousedown="handleMsDown"></div>
+    <div
+      v-if="!hidehandleMs"
+      ref="domProgress"
+      class="progressMask"
+      @mousedown="handleMsDown"
+    ></div>
   </div>
 </template>
 

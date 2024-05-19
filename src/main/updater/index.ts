@@ -20,6 +20,7 @@ export default (win: BrowserWindow): void => {
     autoUpdater.checkForUpdates();
   });
   ipcHelper.on('downloadUpdate', () => {
+    updaterLog.info('开始下载更新');
     // 下载更新
     autoUpdater.downloadUpdate();
   });
@@ -30,35 +31,33 @@ export default (win: BrowserWindow): void => {
     win.webContents.send('update', {
       updateStatus: 'update-available',
       version: _info.version,
-      size: _info.files
+      size: _info.files[0].size
     });
   });
 
   // 没有新版本
   autoUpdater.on('update-not-available', (_info: UpdateInfo) => {
     updaterLog.info('当前版本为最新版本:', _info.version);
-    // handleSendEvent(() => {
     win.webContents.send('update', {
       updateStatus: 'update-not-available',
       version: _info.version
-      // });
     });
   });
 
   // 更新完毕
   autoUpdater.on('update-downloaded', () => {
+    updaterLog.info('开始更新');
     // 退出并安装更新
     autoUpdater.quitAndInstall();
   });
 
   // 更新出错
   autoUpdater.on('error', (error) => {
-    // handleSendEvent(() => {
+    updaterLog.info('更新出错:', error);
     win.webContents.send('update', {
       updateStatus: 'error',
       error: error
     });
-    // });
   });
 
   // 监听下载进度

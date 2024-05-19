@@ -4,7 +4,7 @@ import { useAppStore } from '@r/store/app';
 import { downloadUpdate } from '@r/ipc/updaterIpc';
 
 const appStore = useAppStore();
-const { appInfo } = storeToRefs(appStore);
+const { appInfo, updateProgress } = storeToRefs(appStore);
 </script>
 
 <template>
@@ -13,6 +13,17 @@ const { appInfo } = storeToRefs(appStore);
       <div class="version">
         <div>当前版本: {{ appInfo.curVersion }}</div>
         <div>最新版本: {{ appInfo.lastVersion }}</div>
+      </div>
+      <div class="update_progress">
+        <div class="progress">
+          <Progress :progress="updateProgress.percent" :hidehandle-ms="true" />
+        </div>
+        <div class="progress_info">
+          <div class="transferred">
+            下载进度: {{ updateProgress.transferred }} / {{ appInfo.updateSize }}
+          </div>
+          <div class="bytesPerSecond">当前网速: {{ updateProgress.bytesPerSecond }}</div>
+        </div>
       </div>
     </div>
     <div class="main"></div>
@@ -31,6 +42,25 @@ const { appInfo } = storeToRefs(appStore);
     display: flex;
     padding: 6px;
     .version {
+    }
+    .update_progress {
+      flex: 1;
+      padding: 0 0 0 6px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .progress {
+        height: 2px;
+      }
+      .progress_info {
+        padding-top: 4px;
+        display: flex;
+        justify-content: flex-end;
+        .bytesPerSecond {
+          padding-left: 10px;
+        }
+      }
     }
   }
   .main {

@@ -7,13 +7,14 @@ import applyThemeColor from '@r/utils/theme/index.js';
 import { setMute } from '../player/audio';
 import { getDataIpc } from '@r/ipc/dataIpc';
 import { getAppInfoIpc, getUpdateInfo } from '@r/ipc/updaterIpc';
+import { formatSize } from '@r/utils';
 
 const playStore = usePlayStore(pinia);
 const { playList, curPlayInfo, volume, isMute, playState } = storeToRefs(playStore);
 const setStore = useSetStore(pinia);
 const { setList } = storeToRefs(setStore);
 const appStore = useAppStore(pinia);
-const { appInfo, modalInfo } = storeToRefs(appStore);
+const { appInfo, modalInfo, updateProgress } = storeToRefs(appStore);
 
 const getData = async (name: string) => {
   return await getDataIpc(name);
@@ -62,6 +63,7 @@ const getUpdateInfoListener = (_event, updateInfo: SKY.UpdateInfo) => {
   console.log('updateInfo', updateInfo);
   if (updateInfo.updateStatus === 'update-available') {
     appInfo.value.lastVersion = updateInfo.version!;
+    appInfo.value.updateSize = formatSize(updateInfo.size!);
 
     modalInfo.value.modalName = 'UpdateModal';
     modalInfo.value.modalTitle = '存在新版本';
@@ -69,9 +71,12 @@ const getUpdateInfoListener = (_event, updateInfo: SKY.UpdateInfo) => {
   } else if (updateInfo.updateStatus === 'update-not-available') {
     appInfo.value.lastVersion = updateInfo.version!;
   } else if (updateInfo.updateStatus === 'error') {
-    console.log(333);
+    console.log(updateInfo.error);
   } else if (updateInfo.updateStatus === 'download-progress') {
-    console.log(111);
+    console.log('updateInfo.progress', updateInfo.progress);
+    updateProgress.value.bytesPerSecond = formatSize(updateInfo.progress!.bytesPerSecond) + '/s';
+    updateProgress.value.transferred = formatSize(updateInfo.progress!.transferred);
+    updateProgress.value.percent = Math.trunc(updateInfo.progress!.percent) / 100;
   }
 };
 

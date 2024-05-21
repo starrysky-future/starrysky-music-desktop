@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: starrysky-music
+appId: starrysky-music-desktop
+productName: starrysky-music-desktop
 directories:
   buildResources: build
 files:
@@ -13,7 +13,7 @@ extraResources: ['./service/starrysky-music-backend.exe']
 asarUnpack:
   - resources/**
 win:
-  executableName: starrysky-music
+  executableName: starrysky-music-desktop
   icon: resources/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { useUpdateStore } from '@r/store/setting/update';
+import { checkForUpdates } from '@r/ipc/updaterIpc';
 
 const updateStore = useUpdateStore();
 const { appInfo, updateProgress } = storeToRefs(updateStore);
@@ -25,6 +26,9 @@ const { appInfo, updateProgress } = storeToRefs(updateStore);
           <div class="bytesPerSecond">当前网速: {{ updateProgress.bytesPerSecond }}</div>
         </div>
       </div>
+    </div>
+    <div class="common_card">
+      <div class="update_btn" @click="checkForUpdates">检查更新</div>
     </div>
   </div>
 </template>
@@ -52,6 +56,21 @@ const { appInfo, updateProgress } = storeToRefs(updateStore);
           padding-left: 10px;
         }
       }
+    }
+  }
+  .update_btn {
+    cursor: pointer;
+    width: 80px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid var(--color-primary);
+    color: var(--color-primary);
+    border-radius: 4px;
+    background-color: var(--color-primary-light-700);
+    &:hover {
+      background-color: var(--color-primary-light-500);
     }
   }
 }

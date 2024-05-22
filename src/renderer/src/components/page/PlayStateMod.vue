@@ -142,69 +142,67 @@ const playStateText = computed(() => {
       </Tiptool>
     </div>
   </div>
-  <div v-show="isVisible">
-    <PositionPopup
-      v-model="isVisible"
-      direction="top"
-      :has-arrow="true"
-      :position="position"
-      transition-name="TransitionOpacity"
-    >
-      <div v-if="setPopup === 'volume'" class="volume">
-        <div class="volume_info">
-          <div>{{ Math.floor(volume * 100) }}%</div>
-          <div :class="{ muteActive: isMute }" @click="setVolumeMute">静音</div>
-        </div>
-        <div class="volume_progress">
-          <Progress :progress="volume" @set-progress="setPlayVolume" />
-        </div>
+  <PositionPopup
+    v-model="isVisible"
+    direction="top"
+    :has-arrow="true"
+    :position="position"
+    transition-name="TransitionOpacity"
+  >
+    <div v-if="setPopup === 'volume'" class="volume">
+      <div class="volume_info">
+        <div>{{ Math.floor(volume * 100) }}%</div>
+        <div :class="{ muteActive: isMute }" @click="setVolumeMute">静音</div>
       </div>
-      <div v-else class="mode">
-        <div class="icon_common" @click="setPlayState('loop')">
-          <Tiptool text="列表循环">
-            <svg
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xlink="http://www.w3.org/1999/xlink"
-              height="100%"
-              viewBox="0 0 36 36"
-              space="preserve"
-            >
-              <use xlink:href="#icon-play-loop" />
-            </svg>
-          </Tiptool>
-        </div>
-        <div class="icon_common" @click="setPlayState('loopOnce')">
-          <Tiptool text="单曲循环">
-            <svg
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xlink="http://www.w3.org/1999/xlink"
-              height="100%"
-              viewBox="0 0 36 36"
-              space="preserve"
-            >
-              <use xlink:href="#icon-play-loopOnce" />
-            </svg>
-          </Tiptool>
-        </div>
-        <div class="icon_common" @click="setPlayState('random')">
-          <Tiptool text="随机播放">
-            <svg
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xlink="http://www.w3.org/1999/xlink"
-              height="100%"
-              viewBox="0 0 36 36"
-              space="preserve"
-            >
-              <use xlink:href="#icon-play-random" />
-            </svg>
-          </Tiptool>
-        </div>
+      <div class="volume_progress">
+        <Progress :progress="volume" @set-progress="setPlayVolume" />
       </div>
-    </PositionPopup>
-  </div>
+    </div>
+    <div v-else class="mode">
+      <div class="icon_common" @click="setPlayState('loop')">
+        <Tiptool text="列表循环">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-loop" />
+          </svg>
+        </Tiptool>
+      </div>
+      <div class="icon_common" @click="setPlayState('loopOnce')">
+        <Tiptool text="单曲循环">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-loopOnce" />
+          </svg>
+        </Tiptool>
+      </div>
+      <div class="icon_common" @click="setPlayState('random')">
+        <Tiptool text="随机播放">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 36 36"
+            space="preserve"
+          >
+            <use xlink:href="#icon-play-random" />
+          </svg>
+        </Tiptool>
+      </div>
+    </div>
+  </PositionPopup>
 </template>
 
 <style lang="less" scoped>

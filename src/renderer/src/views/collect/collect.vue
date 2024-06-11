@@ -23,7 +23,7 @@ const labelList = computed<Array<SKY.Play.PlayListItem>>(() => {
 });
 
 const hasList = computed(() => {
-  return playList.value[playList.value.playListId].list.length > 0;
+  return playList.value[collectListActiveId.value].list.length > 0;
 });
 
 const contentList = computed(() => {
@@ -75,7 +75,8 @@ const setCollectListActiveId = (info) => {
     }
   }
   .collect_right {
-    flex: 1;
+    // flex: 1;
+    width: calc(~'100% - 100px');
     height: 516px;
   }
   .active {

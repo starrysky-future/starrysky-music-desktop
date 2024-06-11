@@ -116,7 +116,6 @@ onBeforeUnmount(() => {
           :key="item.songmid"
           class="music_item"
           :class="{ active: active === item.songmid && showListpopup }"
-          :data-song-info="JSON.stringify(item)"
           @dblclick="playSong(item, index)"
           @click.right="getMenu(item, index, $event)"
         >
@@ -174,6 +173,7 @@ onBeforeUnmount(() => {
 
 <style lang="less" scoped>
 .music_list {
+  width: 100%;
   height: 100%;
   font-size: 12px;
   .header {

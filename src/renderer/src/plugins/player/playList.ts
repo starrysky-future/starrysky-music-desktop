@@ -55,17 +55,25 @@ export const playLater = (info: SKY.MusicListItem) => {
 };
 
 export const deleteMusic = (index: number) => {
-  playList.value[playList.value.playListId].list.splice(index, 1);
+  playList.value[collectListActiveId.value].list.splice(index, 1);
 };
 
 export const deleteMusicAll = () => {
-  playList.value[playList.value.playListId].list = [];
+  playList.value[collectListActiveId.value].list = [];
 };
 
 export const deleteList = (id: string) => {
-  if (id === playList.value.playListId) {
-    playList.value.playListId = 'defaultList';
+  // 当前列表
+  if (id === collectListActiveId.value) {
+    collectListActiveId.value = 'defaultList';
   }
+  // 播放列表
+  if (id === collectListActiveId.value) {
+    playList.value.playListId = 'defaultList';
+    playList.value.playId = 0;
+    eventBus.emit('setPause');
+  }
+
   playList.value[id].list = [];
   delete playList.value[id];
 };

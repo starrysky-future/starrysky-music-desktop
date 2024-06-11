@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
 const playStore = usePlayStore();
-const { playList } = storeToRefs(playStore);
+const { playList, collectListActiveId } = storeToRefs(playStore);
 
 const labelList = computed<Array<SKY.Play.PlayListItem>>(() => {
   if (!playList.value) return [];
@@ -27,11 +27,11 @@ const hasList = computed(() => {
 });
 
 const contentList = computed(() => {
-  return playList.value[playList.value.playListId].list;
+  return playList.value[collectListActiveId.value].list;
 });
 
-const setPlayListId = (info) => {
-  playList.value.playListId = info.id;
+const setCollectListActiveId = (info) => {
+  collectListActiveId.value = info.id;
 };
 </script>
 
@@ -42,9 +42,9 @@ const setPlayListId = (info) => {
       <div class="collect_left_main scroll">
         <LayoutLeft
           :list="labelList"
-          :active-id="playList.playListId"
+          :active-id="collectListActiveId"
           has-menu
-          @set-active-id="setPlayListId"
+          @set-active-id="setCollectListActiveId"
         />
       </div>
     </div>

@@ -131,7 +131,7 @@ export const addUnique = (list, data, key: string) => {
     return false;
   }
   list.push(data);
-  return true;
+  return reply;
 };
 
 /**

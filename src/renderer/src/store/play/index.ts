@@ -39,6 +39,8 @@ export const usePlayStore = defineStore('usePlayStore', () => {
     }
   });
 
+  const collectListActiveId = ref<string>('defaultList');
+
   const statulyric = ref({});
   const volume = ref<number>(1);
 
@@ -77,6 +79,7 @@ export const usePlayStore = defineStore('usePlayStore', () => {
     volume,
     isMute,
     playState,
+    collectListActiveId,
     setNowPlayTime,
     setMaxplayTime,
     setProgress

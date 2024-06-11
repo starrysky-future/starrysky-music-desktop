@@ -15,7 +15,7 @@ import { useListpopupStore } from '@r/store/app';
 const route = useRoute();
 
 const playStore = usePlayStore();
-const { curPlayInfo } = storeToRefs(playStore);
+const { curPlayInfo, collectListActiveId, playList } = storeToRefs(playStore);
 
 const listpopupStore = useListpopupStore();
 const {
@@ -121,7 +121,12 @@ onBeforeUnmount(() => {
           @click.right="getMenu(item, index, $event)"
         >
           <div class="w_5">
-            <div v-if="curPlayInfo.songmid === item.songmid" class="commom_icon">
+            <div
+              v-if="
+                collectListActiveId === playList.playListId && curPlayInfo.songmid === item.songmid
+              "
+              class="commom_icon"
+            >
               <svg
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"

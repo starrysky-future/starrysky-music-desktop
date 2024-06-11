@@ -12,7 +12,8 @@ import { watch } from 'vue';
 import { onEnded, onTimeupdate, getCurrentTime } from '@r/plugins/player/audio';
 
 const playStore = usePlayStore(pinia);
-const { curPlayInfo, playList, playProgress, statulyric, playState } = storeToRefs(playStore);
+const { curPlayInfo, playList, playProgress, statulyric, playState, collectListActiveId } =
+  storeToRefs(playStore);
 
 const navStore = useNavStore(pinia);
 const { navName } = storeToRefs(navStore);
@@ -33,6 +34,7 @@ export const playSong = debounce(async (info: SKY.MusicListItem, index: number) 
     }
   } else {
     playList.value.playId = index;
+    playList.value.playListId = collectListActiveId.value;
   }
 
   initPlayInfo(info);

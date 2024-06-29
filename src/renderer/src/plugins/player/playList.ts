@@ -92,6 +92,9 @@ export const addList = async (info: SKY.MusicListItem) => {
 };
 
 export const initPlayInfo = (info: SKY.MusicListItem) => {
+  // 清空上一首歌词
+  statulyric.value = {};
+
   eventBus.emit('setPause');
 
   playStore.setMaxplayTime(info._interval / 1000);

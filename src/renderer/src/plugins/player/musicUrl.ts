@@ -7,7 +7,7 @@ import { searchMusicAll } from '@r/apis/search';
 import eventBus from '@r/plugins/eventBus';
 
 const playStore = usePlayStore(pinia);
-const { curPlayInfo, playList } = storeToRefs(playStore);
+const { curPlayInfo, playList, statulyric } = storeToRefs(playStore);
 
 export const getMusicUrl = async (info) => {
   try {
@@ -107,6 +107,8 @@ const isNextPlay = () => {
     eventBus.emit('setPause');
   } else {
     curPlayInfo.value.statu = '歌曲资源不存在，切换下一首';
+    // 清空上一首歌词
+    statulyric.value = {};
     eventBus.emit('nextPlay');
   }
 };

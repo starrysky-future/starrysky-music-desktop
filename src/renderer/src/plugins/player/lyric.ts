@@ -11,7 +11,6 @@ const { statulyric, curPlayInfo } = storeToRefs(playStore);
 const lyricSources: Array<string> = ['tx', 'kw'];
 
 export const getLyric = async (info) => {
-  statulyric.value = {};
   curPlayInfo.value.statu = '';
   if (hasLyric(info)) {
     parseStatulyric(hasLyric(info));

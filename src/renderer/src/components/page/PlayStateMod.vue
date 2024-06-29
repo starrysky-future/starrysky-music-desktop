@@ -23,11 +23,8 @@ const setCollect = () => {
 };
 
 const setPlayState = (mode: string) => {
-  if (playState.value === 'loop') {
-    setLoopPlay(true);
-  }
-
   playState.value = mode;
+  initLoopPlay();
 };
 
 const setPlayVolume = (dragProgress: number) => {
@@ -92,6 +89,16 @@ const playStateText = computed(() => {
     return '随机播放';
   }
 });
+
+const initLoopPlay = () => {
+  if (playState.value === 'loopOnce') {
+    setLoopPlay(true);
+  } else {
+    setLoopPlay(false);
+  }
+};
+// 初始化单曲循环
+initLoopPlay();
 </script>
 
 <template>

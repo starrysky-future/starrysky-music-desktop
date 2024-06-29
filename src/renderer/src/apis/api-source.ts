@@ -20,10 +20,15 @@ let allApi = {
 };
 
 if (import.meta.env.DEV) {
+  // @ts-ignore
   const api_test_tx = await import('./tx/api-test');
+  // @ts-ignore
   const api_test_kg = await import('./kg/api-test');
+  // @ts-ignore
   const api_test_kw = await import('./kw/api-test');
+  // @ts-ignore
   const api_test_mg = await import('./mg/api-test');
+  // @ts-ignore
   const api_test_wy = await import('./wy/api-test');
 
   const testApi = {

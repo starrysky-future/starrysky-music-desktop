@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, watchEffect } from 'vue';
+import { VNodeRef, computed, onActivated, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useSongListStore, useMusicListStore } from '@r/store/songList';
@@ -9,10 +9,11 @@ const router = useRouter();
 
 const songListStore = useSongListStore();
 const musicListStore = useMusicListStore();
-const { songList, sourceId, sortId, curListId, tagId, pageSize } = storeToRefs(songListStore);
+const { songList, sourceId, sortId, curListId, tagId, pageSize,songListScrollTop } = storeToRefs(songListStore);
 const { musiclistId } = storeToRefs(musicListStore);
 
 const loading = ref<boolean>(false);
+const songListRef = ref<VNodeRef | null>(null)
 
 const totalSize = computed(() => {
   return Math.ceil(songList.value[curListId.value].total / songList.value[curListId.value].limit);
@@ -30,17 +31,23 @@ const hasList = computed(() => {
 });
 
 const setSourceId = (id: string) => {
+  initSongListScrollTop()
+
   sourceId.value = id;
   sortId.value = sources[sourceId.value].config.sortList[0].id;
   pageSize.value = 1;
 };
 
 const setSort = (id: string) => {
+  initSongListScrollTop()
+
   sortId.value = id;
   pageSize.value = 1;
 };
 
 const goDetail = (id: string) => {
+  songListScrollTop.value = songListRef.value.scrollTop
+
   musiclistId.value = id;
 
   router.push({
@@ -48,6 +55,12 @@ const goDetail = (id: string) => {
     query: { pageName: 'songList' }
   });
 };
+
+// tabs切换时清除滚动高度
+const initSongListScrollTop = ()=>{
+  songListScrollTop.value = 0
+  songListRef.value.scrollTop = 0
+}
 
 watchEffect(async () => {
   if (hasList.value) return;
@@ -75,6 +88,10 @@ watchEffect(async () => {
     loading.value = false;
   }
 });
+
+onActivated(()=>{
+  songListRef.value.scrollTop = songListScrollTop.value
+})
 </script>
 
 <template>
@@ -86,7 +103,7 @@ watchEffect(async () => {
     @set-source-id="setSourceId"
     @set-sort="setSort"
   />
-  <div class="songList scroll">
+  <div ref="songListRef" class="songList scroll">
     <div v-if="hasList" class="main">
       <template v-for="item in songList[curListId].list[pageSize - 1]" :key="item.id">
         <SongListItem :list="item" @click="goDetail(item.id)" />

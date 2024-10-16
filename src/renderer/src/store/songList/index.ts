@@ -19,6 +19,8 @@ export const useSongListStore = defineStore('useSongListStore', () => {
   const tagId = ref<string>('');
   const sortId = ref<string>(sources[sourceId.value].config.sortList[0].id);
 
+  const songListScrollTop = ref<number>(0);
+
   const initlist: SKY.SongList.SongListSource = initList({
     limit: 30,
     list: [],
@@ -38,7 +40,7 @@ export const useSongListStore = defineStore('useSongListStore', () => {
 
   const pageSize = ref<number>(1);
 
-  return { songList, sourceId, sortId, tagId, pageSize, curListId };
+  return { songList, sourceId, sortId, tagId, pageSize, curListId, songListScrollTop };
 });
 
 export const useMusicListStore = defineStore('useMusicListStore', () => {
